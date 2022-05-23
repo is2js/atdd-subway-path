@@ -223,4 +223,11 @@ public class Sections {
     public List<Section> getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "Sections{" +
+            "value=" + value +
+            '}';
+    }
 }

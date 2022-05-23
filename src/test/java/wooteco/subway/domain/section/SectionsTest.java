@@ -225,4 +225,19 @@ class SectionsTest {
             () -> assertThat(actual).hasSize(1)
         );
     }
+
+    @DisplayName("정렬된 구간을 반환한다.")
+    @Test
+    void getSortedSections() {
+
+        final Sections sections = new Sections(List.of(
+            SECTION_LINE_1_STATION_2_3_12, SECTION_LINE_1_STATION_1_2_10));
+
+        final Sections actual = new Sections(sections.getSortedSections());
+
+        final Sections expected = new Sections(List.of(
+            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+
+        assertThat(actual.toString()).isEqualTo(expected.toString());
+    }
 }
