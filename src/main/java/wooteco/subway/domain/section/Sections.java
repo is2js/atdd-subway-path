@@ -50,7 +50,7 @@ public class Sections {
     }
 
     private void validateSection(final List<Long> stationIds, final Section section) {
-        if (stationIds.contains(section.getUpStationId()) && stationIds.contains(section.getDownStationId())) {
+        if (section.isUpStationIdContained(stationIds) && section.isDownStationIdContained(stationIds)) {
             throw new IllegalStateException(ERROR_ALREADY_CONTAIN);
         }
     }
@@ -63,20 +63,19 @@ public class Sections {
     }
 
     private Section addMiddleSectionFromUpStation(final Section section) {
-        final Section sameUpStationSection = getSameConditionStationSection(
-            it -> Objects.equals(it.getUpStationId(), section.getUpStationId()));
+        final Section sameUpStationSection = getSameConditionStationSection(section::isSameUpStation);
         checkDistance(section, sameUpStationSection);
         return section.createMiddleToDownSection(sameUpStationSection);
     }
 
     private Section addMiddleSectionFromDownStation(final Section section) {
-        final Section sameDownStationSection = getSameConditionStationSection(
-            it -> Objects.equals(it.getDownStationId(), section.getDownStationId()));
+        final Section sameDownStationSection = getSameConditionStationSection(section::isSameDownStation);
         checkDistance(section, sameDownStationSection);
         return section.createUpToMiddleSection(sameDownStationSection);
     }
 
     public List<Section> getSortedSections() {
+        // 정렬된 구간을 모으려면 (1) 첫번재 구간을 찾고 -> (2) 2번째부터는 첫 구간downId == 다음 구간upId 인 다음 구간을 찾아 (3) 연결해야한다.
         final Section firstSection = findFirstSection();
 
         return Stream.concat(Stream.of(firstSection), findNextSections(firstSection).stream())
@@ -91,6 +90,8 @@ public class Sections {
     }
 
     private boolean isFirstSection(final Section section) {
+        // upId가 구간내 downId로 사용된 적이 없다면, 첫번째 구간이다.
+        // [] [] [] [] 2번째부터는 upId가 앞 구간의 downId와 일치된다 = downId로 사용된다.
         return !getDownStationIds().contains(section.getUpStationId());
     }
 
@@ -102,6 +103,8 @@ public class Sections {
 
     private List<Section> findNextSections(Section section) {
         final List<Section> sections = new ArrayList<>();
+        // 조건에 맞는 것만 순서대로 골라 담을 때, 끝을 모른다면 -> while ( ) 로 조건 만족하는 동안 돌게 해야한다.
+        // -> 찾는 메서드에서 Opitonal로 반환한 뒤, isPresent()로 [메서드 밖 영역에서 찾는 것이 있으면] 의 조건을 만들 수 있다.
         while (findNextSection(section).isPresent()) {
             final Section nextSection = findNextSection(section).get();
             sections.add(nextSection);
@@ -112,7 +115,7 @@ public class Sections {
 
     private Optional<Section> findNextSection(final Section previousSection) {
         return value.stream()
-            .filter(section -> section.getUpStationId().equals(previousSection.getDownStationId()))
+            .filter(previousSection::isConnected)
             .findFirst();
     }
 

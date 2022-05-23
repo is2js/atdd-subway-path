@@ -1,5 +1,6 @@
 package wooteco.subway.domain.section;
 
+import java.util.List;
 import java.util.Objects;
 import wooteco.subway.dto.request.LineRequest;
 
@@ -99,6 +100,26 @@ public class Section {
         return downStationId;
     }
 
+
+    public boolean isUpStationIdContained(final List<Long> stationIds) {
+        return stationIds.contains(upStationId);
+    }
+
+    public boolean isDownStationIdContained(final List<Long> stationIds) {
+        return stationIds.contains(downStationId);
+    }
+
+    public boolean isSameUpStation(final Section section) {
+        return upStationId.equals(section.upStationId);
+    }
+
+    public boolean isSameDownStation(final Section section) {
+        return downStationId.equals(section.downStationId);
+    }
+
+    public boolean isConnected(final Section section) {
+        return downStationId.equals(section.upStationId);
+    }
 
     @Override
     public boolean equals(final Object o) {
