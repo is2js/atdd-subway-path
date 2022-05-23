@@ -13,7 +13,6 @@ class StationTest {
     void create_success() {
         assertDoesNotThrow(() -> new Station("잠실역"));
     }
-
     @DisplayName("지하철 역의 이름이 빈칸이면 예외가 발생한다.")
     @Test
     void create_fail_empty() {

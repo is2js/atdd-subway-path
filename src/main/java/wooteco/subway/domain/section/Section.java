@@ -99,6 +99,7 @@ public class Section {
         return downStationId;
     }
 
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -107,34 +108,15 @@ public class Section {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         final Section section = (Section) o;
-
-        if (getDistance() != section.getDistance()) {
-            return false;
-        }
-        if (getId() != null ? !getId().equals(section.getId()) : section.getId() != null) {
-            return false;
-        }
-        if (getLineId() != null ? !getLineId().equals(section.getLineId()) : section.getLineId() != null) {
-            return false;
-        }
-        if (getUpStationId() != null ? !getUpStationId().equals(section.getUpStationId())
-            : section.getUpStationId() != null) {
-            return false;
-        }
-        return getDownStationId() != null ? getDownStationId().equals(section.getDownStationId())
-            : section.getDownStationId() == null;
+        return getDistance() == section.getDistance() && Objects.equals(getId(), section.getId())
+            && Objects.equals(getLineId(), section.getLineId()) && Objects.equals(getUpStationId(),
+            section.getUpStationId()) && Objects.equals(getDownStationId(), section.getDownStationId());
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getLineId() != null ? getLineId().hashCode() : 0);
-        result = 31 * result + getDistance();
-        result = 31 * result + (getUpStationId() != null ? getUpStationId().hashCode() : 0);
-        result = 31 * result + (getDownStationId() != null ? getDownStationId().hashCode() : 0);
-        return result;
+        return Objects.hash(getId(), getLineId(), getDistance(), getUpStationId(), getDownStationId());
     }
 
     @Override

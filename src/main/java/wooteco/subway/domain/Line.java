@@ -46,23 +46,13 @@ public class Line {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         final Line line = (Line) o;
-
-        if (getId() != null ? !getId().equals(line.getId()) : line.getId() != null) {
-            return false;
-        }
-        if (getName() != null ? !getName().equals(line.getName()) : line.getName() != null) {
-            return false;
-        }
-        return getColor() != null ? getColor().equals(line.getColor()) : line.getColor() == null;
+        return Objects.equals(getId(), line.getId()) && Objects.equals(getName(), line.getName())
+            && Objects.equals(getColor(), line.getColor());
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        result = 31 * result + (getColor() != null ? getColor().hashCode() : 0);
-        return result;
+        return Objects.hash(getId(), getName(), getColor());
     }
 }
