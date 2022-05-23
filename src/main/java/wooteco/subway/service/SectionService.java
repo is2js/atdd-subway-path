@@ -54,7 +54,7 @@ public class SectionService {
     public void deleteSection(final Long id, final Long stationId) {
         lineDao.findById(id)
             .orElseThrow(() -> new LineNotFoundException("[ERROR] 해당 노선이 없습니다."));
-        stationDao.findById(id)
+        stationDao.findById(stationId)
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
 
         final Sections sections = new Sections(sectionDao.findSectionStationsByLineId(id));
