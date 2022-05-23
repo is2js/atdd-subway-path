@@ -2,8 +2,8 @@ package wooteco.subway.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static wooteco.subway.testutils.Fixture.LINE_1_BLUE;
-import static wooteco.subway.testutils.Fixture.LINE_2_GREEN;
+import static wooteco.subway.testutils.Fixture.이호선_그린;
+import static wooteco.subway.testutils.Fixture.일호선_파랑;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -33,13 +33,13 @@ public class JdbcLineDaoTest {
     @DisplayName("노선을 저장한다.")
     void save() {
         //given
-        final Line actual = lineDao.save(LINE_2_GREEN);
+        final Line actual = lineDao.save(이호선_그린);
 
         //when
         String actualName = actual.getName();
 
         //then
-        assertThat(actualName).isEqualTo(LINE_2_GREEN.getName());
+        assertThat(actualName).isEqualTo(이호선_그린.getName());
 
         lineDao.deleteById(actual.getId());
     }
@@ -48,10 +48,10 @@ public class JdbcLineDaoTest {
     @DisplayName("중복된 노선을 저장할 경우 예외를 발생시킨다.")
     void save_duplicate() {
         //given
-        final Line saved = lineDao.save(LINE_2_GREEN);
+        final Line saved = lineDao.save(이호선_그린);
 
         //when & then
-        assertThatThrownBy(() -> lineDao.save(LINE_2_GREEN))
+        assertThatThrownBy(() -> lineDao.save(이호선_그린))
             .isInstanceOf(DuplicateKeyException.class);
 
         lineDao.deleteById(saved.getId());
@@ -61,8 +61,8 @@ public class JdbcLineDaoTest {
     @DisplayName("모든 노선을 조회한다")
     void findAll() {
         //given
-        final Line line1 = lineDao.save(LINE_2_GREEN);
-        final Line line2 = lineDao.save(LINE_1_BLUE);
+        final Line line1 = lineDao.save(이호선_그린);
+        final Line line2 = lineDao.save(일호선_파랑);
 
         //when
         List<Line> lines = lineDao.findAll();
@@ -78,7 +78,7 @@ public class JdbcLineDaoTest {
     @DisplayName("입력된 id의 노선을 삭제한다")
     void deleteById() {
         //given
-        final Line created = lineDao.save(LINE_2_GREEN);
+        final Line created = lineDao.save(이호선_그린);
 
         //when
         lineDao.deleteById(created.getId());
@@ -91,7 +91,7 @@ public class JdbcLineDaoTest {
     @DisplayName("입력된 id의 노선을 수정한다.")
     void update() {
         //given
-        final Line created = lineDao.save(LINE_2_GREEN);
+        final Line created = lineDao.save(이호선_그린);
         final LineRequest lineRequest = new LineRequest("1호선", "green", 1L, 2L, 10);
         final Line updated = lineRequest.toEntity(created.getId());
 
@@ -99,7 +99,7 @@ public class JdbcLineDaoTest {
         lineDao.update(updated);
         final Line updateLine = lineDao.findById(created.getId())
             .orElseThrow();
-        
+
         //then
         assertThat(updateLine.getName()).isEqualTo(updateLine.getName());
 

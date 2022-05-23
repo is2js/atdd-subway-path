@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static wooteco.subway.testutils.Fixture.SECTION_LINE_1_STATION_1_2_10;
-import static wooteco.subway.testutils.Fixture.SECTION_LINE_1_STATION_1_3_22;
-import static wooteco.subway.testutils.Fixture.SECTION_LINE_1_STATION_2_3_12;
+import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_2번역_거리_10;
+import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_3번역_거리_22;
+import static wooteco.subway.testutils.Fixture.일호선_구간_2번역_3번역_거리_12;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ class SectionsTest {
     void create_success() {
         //given & when
         final List<Section> sections = List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12);
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12);
 
         //then
         assertDoesNotThrow(() -> new Sections(sections));
@@ -42,7 +42,7 @@ class SectionsTest {
     void addSection_valid_only_one_station_same() {
         //given & when
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
         final Section targetSection = new Section(1L, 1L, 4L, 8);
 
         //then
@@ -54,7 +54,7 @@ class SectionsTest {
     void addSection_invalid_all_same_up_and_down_station() {
         //given & when
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
         final Section targetSection = new Section(1L, 1L, 2L, 12);
 
         //then
@@ -68,7 +68,7 @@ class SectionsTest {
     void addSection_invalid_all_not_same_up_and_down_station() {
         //given & when
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
         final Section targetSection = new Section(1L, 2L, 4L, 13);
 
         //then
@@ -82,7 +82,7 @@ class SectionsTest {
     void addSection_invalid_distance() {
         //given & when
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
         final Section targetSection = new Section(1L, 1L, 4L, 15);
 
         //then
@@ -96,7 +96,7 @@ class SectionsTest {
     @Test
     void addSection_same_up_station() {
         //given
-        final Sections sections_1_3 = new Sections(List.of(SECTION_LINE_1_STATION_1_3_22));
+        final Sections sections_1_3 = new Sections(List.of(일호선_구간_1번역_3번역_거리_22));
         final Section section_1_2 = new Section(3L, 1L, 1L, 2L, 15);
 
         // when
@@ -105,7 +105,7 @@ class SectionsTest {
         //then
         assertAll(
             () -> assertThat(section_2_3.getUpStationId()).isEqualTo(section_1_2.getDownStationId()),
-            () -> assertThat(section_2_3.getDownStationId()).isEqualTo(SECTION_LINE_1_STATION_1_3_22.getDownStationId())
+            () -> assertThat(section_2_3.getDownStationId()).isEqualTo(일호선_구간_1번역_3번역_거리_22.getDownStationId())
         );
     }
 
@@ -115,7 +115,7 @@ class SectionsTest {
     @Test
     void addSection_same_down_station() {
         //given
-        final Sections sections_1_3 = new Sections(List.of(SECTION_LINE_1_STATION_1_3_22));
+        final Sections sections_1_3 = new Sections(List.of(일호선_구간_1번역_3번역_거리_22));
         final Section section_2_3 = new Section(3L, 1L, 2L, 3L, 15);
 
         //when
@@ -123,7 +123,7 @@ class SectionsTest {
 
         //then
         assertAll(
-            () -> assertThat(section_1_2.getUpStationId()).isEqualTo(SECTION_LINE_1_STATION_1_3_22.getUpStationId()),
+            () -> assertThat(section_1_2.getUpStationId()).isEqualTo(일호선_구간_1번역_3번역_거리_22.getUpStationId()),
             () -> assertThat(section_1_2.getDownStationId()).isEqualTo(section_2_3.getUpStationId())
         );
     }
@@ -133,7 +133,7 @@ class SectionsTest {
     @Test
     void addSection_end_station() {
         //given
-        final Sections section_2_3 = new Sections(List.of(SECTION_LINE_1_STATION_2_3_12));
+        final Sections section_2_3 = new Sections(List.of(일호선_구간_2번역_3번역_거리_12));
         final Section section_1_2 = new Section(3L, 1L, 1L, 2L, 15);
 
         //when
@@ -151,7 +151,7 @@ class SectionsTest {
     @Test
     void deleteSectionByStationId_invalid_not_existing_stationId() {
         //given
-        final Sections sections = new Sections(List.of(SECTION_LINE_1_STATION_2_3_12));
+        final Sections sections = new Sections(List.of(일호선_구간_2번역_3번역_거리_12));
 
         //when & then
         Assertions.assertThatThrownBy(() -> sections.deleteSectionByStationId(1L))
@@ -163,7 +163,7 @@ class SectionsTest {
     @Test
     void deleteSectionByStationId_invalid_ony_default_section() {
         //given
-        final Sections sections = new Sections(List.of(SECTION_LINE_1_STATION_2_3_12));
+        final Sections sections = new Sections(List.of(일호선_구간_2번역_3번역_거리_12));
 
         //when & then
         Assertions.assertThatThrownBy(() -> sections.deleteSectionByStationId(2L))
@@ -176,7 +176,7 @@ class SectionsTest {
     void deleteSectionByStationId_valid_delete_up_station() {
         //given
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
 
         //when
         sections.deleteSectionByStationId(1L);
@@ -194,7 +194,7 @@ class SectionsTest {
     void deleteSectionByStationId_valid_delete_down_station() {
         //given
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
 
         //when
         sections.deleteSectionByStationId(3L);
@@ -212,7 +212,7 @@ class SectionsTest {
     void deleteSectionByStationId_valid_delete_middle_station() {
         //given
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
 
         //when
         sections.deleteSectionByStationId(2L);
@@ -231,12 +231,12 @@ class SectionsTest {
     void getSortedSections() {
 
         final Sections sections = new Sections(List.of(
-            SECTION_LINE_1_STATION_2_3_12, SECTION_LINE_1_STATION_1_2_10));
+            일호선_구간_2번역_3번역_거리_12, 일호선_구간_1번역_2번역_거리_10));
 
         final Sections actual = new Sections(sections.getSortedSections());
 
         final Sections expected = new Sections(List.of(
-            SECTION_LINE_1_STATION_1_2_10, SECTION_LINE_1_STATION_2_3_12));
+            일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }

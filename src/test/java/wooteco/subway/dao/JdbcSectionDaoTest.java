@@ -2,8 +2,8 @@ package wooteco.subway.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static wooteco.subway.testutils.Fixture.LINE_1_SECTION_A;
-import static wooteco.subway.testutils.Fixture.LINE_1_SECTION_B;
+import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_2번역;
+import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_3번역;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -30,7 +30,7 @@ class JdbcSectionDaoTest {
     @Test
     void save() {
         //given
-        final Section created = sectionDao.save(LINE_1_SECTION_A);
+        final Section created = sectionDao.save(일호선_구간_1번역_2번역);
 
         //when
         assertThat(created.getId()).isNotNull();
@@ -43,7 +43,7 @@ class JdbcSectionDaoTest {
     @Test
     void findById() {
         //given
-        final Section expected = sectionDao.save(LINE_1_SECTION_A);
+        final Section expected = sectionDao.save(일호선_구간_1번역_2번역);
 
         //when
         final Section actual = sectionDao.findById(expected.getId()).orElseThrow();
@@ -59,8 +59,8 @@ class JdbcSectionDaoTest {
     void findAllByLineId() {
         //given
         final Long lineId = 1L;
-        final Section createdA = sectionDao.save(LINE_1_SECTION_A);
-        final Section createdB = sectionDao.save(LINE_1_SECTION_B);
+        final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
+        final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
 
         //when
         final List<Section> sections = sectionDao.findSectionStationsByLineId(lineId);
@@ -77,8 +77,8 @@ class JdbcSectionDaoTest {
     void deleteAllByLineId() {
         //given
         final Long lineId = 1L;
-        final Section createdA = sectionDao.save(LINE_1_SECTION_A);
-        final Section createdB = sectionDao.save(LINE_1_SECTION_B);
+        final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
+        final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
 
         //when
         sectionDao.deleteAllByLineId(lineId);
@@ -95,8 +95,8 @@ class JdbcSectionDaoTest {
     @Test
     void batchUpdate() {
         //given
-        final Section createdA = sectionDao.save(LINE_1_SECTION_A);
-        final Section createdB = sectionDao.save(LINE_1_SECTION_B);
+        final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
+        final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
 
         final Section updatedA = new Section(createdA.getId(), 1L, 100L, 101L, 100);
         final Section updatedB = new Section(createdB.getId(), 1L, 200L, 201L, 200);

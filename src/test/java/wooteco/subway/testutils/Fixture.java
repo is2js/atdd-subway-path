@@ -17,13 +17,13 @@ public class Fixture {
     public static final StationRequest STATION_REQUEST_역삼역 = new StationRequest("역삼역");
     public static final StationRequest STATION_REQUEST_신림역 = new StationRequest("신림역");
     public static final StationRequest STATION_REQUEST_서울대역 = new StationRequest("서울대역");
-    public static final Line LINE_1_BLUE = new Line("1호선", "blue");
-    public static final Line LINE_2_GREEN = new Line("2호선", "green");
-    public static final Section LINE_1_SECTION_A = new Section(1L, 1L, 2L, 1);
-    public static final Section LINE_1_SECTION_B = new Section(1L, 1L, 3L, 2);
-    public static final Station STATION_선릉 = new Station("선릉역");
-    public static final Station STATION_1_강남 = new Station(1L, "강남역");
-    public static final Section SECTION_LINE_1_STATION_1_2_10 = new Section(1L, 1L, 2L, 10);
-    public static final Section SECTION_LINE_1_STATION_2_3_12 = new Section(1L, 2L, 3L, 12);
-    public static final Section SECTION_LINE_1_STATION_1_3_22 = new Section(1L, 1L, 1L, 3L, 22);
+    public static final Line 일호선_파랑 = new Line("1호선", "blue");
+    public static final Line 이호선_그린 = new Line("2호선", "green");
+    public static final Station 선릉역 = new Station("선릉역");
+    public static final Station 강남역_첫번째역 = new Station(1L, "강남역");
+    public static final Section 일호선_구간_1번역_2번역 = new Section(1L, 1L, 2L, 1);
+    public static final Section 일호선_구간_1번역_3번역 = new Section(1L, 1L, 3L, 2);
+    public static final Section 일호선_구간_1번역_2번역_거리_10 = new Section(1L, 1L, 2L, 10);
+    public static final Section 일호선_구간_2번역_3번역_거리_12 = new Section(1L, 2L, 3L, 12);
+    public static final Section 일호선_구간_1번역_3번역_거리_22 = new Section(1L, 1L, 1L, 3L, 22);
 }

@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static wooteco.subway.testutils.Fixture.SECTION_LINE_1_STATION_1_2_10;
-import static wooteco.subway.testutils.Fixture.SECTION_LINE_1_STATION_1_3_22;
-import static wooteco.subway.testutils.Fixture.SECTION_LINE_1_STATION_2_3_12;
+import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_2번역_거리_10;
+import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_3번역_거리_22;
+import static wooteco.subway.testutils.Fixture.일호선_구간_2번역_3번역_거리_12;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,15 +54,15 @@ class SectionTest {
     @Test
     void createMiddleToDownSection() {
         //given & when
-        final Section middleToDownSection = SECTION_LINE_1_STATION_1_2_10.createMiddleToDownSection(
-            SECTION_LINE_1_STATION_1_3_22);
+        final Section middleToDownSection = 일호선_구간_1번역_2번역_거리_10.createMiddleToDownSection(
+            일호선_구간_1번역_3번역_거리_22);
 
         //then
         assertAll(
             () -> assertThat(middleToDownSection.getUpStationId()).isEqualTo(
-                SECTION_LINE_1_STATION_1_2_10.getDownStationId()),
+                일호선_구간_1번역_2번역_거리_10.getDownStationId()),
             () -> assertThat(middleToDownSection.getDownStationId()).isEqualTo(
-                SECTION_LINE_1_STATION_1_3_22.getDownStationId())
+                일호선_구간_1번역_3번역_거리_22.getDownStationId())
         );
     }
 
@@ -70,15 +70,15 @@ class SectionTest {
     @Test
     void createUpToMiddleSection() {
         //given & when
-        final Section upToMiddleSection = SECTION_LINE_1_STATION_2_3_12.createUpToMiddleSection(
-            SECTION_LINE_1_STATION_1_3_22);
+        final Section upToMiddleSection = 일호선_구간_2번역_3번역_거리_12.createUpToMiddleSection(
+            일호선_구간_1번역_3번역_거리_22);
 
         //then
         assertAll(
             () -> assertThat(upToMiddleSection.getUpStationId()).isEqualTo(
-                SECTION_LINE_1_STATION_1_3_22.getUpStationId()),
+                일호선_구간_1번역_3번역_거리_22.getUpStationId()),
             () -> assertThat(upToMiddleSection.getDownStationId()).isEqualTo(
-                SECTION_LINE_1_STATION_2_3_12.getUpStationId())
+                일호선_구간_2번역_3번역_거리_12.getUpStationId())
         );
     }
 
@@ -86,13 +86,13 @@ class SectionTest {
     @Test
     void createUpToDownSection() {
         //given & when
-        final Section newSection = SECTION_LINE_1_STATION_1_2_10.createUpToDownSection(
-            SECTION_LINE_1_STATION_2_3_12);
+        final Section newSection = 일호선_구간_1번역_2번역_거리_10.createUpToDownSection(
+            일호선_구간_2번역_3번역_거리_12);
 
         //then
         assertAll(
-            () -> assertThat(newSection.getUpStationId()).isEqualTo(SECTION_LINE_1_STATION_1_2_10.getUpStationId()),
-            () -> assertThat(newSection.getDownStationId()).isEqualTo(SECTION_LINE_1_STATION_2_3_12.getDownStationId())
+            () -> assertThat(newSection.getUpStationId()).isEqualTo(일호선_구간_1번역_2번역_거리_10.getUpStationId()),
+            () -> assertThat(newSection.getDownStationId()).isEqualTo(일호선_구간_2번역_3번역_거리_12.getDownStationId())
         );
     }
 }
