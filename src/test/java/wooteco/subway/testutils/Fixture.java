@@ -20,7 +20,9 @@ public class Fixture {
     public static final Line 일호선_파랑 = new Line("1호선", "blue");
     public static final Line 이호선_그린 = new Line("2호선", "green");
     public static final Station 선릉역 = new Station("선릉역");
-    public static final Station 강남역_첫번째역 = new Station(1L, "강남역");
+    public static final Station 일번역_강남 = new Station(1L, "강남역");
+    public static final Station 이번역_선릉 = new Station(2L, "선릉역");
+    public static final Station 삼번_잠실역 = new Station(3L, "잠실역");
     public static final Section 일호선_구간_1번역_2번역 = new Section(1L, 1L, 2L, 1);
     public static final Section 일호선_구간_1번역_3번역 = new Section(1L, 1L, 3L, 2);
     public static final Section 일호선_구간_1번역_2번역_거리_10 = new Section(1L, 1L, 2L, 10);

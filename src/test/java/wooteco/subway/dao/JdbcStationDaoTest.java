@@ -29,10 +29,10 @@ public class JdbcStationDaoTest {
     @DisplayName("지하철역을 저장한다.")
     void save() {
         //given
-        final Station created = stationDao.save(Fixture.강남역_첫번째역);
+        final Station created = stationDao.save(Fixture.일번역_강남);
 
         //when & then
-        assertThat(Fixture.강남역_첫번째역.getId()).isEqualTo(Fixture.강남역_첫번째역.getId());
+        assertThat(Fixture.일번역_강남.getId()).isEqualTo(Fixture.일번역_강남.getId());
 
         stationDao.deleteById(created.getId());
     }
@@ -55,7 +55,7 @@ public class JdbcStationDaoTest {
     void findAll() {
         //given
         final Station created_1 = stationDao.save(Fixture.선릉역);
-        final Station created_2 = stationDao.save(Fixture.강남역_첫번째역);
+        final Station created_2 = stationDao.save(Fixture.일번역_강남);
 
         //when & then
         assertThat(stationDao.findAll()).hasSize(2);
