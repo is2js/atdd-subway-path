@@ -1,16 +1,28 @@
 package wooteco.subway.domain.path;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static wooteco.subway.testutils.Fixture.사번_사당역;
 import static wooteco.subway.testutils.Fixture.삼번_잠실역;
+import static wooteco.subway.testutils.Fixture.오번_신림역;
 import static wooteco.subway.testutils.Fixture.이번역_선릉;
 import static wooteco.subway.testutils.Fixture.일번역_강남;
 import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_2번역_거리_10;
 import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_3번역_거리_22;
+import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_5번역_거리_31;
 import static wooteco.subway.testutils.Fixture.일호선_구간_2번역_3번역_거리_12;
+import static wooteco.subway.testutils.Fixture.일호선_구간_3번역_4번역_거리_5;
+import static wooteco.subway.testutils.Fixture.일호선_구간_4번역_5번역_거리_3;
 
 import java.util.List;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 
@@ -34,7 +46,7 @@ class ShortestPathFinderTest {
             일호선_구간_1번역_3번역_거리_22
         );
 
-        // then(수행)
+        // when & then (수행)
         assertDoesNotThrow(() -> ShortestPathFinder.of(stations, sections));
     }
 
@@ -74,10 +86,145 @@ class ShortestPathFinderTest {
 
         final List<Section> sections = List.of();
 
-        // then(수행)
+        // when & then (수행)
         assertThatThrownBy(() -> ShortestPathFinder.of(stations, sections))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 구간이 비어서 경로를 만들 수 없습니다.");
     }
 
+    @DisplayName("1번역과 5번역 사이 최단거리를 계산하면, 최단 경로와 최단거리를 구한다.")
+    @Test
+    void find() {
+        //given
+        final List<Station> stations = List.of(
+            일번역_강남,
+            이번역_선릉,
+            삼번_잠실역,
+            사번_사당역,
+            오번_신림역
+        );
+
+        final List<Section> sections = List.of(
+            일호선_구간_1번역_2번역_거리_10,
+            일호선_구간_2번역_3번역_거리_12,
+            일호선_구간_3번역_4번역_거리_5,
+            일호선_구간_4번역_5번역_거리_3,
+            일호선_구간_1번역_5번역_거리_31
+        );
+
+        final Long source = 1L;
+        final Long target = 5L;
+
+        // when
+        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stations, sections);
+        final Path actual = shortestPathFinder.find(source, target);
+
+        // 예상
+        final Path expected = new Path(List.of(1L, 2L, 3L, 4L, 5L), 30);
+
+        // 검증
+        assertThat(actual.toString()).isEqualTo(expected.toString());
+    }
+
+    @DisplayName("인접한 역끼리 최단거리를 계산하면, 최단 경로와 최단거리를 구한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"1:2:10", "2:3:12"}, delimiter = ':')
+    void find_adjacent_stations(final Long source, final Long target, final int expectedDistance) {
+        //given
+        final List<Station> stations = List.of(
+            일번역_강남,
+            이번역_선릉,
+            삼번_잠실역,
+            사번_사당역,
+            오번_신림역
+        );
+
+        final List<Section> sections = List.of(
+            일호선_구간_1번역_2번역_거리_10,
+            일호선_구간_2번역_3번역_거리_12,
+            일호선_구간_3번역_4번역_거리_5,
+            일호선_구간_4번역_5번역_거리_3,
+            일호선_구간_1번역_5번역_거리_31
+        );
+
+        // when
+        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stations, sections);
+        final Path actual = shortestPathFinder.find(source, target);
+
+        // 예상
+        final Path expected = new Path(List.of(source, target), expectedDistance);
+
+        // 검증
+        assertThat(actual.toString()).isEqualTo(expected.toString());
+    }
+
+    @DisplayName("떨어진 역도 최단거리를 계산하면, 최단 경로와 최단거리를 구한다.")
+    @ParameterizedTest
+    @MethodSource
+    void find_remote_stations(final Long source, final Long target,
+                              final List<Long> expectedStationIds, final int expectedDistance) {
+        //given
+        final List<Station> stations = List.of(
+            일번역_강남,
+            이번역_선릉,
+            삼번_잠실역,
+            사번_사당역,
+            오번_신림역
+        );
+
+        final List<Section> sections = List.of(
+            일호선_구간_1번역_2번역_거리_10,
+            일호선_구간_2번역_3번역_거리_12,
+            일호선_구간_3번역_4번역_거리_5,
+            일호선_구간_4번역_5번역_거리_3,
+            일호선_구간_1번역_5번역_거리_31
+        );
+
+        // when
+        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stations, sections);
+        final Path actual = shortestPathFinder.find(source, target);
+
+        // 예상
+        final Path expected = new Path(expectedStationIds, expectedDistance);
+
+        // 검증
+        assertThat(actual.toString()).isEqualTo(expected.toString());
+    }
+
+    public static Stream<Arguments> find_remote_stations() {
+        return Stream.of(
+            Arguments.of(1L, 3L, List.of(1L, 2L, 3L), 22)
+        );
+    }
+
+    @DisplayName("최단거리를 구할 때, 같은 역을 입력하면 예외를 발생시킨다.")
+    @Test
+    void find_invalid() {
+        //given
+        final List<Station> stations = List.of(
+            일번역_강남,
+            이번역_선릉,
+            삼번_잠실역,
+            사번_사당역,
+            오번_신림역
+        );
+
+        final List<Section> sections = List.of(
+            일호선_구간_1번역_2번역_거리_10,
+            일호선_구간_2번역_3번역_거리_12,
+            일호선_구간_3번역_4번역_거리_5,
+            일호선_구간_4번역_5번역_거리_3,
+            일호선_구간_1번역_5번역_거리_31
+        );
+
+        final Long source = 1L;
+        final Long target = 1L;
+
+        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stations, sections);
+
+        // when
+        assertThatThrownBy(() -> shortestPathFinder.find(source, target))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("[ERROR] 경로를 찾으려면 같은 역을 입력할 수 없습니다.");
+    }
 }

@@ -2,6 +2,8 @@ package wooteco.subway.domain.path;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -98,6 +100,27 @@ public class ShortestPathFinder {
     private static void checkCountOfSections(final List<Section> sections) {
         if (sections.size() < 1) {
             throw new IllegalArgumentException("[ERROR] 구간이 비어서 경로를 만들 수 없습니다.");
+        }
+    }
+
+    public Path find(final Long source, final Long target) {
+        // 외부 인자는 일단 검사한다.
+        validateStationIds(source, target);
+
+        // 주입받아 생성한 호출직전의 객체 필드를 사용해서 역할을 수행한다.
+        // - 문서를 읽djT을 때, null가능성이 있으면 Optional로 받는다.?
+        final Optional<GraphPath<Long, DefaultWeightedEdge>> graphPathOrEmpty = Optional.of(
+            shortestPath.getPath(source, target));
+        final GraphPath<Long, DefaultWeightedEdge> graphPath = graphPathOrEmpty.orElseThrow(
+            () -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
+
+        // 같이 다니는 것이 발생하면 도메인으로 묶어서 응답한다.
+        return new Path(graphPath.getVertexList(), graphPath.getWeight());
+    }
+
+    private void validateStationIds(final Long source, final Long target) {
+        if (Objects.equals(source, target)) {
+            throw new IllegalArgumentException("[ERROR] 경로를 찾으려면 같은 역을 입력할 수 없습니다.");
         }
     }
 }

@@ -23,9 +23,14 @@ public class Fixture {
     public static final Station 일번역_강남 = new Station(1L, "강남역");
     public static final Station 이번역_선릉 = new Station(2L, "선릉역");
     public static final Station 삼번_잠실역 = new Station(3L, "잠실역");
+    public static final Station 사번_사당역 = new Station(4L, "신림역");
+    public static final Station 오번_신림역 = new Station(5L, "사당역");
     public static final Section 일호선_구간_1번역_2번역 = new Section(1L, 1L, 2L, 1);
     public static final Section 일호선_구간_1번역_3번역 = new Section(1L, 1L, 3L, 2);
     public static final Section 일호선_구간_1번역_2번역_거리_10 = new Section(1L, 1L, 2L, 10);
-    public static final Section 일호선_구간_2번역_3번역_거리_12 = new Section(1L, 2L, 3L, 12);
-    public static final Section 일호선_구간_1번역_3번역_거리_22 = new Section(1L, 1L, 1L, 3L, 22);
+    public static final Section 일호선_구간_2번역_3번역_거리_12 = new Section(2L, 2L, 3L, 12);
+    public static final Section 일호선_구간_1번역_3번역_거리_22 = new Section(3L, 1L, 1L, 3L, 22);
+    public static final Section 일호선_구간_3번역_4번역_거리_5 = new Section(4L, 1L, 3L, 4L, 5);
+    public static final Section 일호선_구간_4번역_5번역_거리_3 = new Section(5L, 1L, 4L, 5L, 3);
+    public static final Section 일호선_구간_1번역_5번역_거리_31 = new Section(6L, 1L, 1L, 5L, 31);
 }
