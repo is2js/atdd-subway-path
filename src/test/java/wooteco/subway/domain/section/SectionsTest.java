@@ -240,4 +240,17 @@ class SectionsTest {
 
         assertThat(actual.toString()).isEqualTo(expected.toString());
     }
+
+    @DisplayName("")
+    @Test
+    void getTotalStationIds() {
+
+        final Sections sections = new Sections(List.of(
+            일호선_구간_2번역_3번역_거리_12, 일호선_구간_1번역_2번역_거리_10));
+        final List<Long> expected = List.of(1L, 2L, 3L);
+
+        final List<Long> actual = sections.getTotalStationIds();
+
+        assertThat(actual).isEqualTo(expected);
+    }
 }
