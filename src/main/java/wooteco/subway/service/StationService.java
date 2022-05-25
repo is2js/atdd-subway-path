@@ -1,6 +1,7 @@
 package wooteco.subway.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wooteco.subway.dao.StationDao;
@@ -50,5 +51,12 @@ public class StationService {
         final Station downStation = stationDao.findById(lineRequest.getDownStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
         return List.of(upStation, downStation);
+    }
+
+    public List<Station> findByIds(final List<Long> ids) {
+        return ids.stream()
+            .map(id -> stationDao.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다.")))
+            .collect(Collectors.toList());
     }
 }
