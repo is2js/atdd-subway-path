@@ -124,6 +124,5 @@ public class AcceptanceFixtures {
             .get(URI)
             .then().log().all()
             .extract();
-
     }
 }
