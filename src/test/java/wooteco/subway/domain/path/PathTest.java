@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 class PathTest {
 
-    @DisplayName("")
+    @DisplayName("given)최단거리를 제공하면 거리에 따른 요금을 계산하여 반환한다.")
     @ParameterizedTest
     @CsvSource(value = {"9,1250", "10,1250", "11,1350", "15,1350", "16, 1450", "50, 2050", "51,2150"})
     void calculateFare(final int distance, final int expected) {
