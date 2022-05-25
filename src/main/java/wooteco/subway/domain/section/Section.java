@@ -80,26 +80,6 @@ public class Section {
         return Objects.equals(section.getUpStationId(), downStationId);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getLineId() {
-        return lineId;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
-
-    public Long getUpStationId() {
-        return upStationId;
-    }
-
-    public Long getDownStationId() {
-        return downStationId;
-    }
-
 
     public boolean isUpStationIdContained(final List<Long> stationIds) {
         return stationIds.contains(upStationId);
@@ -119,6 +99,26 @@ public class Section {
 
     public boolean isConnected(final Section section) {
         return downStationId.equals(section.upStationId);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getLineId() {
+        return lineId;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public Long getUpStationId() {
+        return upStationId;
+    }
+
+    public Long getDownStationId() {
+        return downStationId;
     }
 
     @Override

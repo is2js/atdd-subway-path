@@ -75,10 +75,13 @@ public class Sections {
     }
 
     public List<Section> getSortedSections() {
-        // 정렬된 구간을 모으려면 (1) 첫번재 구간을 찾고 -> (2) 2번째부터는 첫 구간downId == 다음 구간upId 인 다음 구간을 찾아 (3) 연결해야한다.
         final Section firstSection = findFirstSection();
+        final List<Section> theRestSections = findTheRestSections(firstSection);
+        return concatSections(firstSection, theRestSections);
+    }
 
-        return Stream.concat(Stream.of(firstSection), findNextSections(firstSection).stream())
+    private List<Section> concatSections(final Section firstSection, final List<Section> theRestSections) {
+        return Stream.concat(Stream.of(firstSection), theRestSections.stream())
             .collect(Collectors.toList());
     }
 
@@ -99,14 +102,13 @@ public class Sections {
             .collect(Collectors.toList());
     }
 
-    private List<Section> findNextSections(Section section) {
+    private List<Section> findTheRestSections(Section previousSection) {
         final List<Section> sections = new ArrayList<>();
-        // 조건에 맞는 것만 순서대로 골라 담을 때, 끝을 모른다면 -> while ( ) 로 조건 만족하는 동안 돌게 해야한다.
-        // -> 찾는 메서드에서 Opitonal로 반환한 뒤, isPresent()로 [메서드 밖 영역에서 찾는 것이 있으면] 의 조건을 만들 수 있다.
-        while (findNextSection(section).isPresent()) {
-            final Section nextSection = findNextSection(section).get();
+
+        while (findNextSection(previousSection).isPresent()) {
+            final Section nextSection = findNextSection(previousSection).get();
             sections.add(nextSection);
-            section = nextSection;
+            previousSection = nextSection;
         }
         return sections;
     }
