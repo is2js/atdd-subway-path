@@ -2,10 +2,10 @@ package wooteco.subway.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_2호선_STATION_1_3;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_분당선_STATION_1_3;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_신분당선_STATION_1_2;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_중앙선_STATION_1_3;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_2호선_STATION_1_3;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_분당선_STATION_1_3;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_중앙선_STATION_1_3;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -38,6 +38,12 @@ class LineServiceTest {
         this.lineDao = new JdbcLineDao(dataSource);
         this.sectionDao = new JdbcSectionDao(dataSource);
         this.lineService = new LineService(lineDao, sectionDao);
+    }
+
+    @DisplayName("")
+    @Test
+    void name() {
+        
     }
 
     @DisplayName("새로운 호선을 생성한다")

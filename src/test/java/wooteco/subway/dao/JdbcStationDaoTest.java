@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.DuplicateKeyException;
 import wooteco.subway.domain.Station;
-import wooteco.subway.testutils.Fixture;
+import wooteco.subway.testutils.SubWayFixtures;
 
 @JdbcTest
 public class JdbcStationDaoTest {
@@ -29,10 +29,10 @@ public class JdbcStationDaoTest {
     @DisplayName("지하철역을 저장한다.")
     void save() {
         //given
-        final Station created = stationDao.save(Fixture.일번역_강남);
+        final Station created = stationDao.save(SubWayFixtures.일번역_강남);
 
         //when & then
-        assertThat(Fixture.일번역_강남.getId()).isEqualTo(Fixture.일번역_강남.getId());
+        assertThat(SubWayFixtures.일번역_강남.getId()).isEqualTo(SubWayFixtures.일번역_강남.getId());
 
         stationDao.deleteById(created.getId());
     }
@@ -41,7 +41,7 @@ public class JdbcStationDaoTest {
     @DisplayName("중복된 역을 저장할 경우 예외를 발생시킨다.")
     void save_duplicate() {
         //given
-        final Station created = stationDao.save(Fixture.선릉역);
+        final Station created = stationDao.save(SubWayFixtures.선릉역);
 
         //when & then
         assertThatThrownBy(() -> stationDao.save(created))
@@ -54,8 +54,8 @@ public class JdbcStationDaoTest {
     @DisplayName("모든 지하철 역을 조회한다")
     void findAll() {
         //given
-        final Station created_1 = stationDao.save(Fixture.선릉역);
-        final Station created_2 = stationDao.save(Fixture.일번역_강남);
+        final Station created_1 = stationDao.save(SubWayFixtures.선릉역);
+        final Station created_2 = stationDao.save(SubWayFixtures.일번역_강남);
 
         //when & then
         assertThat(stationDao.findAll()).hasSize(2);
@@ -68,7 +68,7 @@ public class JdbcStationDaoTest {
     @DisplayName("입력된 id의 지하철 역을 삭제한다")
     void deleteById() {
         //given
-        final Station created = stationDao.save(Fixture.선릉역);
+        final Station created = stationDao.save(SubWayFixtures.선릉역);
 
         //when
         stationDao.deleteById(created.getId());

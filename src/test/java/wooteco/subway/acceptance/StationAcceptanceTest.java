@@ -2,14 +2,14 @@ package wooteco.subway.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.getExpectedStationIds;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.getResultStationIds;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestDeleteStation;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestGetStations;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestPostStation;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_서울대역;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_신림역;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_역삼역;
+import static wooteco.subway.acceptance.AcceptanceFixtures.getExpectedStationIds;
+import static wooteco.subway.acceptance.AcceptanceFixtures.getResultStationIds;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestDeleteStation;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestGetStations;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestPostStation;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_서울대역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_신림역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_역삼역;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

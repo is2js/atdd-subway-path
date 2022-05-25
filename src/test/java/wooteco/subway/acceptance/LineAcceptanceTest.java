@@ -2,17 +2,17 @@ package wooteco.subway.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestDeleteLine;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestGetLines;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestPostLine;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestPostStation;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestPutLine;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_분당선_STATION_1_3;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_신분당선2_FOR_PUT;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_신분당선_STATION_1_2;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_강남역;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_역삼역;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_잠실역;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestDeleteLine;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestGetLines;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestPostLine;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestPostStation;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestPutLine;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_분당선_STATION_1_3;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선2_FOR_PUT;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_강남역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_역삼역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_잠실역;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

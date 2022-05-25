@@ -2,11 +2,12 @@ package wooteco.subway.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static wooteco.subway.testutils.Fixture.이호선_그린;
-import static wooteco.subway.testutils.Fixture.일호선_파랑;
+import static wooteco.subway.testutils.SubWayFixtures.이호선_그린;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_파랑;
 
 import java.util.List;
 import javax.sql.DataSource;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,15 +34,17 @@ public class JdbcLineDaoTest {
     @DisplayName("노선을 저장한다.")
     void save() {
         //given
-        final Line actual = lineDao.save(이호선_그린);
+        final Line 이호선_그린_entity = new Line("2호선", "green");
 
         //when
-        String actualName = actual.getName();
+        final Line 이호선_그린_domain = lineDao.save(이호선_그린_entity);
 
         //then
-        assertThat(actualName).isEqualTo(이호선_그린.getName());
+        Assertions.assertThat(이호선_그린_domain).usingRecursiveComparison()
+            .ignoringFields("id") // isEqualTo전에 객체에서 무시할 field를 지정
+            .isEqualTo(이호선_그린_entity);
 
-        lineDao.deleteById(actual.getId());
+        lineDao.deleteById(이호선_그린_domain.getId());
     }
 
     @Test

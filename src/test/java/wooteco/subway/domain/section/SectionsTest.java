@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_2번역_거리_10;
-import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_3번역_거리_22;
-import static wooteco.subway.testutils.Fixture.일호선_구간_2번역_3번역_거리_12;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역_거리_10;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역_거리_22;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_2번역_3번역_거리_12;
 
 import java.util.ArrayList;
 import java.util.List;

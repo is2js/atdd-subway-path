@@ -1,12 +1,13 @@
 package wooteco.subway.acceptance;
 
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestPostLine;
-import static wooteco.subway.acceptance.AcceptanceTestUtil.requestPostStation;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_분당선_STATION_1_3;
-import static wooteco.subway.testutils.Fixture.LINE_REQUEST_신분당선_STATION_1_2;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_강남역;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_역삼역;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_잠실역;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestPostLine;
+import static wooteco.subway.acceptance.AcceptanceFixtures.requestPostStation;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_분당선_STATION_1_3;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2;
+import static wooteco.subway.testutils.SubWayFixtures.SECTION_REQUEST_1번역_2번역_거리5;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_강남역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_역삼역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_잠실역;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -14,7 +15,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import wooteco.subway.dto.request.SectionRequest;
 
 @DisplayName("지하철 구간 관련 기능")
 public class SectionAcceptanceTest extends AcceptanceTest {
@@ -26,9 +26,8 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
         requestPostLine(LINE_REQUEST_신분당선_STATION_1_2, "/lines");
 
-        final SectionRequest sectionRequest = new SectionRequest(2L, 3L, 10);
-
-        final ExtractableResponse<Response> response = AcceptanceTestUtil.requestPostSection(sectionRequest,
+        final ExtractableResponse<Response> response = AcceptanceFixtures.requestPostSection(
+            SECTION_REQUEST_1번역_2번역_거리5,
             "/lines/1/sections");
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -41,9 +40,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
         requestPostStation(STATION_REQUEST_역삼역, "/stations");
         requestPostLine(LINE_REQUEST_분당선_STATION_1_3, "/lines");
-        final SectionRequest sectionRequest = new SectionRequest(1L, 2L, 5);
 
-        final ExtractableResponse<Response> response = AcceptanceTestUtil.requestPostSection(sectionRequest,
+        final ExtractableResponse<Response> response = AcceptanceFixtures.requestPostSection(
+            SECTION_REQUEST_1번역_2번역_거리5,
             "/lines/1/sections");
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -56,9 +55,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
         requestPostStation(STATION_REQUEST_역삼역, "/stations");
         requestPostLine(LINE_REQUEST_분당선_STATION_1_3, "/lines");
-        AcceptanceTestUtil.requestPostSection(new SectionRequest(1L, 2L, 5), "/lines/1/sections");
+        AcceptanceFixtures.requestPostSection(SECTION_REQUEST_1번역_2번역_거리5, "/lines/1/sections");
 
-        final ExtractableResponse<Response> response = AcceptanceTestUtil.requestDeleteSection(
+        final ExtractableResponse<Response> response = AcceptanceFixtures.requestDeleteSection(
             "/lines/1/sections?stationId=2");
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -71,9 +70,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
         requestPostStation(STATION_REQUEST_역삼역, "/stations");
         requestPostLine(LINE_REQUEST_분당선_STATION_1_3, "/lines");
-        AcceptanceTestUtil.requestPostSection(new SectionRequest(1L, 2L, 5), "/lines/1/sections");
+        AcceptanceFixtures.requestPostSection(SECTION_REQUEST_1번역_2번역_거리5, "/lines/1/sections");
 
-        final ExtractableResponse<Response> response = AcceptanceTestUtil.requestDeleteSection(
+        final ExtractableResponse<Response> response = AcceptanceFixtures.requestDeleteSection(
             "/lines/1/sections?stationId=3");
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -86,9 +85,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
         requestPostStation(STATION_REQUEST_역삼역, "/stations");
         requestPostLine(LINE_REQUEST_분당선_STATION_1_3, "/lines");
-        AcceptanceTestUtil.requestPostSection(new SectionRequest(1L, 2L, 5), "/lines/1/sections");
+        AcceptanceFixtures.requestPostSection(SECTION_REQUEST_1번역_2번역_거리5, "/lines/1/sections");
 
-        final ExtractableResponse<Response> response = AcceptanceTestUtil.requestDeleteSection(
+        final ExtractableResponse<Response> response = AcceptanceFixtures.requestDeleteSection(
             "/lines/1/sections?stationId=1");
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());

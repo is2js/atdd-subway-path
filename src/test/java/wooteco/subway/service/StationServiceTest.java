@@ -1,8 +1,8 @@
 package wooteco.subway.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_강남역;
-import static wooteco.subway.testutils.Fixture.STATION_REQUEST_잠실역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_강남역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_잠실역;
 
 import java.util.List;
 import javax.sql.DataSource;

@@ -2,8 +2,8 @@ package wooteco.subway.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_2번역;
-import static wooteco.subway.testutils.Fixture.일호선_구간_1번역_3번역;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역;
 
 import java.util.List;
 import javax.sql.DataSource;
