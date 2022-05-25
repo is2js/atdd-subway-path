@@ -90,8 +90,6 @@ public class Sections {
     }
 
     private boolean isFirstSection(final Section section) {
-        // upId가 구간내 downId로 사용된 적이 없다면, 첫번째 구간이다.
-        // [] [] [] [] 2번째부터는 upId가 앞 구간의 downId와 일치된다 = downId로 사용된다.
         return !getDownStationIds().contains(section.getUpStationId());
     }
 
