@@ -38,5 +38,6 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(new ErrorResponse(e.getMessage()));
+//            .body(new ErrorResponse("[ERROR] 예기치 못한 에러가 발생했습니다."));
     }
 }
