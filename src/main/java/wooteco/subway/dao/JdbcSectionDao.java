@@ -95,4 +95,10 @@ public class JdbcSectionDao implements SectionDao {
         final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(section);
         namedParameterJdbcTemplate.update(sql, parameters);
     }
+
+    @Override
+    public List<Section> findAll() {
+        final String sql = "SELECT * FROM section";
+        return namedParameterJdbcTemplate.query(sql, SECTION_ROW_MAPPER);
+    }
 }

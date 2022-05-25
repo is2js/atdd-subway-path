@@ -132,7 +132,7 @@ public class Sections {
             .orElseThrow(() -> new IllegalArgumentException(ERROR_NO_STATION));
     }
 
-    private List<Long> getTotalStationIds() {
+    public List<Long> getTotalStationIds() {
         return this.value.stream()
             .flatMap(it -> Stream.of(it.getUpStationId(), it.getDownStationId()))
             .distinct()

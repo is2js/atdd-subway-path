@@ -19,4 +19,6 @@ public interface SectionDao {
     void batchUpdate(List<Section> sections);
 
     void update(Section updated);
+
+    List<Section> findAll();
 }
