@@ -17,8 +17,5 @@ class PathTest {
         final int actual = path.calculateFare();
 
         Assertions.assertThat(actual).isEqualTo(expected);
-
-        System.out.println("actual = " + actual);
-        System.out.println("expected = " + expected);
     }
 }

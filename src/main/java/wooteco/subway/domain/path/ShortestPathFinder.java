@@ -8,7 +8,6 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
-import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 
 //1. 생성자주입으로 재료를 받아 상황을 만들고, method로 역할 수행할 객체 class를 만든다. -> test를 만들어서, 생성자 + method를 모두 개발한다.
@@ -33,7 +32,7 @@ public class ShortestPathFinder {
         this.shortestPath = shortestPath;
     }
 
-    public static ShortestPathFinder of(final List<Station> stations, final List<Section> sections) {
+    public static ShortestPathFinder of(final List<Long> stations, final List<Section> sections) {
 
         //4-3. 정펙매로 인해 private기본생성자는 호출안된다고 가정하고, 유일통로로서 + 외부의 재료들을 받는 곳으로 검증을 시행해줌
         validateStations(stations);
@@ -60,10 +59,10 @@ public class ShortestPathFinder {
         return new ShortestPathFinder(new DijkstraShortestPath<Long, DefaultWeightedEdge>(graph));
     }
 
-    private static void addVertex(final List<Station> stations,
+    private static void addVertex(final List<Long> stations,
                                   final WeightedMultigraph<Long, DefaultWeightedEdge> graph) {
-        for (final Station station : stations) {
-            graph.addVertex(station.getId());
+        for (final Long stationId : stations) {
+            graph.addVertex(stationId);
         }
     }
 
@@ -77,7 +76,7 @@ public class ShortestPathFinder {
         }
     }
 
-    private static void validateStations(final List<Station> stations) {
+    private static void validateStations(final List<Long> stations) {
         checkNull(stations);
         checkCountOfStations(stations);
     }
@@ -86,8 +85,8 @@ public class ShortestPathFinder {
         Objects.requireNonNull(object, "[ERROR] 빈칸 입력은 허용하지 않는다.");
     }
 
-    private static void checkCountOfStations(final List<Station> stations) {
-        if (stations.size() <= 1) {
+    private static void checkCountOfStations(final List<Long> stationids) {
+        if (stationids.size() <= 1) {
             throw new IllegalArgumentException("[ERROR] 지하철역이 부족하여 경로를 만들 수 없습니다.");
         }
     }
@@ -115,7 +114,7 @@ public class ShortestPathFinder {
             () -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
 
         // 같이 다니는 것이 발생하면 도메인으로 묶어서 응답한다.
-        return new Path(graphPath.getVertexList(), graphPath.getWeight());
+        return new Path(graphPath.getVertexList(), (int) graphPath.getWeight());
     }
 
     private void validateStationIds(final Long source, final Long target) {
