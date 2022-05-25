@@ -8,11 +8,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.http.MediaType;
 import wooteco.subway.dto.request.LineRequest;
+import wooteco.subway.dto.request.PathRequest;
 import wooteco.subway.dto.request.SectionRequest;
 import wooteco.subway.dto.request.StationRequest;
 import wooteco.subway.dto.response.StationResponse;
 
-public class AcceptanceTestUtil {
+public class AcceptanceFixtures {
     public static ExtractableResponse<Response> requestPostStation(final StationRequest stationRequest,
                                                                    final String URI) {
         return RestAssured.given().log().all()
@@ -112,5 +113,17 @@ public class AcceptanceTestUtil {
             .delete(URI)
             .then().log().all()
             .extract();
+    }
+
+    public static ExtractableResponse<Response> requestGetPath(final PathRequest pathRequest, final String URI) {
+        return RestAssured.given().log().all()
+            .param("source", pathRequest.getSource())
+            .param("target", pathRequest.getTarget())
+            .param("age", pathRequest.getAge())
+            .when()
+            .get(URI)
+            .then().log().all()
+            .extract();
+
     }
 }
