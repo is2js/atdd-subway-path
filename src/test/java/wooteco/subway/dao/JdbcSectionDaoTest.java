@@ -7,9 +7,12 @@ import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3
 
 import java.util.List;
 import javax.sql.DataSource;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import wooteco.subway.domain.section.Section;
@@ -109,5 +112,24 @@ class JdbcSectionDaoTest {
             () -> assertThat(sectionDao.findById(createdA.getId()).get().getDistance()).isEqualTo(100),
             () -> assertThat(sectionDao.findById(createdB.getId()).get().getDistance()).isEqualTo(200)
         );
+
+        sectionDao.deleteById(createdA.getId());
+        sectionDao.deleteById(createdB.getId());
+    }
+
+    @DisplayName("stationId이 주어지면, 구간 중에 해당 지하철역이 존재하는지 확인한다.")
+    @ParameterizedTest
+    @CsvSource({"1,true", "-1,false"})
+    void existStation(final long stationId, final boolean expected) {
+        //given
+        final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
+
+        //when
+        final Boolean actual = sectionDao.existStation(stationId);
+
+        //then
+        Assertions.assertThat(actual).isEqualTo(expected);
+
+        sectionDao.deleteById(createdA.getId());
     }
 }

@@ -21,4 +21,6 @@ public interface SectionDao {
     void update(Section updated);
 
     List<Section> findAll();
+
+    Boolean existStation(Long id);
 }
