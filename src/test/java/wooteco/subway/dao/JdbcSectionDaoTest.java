@@ -63,7 +63,7 @@ class JdbcSectionDaoTest {
         final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
 
         //when
-        final List<Section> sections = sectionDao.findSectionStationsByLineId(lineId);
+        final List<Section> sections = sectionDao.findSectionByLineId(lineId);
 
         //then
         assertThat(sections).isNotEmpty();
@@ -84,7 +84,7 @@ class JdbcSectionDaoTest {
         sectionDao.deleteAllByLineId(lineId);
 
         //then
-        assertThat(sectionDao.findSectionStationsByLineId(lineId)).isEmpty();
+        assertThat(sectionDao.findSectionByLineId(lineId)).isEmpty();
 
         sectionDao.deleteById(createdA.getId());
         sectionDao.deleteById(createdB.getId());
