@@ -3,9 +3,10 @@ package wooteco.subway.dto.response;
 import wooteco.subway.domain.section.Section;
 
 public class SectionResponse {
+    
     private Section section;
 
-    public SectionResponse() {
+    private SectionResponse() {
     }
 
     public Section getSection() {
