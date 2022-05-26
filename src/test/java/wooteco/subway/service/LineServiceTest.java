@@ -40,12 +40,6 @@ class LineServiceTest {
         this.lineService = new LineService(lineDao, sectionDao);
     }
 
-    @DisplayName("")
-    @Test
-    void name() {
-
-    }
-
     @DisplayName("새로운 호선을 생성한다")
     @Test
     void create() {

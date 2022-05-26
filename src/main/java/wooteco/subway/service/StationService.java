@@ -53,10 +53,18 @@ public class StationService {
         return List.of(upStation, downStation);
     }
 
-    public List<Station> findByIds(final List<Long> ids) {
+    public List<Station> findByIds2(final List<Long> ids) {
         return ids.stream()
             .map(id -> stationDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다.")))
             .collect(Collectors.toList());
+    }
+
+    public List<Station> findByIds(final List<Long> ids) {
+        return stationDao.findByIds(ids);
+/*        ids.stream()
+            .map(id -> stationDao.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다.")))
+            .collect(Collectors.toList());*/
     }
 }

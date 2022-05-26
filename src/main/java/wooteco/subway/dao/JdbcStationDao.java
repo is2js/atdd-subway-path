@@ -23,7 +23,7 @@ public class JdbcStationDao implements StationDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
-    
+
     public JdbcStationDao(final DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
@@ -68,5 +68,12 @@ public class JdbcStationDao implements StationDao {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Station> findByIds(final List<Long> ids) {
+        final String sql = "SELECT * FROM station WHERE id IN (:ids)";
+        final MapSqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
+        return namedParameterJdbcTemplate.query(sql, parameters, STATION_ROW_MAPPER);
     }
 }
