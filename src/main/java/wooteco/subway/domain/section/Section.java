@@ -121,6 +121,10 @@ public class Section {
         return downStationId;
     }
 
+    public boolean isSameOppositeStation(final Section section) {
+        return downStationId.equals(section.upStationId);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -150,5 +154,4 @@ public class Section {
             ", downStationId=" + downStationId +
             '}';
     }
-
 }

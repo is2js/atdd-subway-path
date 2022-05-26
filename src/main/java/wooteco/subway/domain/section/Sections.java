@@ -76,8 +76,7 @@ public class Sections {
 
     public List<Section> getSortedSections() {
         final Section firstSection = findFirstSection();
-        final List<Section> theRestSections = findTheRestSections(firstSection);
-        return concatSections(firstSection, theRestSections);
+        return concatSections(firstSection, findTheRestSections(firstSection));
     }
 
     private List<Section> concatSections(final Section firstSection, final List<Section> theRestSections) {
@@ -93,13 +92,8 @@ public class Sections {
     }
 
     private boolean isFirstSection(final Section section) {
-        return !getDownStationIds().contains(section.getUpStationId());
-    }
-
-    private List<Long> getDownStationIds() {
         return value.stream()
-            .map(Section::getDownStationId)
-            .collect(Collectors.toList());
+            .noneMatch(it -> it.isSameOppositeStation(section));
     }
 
     private List<Section> findTheRestSections(Section previousSection) {
