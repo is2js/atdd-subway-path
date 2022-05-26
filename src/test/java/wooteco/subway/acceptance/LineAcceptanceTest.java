@@ -20,7 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import wooteco.subway.dto.response.LineResponse;
+import wooteco.subway.ui.dto.response.LineResponse;
 
 @Transactional
 @DisplayName("지하철 노선 관련 기능")

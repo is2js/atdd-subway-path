@@ -6,7 +6,7 @@ import wooteco.subway.dao.SectionDao;
 import wooteco.subway.domain.path.Path;
 import wooteco.subway.domain.path.ShortestPathFinder;
 import wooteco.subway.domain.section.Sections;
-import wooteco.subway.dto.request.PathRequest;
+import wooteco.subway.ui.dto.request.PathRequest;
 
 @Service
 public class PathService {

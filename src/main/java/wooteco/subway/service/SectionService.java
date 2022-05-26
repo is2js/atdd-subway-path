@@ -12,9 +12,9 @@ import wooteco.subway.dao.StationDao;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 import wooteco.subway.domain.section.Sections;
-import wooteco.subway.dto.request.SectionRequest;
 import wooteco.subway.exception.LineNotFoundException;
 import wooteco.subway.exception.StationNotFoundException;
+import wooteco.subway.ui.dto.request.SectionRequest;
 
 @Service
 public class SectionService {

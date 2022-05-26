@@ -2,7 +2,7 @@ package wooteco.subway.domain.section;
 
 import java.util.List;
 import java.util.Objects;
-import wooteco.subway.dto.request.LineRequest;
+import wooteco.subway.ui.dto.request.LineRequest;
 
 public class Section {
 

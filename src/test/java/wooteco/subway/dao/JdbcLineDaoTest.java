@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.DuplicateKeyException;
 import wooteco.subway.domain.Line;
-import wooteco.subway.dto.request.LineRequest;
+import wooteco.subway.ui.dto.request.LineRequest;
 
 @JdbcTest
 public class JdbcLineDaoTest {

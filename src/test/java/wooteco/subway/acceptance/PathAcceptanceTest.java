@@ -24,7 +24,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import wooteco.subway.dto.request.PathRequest;
+import wooteco.subway.ui.dto.request.PathRequest;
 
 @Transactional
 @DisplayName("지하철 경로 관련 기능")

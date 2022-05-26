@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import wooteco.subway.dto.response.ErrorResponse;
 import wooteco.subway.exception.LineDuplicateException;
 import wooteco.subway.exception.LineNotFoundException;
 import wooteco.subway.exception.SectionNotFoundException;
 import wooteco.subway.exception.StationDuplicateException;
 import wooteco.subway.exception.StationNotFoundException;
+import wooteco.subway.ui.dto.response.ErrorResponse;
 
 @RestControllerAdvice(annotations = RestController.class)
 public class SubwayControllerAdvice {

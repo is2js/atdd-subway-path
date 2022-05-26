@@ -1,4 +1,4 @@
-package wooteco.subway.dto.request;
+package wooteco.subway.ui.dto.request;
 
 import java.util.Objects;
 import wooteco.subway.domain.section.Section;

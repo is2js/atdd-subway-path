@@ -19,9 +19,9 @@ import wooteco.subway.dao.JdbcSectionDao;
 import wooteco.subway.dao.LineDao;
 import wooteco.subway.dao.SectionDao;
 import wooteco.subway.domain.Line;
-import wooteco.subway.dto.request.LineRequest;
 import wooteco.subway.exception.LineDuplicateException;
 import wooteco.subway.exception.LineNotFoundException;
+import wooteco.subway.ui.dto.request.LineRequest;
 
 @JdbcTest
 class LineServiceTest {
@@ -43,7 +43,7 @@ class LineServiceTest {
     @DisplayName("")
     @Test
     void name() {
-        
+
     }
 
     @DisplayName("새로운 호선을 생성한다")

@@ -20,7 +20,7 @@ import wooteco.subway.dao.StationDao;
 import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
-import wooteco.subway.dto.request.SectionRequest;
+import wooteco.subway.ui.dto.request.SectionRequest;
 
 @JdbcTest
 class SectionServiceTest {

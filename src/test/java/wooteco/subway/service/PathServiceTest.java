@@ -26,7 +26,7 @@ import wooteco.subway.dao.StationDao;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.path.Path;
 import wooteco.subway.domain.section.Section;
-import wooteco.subway.dto.request.PathRequest;
+import wooteco.subway.ui.dto.request.PathRequest;
 
 @JdbcTest
 class PathServiceTest {

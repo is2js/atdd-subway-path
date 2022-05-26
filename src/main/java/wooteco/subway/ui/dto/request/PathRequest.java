@@ -1,4 +1,4 @@
-package wooteco.subway.dto.request;
+package wooteco.subway.ui.dto.request;
 
 public class PathRequest {
     private Long source;
