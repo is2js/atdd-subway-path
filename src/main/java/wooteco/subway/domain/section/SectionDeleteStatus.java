@@ -25,23 +25,21 @@ public enum SectionDeleteStatus {
             .orElseThrow(() -> new IllegalStateException("[ERROR] 해당 구간을 삭제할 수 없습니다."));
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private static boolean isFirstSection(final List<Section> sections, final Long stationId) {
         final Long upStationId = sections.stream()
             .flatMap(section -> Stream.of(section.getUpStationId(), section.getDownStationId()))
             .distinct()
             .min(Comparator.comparing(it -> it))
-            .get();
+            .orElseThrow(() -> new IllegalArgumentException("[ERROR] 첫 구간을 찾을 수 없습니다."));
         return upStationId.equals(stationId);
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private static boolean isLastSection(final List<Section> sections, final Long stationId) {
         final Long downStationId = sections.stream()
             .flatMap(section -> Stream.of(section.getUpStationId(), section.getDownStationId()))
             .distinct()
             .max(Comparator.comparing(it -> it))
-            .get();
+            .orElseThrow(() -> new IllegalArgumentException("[ERROR] 마지막 구간을 찾을 수 없습니다."));
         return downStationId.equals(stationId);
     }
 
