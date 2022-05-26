@@ -60,6 +60,10 @@ public class LineService {
     @Transactional
     public void delete(final Long id) {
         final Line targetLine = findById(id);
+
+        //상위도메인으로서 삭제시, fk로 갖다쓰는 하위 도메인도 같이 삭제 -> dao 없으면 import
+        sectionDao.deleteByLineId(id);
+
         lineDao.deleteById(targetLine.getId());
     }
 }

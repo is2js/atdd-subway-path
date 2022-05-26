@@ -2,6 +2,7 @@ package wooteco.subway.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_2호선_STATION_1_3;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_분당선_STATION_1_3;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2;
@@ -149,9 +150,12 @@ class LineServiceTest {
         lineService.delete(line.getId());
 
         //then
-        assertThatThrownBy(() -> lineService.findById(line.getId()))
-            .isInstanceOf(LineNotFoundException.class)
-            .hasMessage("[ERROR] 해당 노선이 없습니다.");
+        assertAll(
+            () -> assertThatThrownBy(() -> lineService.findById(line.getId()))
+                .isInstanceOf(LineNotFoundException.class)
+                .hasMessage("[ERROR] 해당 노선이 없습니다."),
+            () -> assertThat(sectionDao.findSectionByLineId(line.getId())).isEmpty()
+        );
     }
 
     @DisplayName("특정 노선을 삭제시, 없는 노선을 삭제 요청하면 예외를 발생시킨다.")
