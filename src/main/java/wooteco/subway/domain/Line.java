@@ -11,19 +11,14 @@ public class Line {
     private String color;
 
 
-    public Line(String name,
-                String color) {
+    public Line(String name, String color) {
         this(null, name, color);
     }
 
-    public Line(Long id,
-                final String name,
-                final String color) {
-        Objects.requireNonNull(name, ERROR_NULL);
-        Objects.requireNonNull(color, ERROR_NULL);
+    public Line(Long id, final String name, final String color) {
         this.id = id;
-        this.name = new Name(name);
-        this.color = color;
+        this.name = new Name(Objects.requireNonNull(name, ERROR_NULL));
+        this.color = Objects.requireNonNull(color, ERROR_NULL);
     }
 
     public Long getId() {
