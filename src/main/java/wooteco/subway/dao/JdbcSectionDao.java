@@ -77,7 +77,7 @@ public class JdbcSectionDao implements SectionDao {
     }
 
     @Override
-    public void deleteAllByLineId(final Long lineId) {
+    public void deleteByLineId(final Long lineId) {
         final String sql = "DELETE FROM section WHERE line_id = :lineId";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("lineId", lineId);
         namedParameterJdbcTemplate.update(sql, parameters);

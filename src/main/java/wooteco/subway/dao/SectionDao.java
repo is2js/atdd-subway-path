@@ -14,7 +14,7 @@ public interface SectionDao {
 
     List<Section> findSectionByLineId(Long lineId);
 
-    void deleteAllByLineId(Long lineId);
+    void deleteByLineId(Long lineId);
 
     void batchUpdate(List<Section> sections);
 
