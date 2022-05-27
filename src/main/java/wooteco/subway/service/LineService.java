@@ -27,7 +27,9 @@ public class LineService {
         final Line targetLine = lineRequest.toEntity();
         checkDuplicateName(targetLine);
         final Line createdLine = lineDao.save(targetLine);
-        final Section targetSection = new Section(createdLine.getId(), lineRequest);
+
+        final Section targetSection = new Section(createdLine.getId(), lineRequest.getUpStationId(),
+            lineRequest.getDownStationId(), lineRequest.getDistance());
         sectionDao.save(targetSection);
 
         return createdLine;
@@ -41,12 +43,14 @@ public class LineService {
 
     @Transactional(readOnly = true)
     public List<Line> findAll() {
+//        final List<Line> lines = lineDao.findAll()
+//            .stream()
+//            .map(line -> new LineResponse(line, findStationsByLine(line))).collect(Collectors.toList());
         return lineDao.findAll();
     }
 
     public Line findById(final Long id) {
-        return lineDao.findById(id)
-            .orElseThrow(() -> new LineNotFoundException("[ERROR] 해당 노선이 없습니다."));
+        return lineDao.findById(id).orElseThrow(() -> new LineNotFoundException("[ERROR] 해당 노선이 없습니다."));
     }
 
     @Transactional

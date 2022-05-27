@@ -20,6 +20,7 @@ import wooteco.subway.dao.JdbcSectionDao;
 import wooteco.subway.dao.LineDao;
 import wooteco.subway.dao.SectionDao;
 import wooteco.subway.domain.Line;
+import wooteco.subway.domain.section.Section;
 import wooteco.subway.exception.LineDuplicateException;
 import wooteco.subway.exception.LineNotFoundException;
 import wooteco.subway.ui.dto.request.LineRequest;
@@ -165,5 +166,23 @@ class LineServiceTest {
         assertThatThrownBy(() -> lineService.delete(-1L))
             .isInstanceOf(LineNotFoundException.class)
             .hasMessage("[ERROR] 해당 노선이 없습니다.");
+    }
+
+    @DisplayName("지하철 노선 생성시, 상/하행종점을 바탕으로 기본 구간을 추가로 만든다.")
+    @Test
+    void create_with_default_section() {
+
+        final LineRequest lineRequest = new LineRequest("1호선", "green", 1L, 2L, 10);
+
+        final Line line = lineService.create(lineRequest);
+        final Section expected = new Section(line.getId(), 1L, 2L, 10);
+        final List<Section> sections = sectionDao.findSectionByLineId(line.getId());
+
+        assertThat(sections).usingRecursiveComparison()
+            .ignoringFields("id")
+            .isEqualTo(List.of(expected));
+
+        lineService.delete(line.getId());
+        sectionDao.deleteByLineId(line.getId());
     }
 }

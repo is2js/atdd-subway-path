@@ -50,7 +50,7 @@ class SectionServiceTest {
         final Station 신분당_3역 = stationDao.save(new Station("신분당_3역"));
         sectionDao.save(new Section(lineId, 신분당_1역.getId(), 신분당_3역.getId(), 10));
 
-        final List<Station> stations = sectionService.findSectionStationsByLineId(lineId);
+        final List<Station> stations = sectionService.findStationsByLineId(lineId);
 
         assertThat(stations).hasSize(2);
     }

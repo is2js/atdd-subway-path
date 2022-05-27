@@ -9,6 +9,7 @@ public class Line {
     private Long id;
     private Name name;
     private String color;
+//    private Section section;
 
 
     public Line(String name, String color) {
@@ -19,7 +20,17 @@ public class Line {
         this.id = id;
         this.name = new Name(Objects.requireNonNull(name, ERROR_NULL));
         this.color = Objects.requireNonNull(color, ERROR_NULL);
+        // 객체를 필드로 가지며, 인자로 안받을 땐, 기본값을 넣어줘야한다... 일급이라면, null대신 빈list를 빈 인자로서 가지도록 넣어줬을 것이다. new Sections(Collections.emptyList())
+        // 포장된 것으로서 null을 가질순 있다.
+//        this.section = null;
     }
+
+//    public Line(final Long id, final String name, final String color, final Section section) {
+//        this.id = id;
+//        this.name = new Name(Objects.requireNonNull(name, ERROR_NULL));
+//        this.color = Objects.requireNonNull(color, ERROR_NULL);
+//        this.section = section;
+//    }
 
     public Long getId() {
         return id;

@@ -14,6 +14,7 @@ import wooteco.subway.domain.section.Section;
 import wooteco.subway.domain.section.Sections;
 import wooteco.subway.exception.LineNotFoundException;
 import wooteco.subway.exception.StationNotFoundException;
+import wooteco.subway.ui.dto.request.LineRequest;
 import wooteco.subway.ui.dto.request.SectionRequest;
 
 @Service
@@ -29,12 +30,22 @@ public class SectionService {
         this.lineDao = lineDao;
     }
 
-    public List<Station> findSectionStationsByLineId(final Long lineId) {
-        final List<Long> stationIds = findSectionStationIds(lineId);
+    public void create(final Long lineId, final LineRequest lineRequest) {
+        //dao로 넘겨주기 전에 section(빈Id entity or domain)을 만들고 dao로 넘겨준다.
+        sectionDao.save(createSection(lineId, lineRequest));
+    }
+
+    private Section createSection(final Long lineId, final LineRequest lineRequest) {
+        return new Section(lineId, lineRequest.getUpStationId(), lineRequest.getDownStationId(),
+            lineRequest.getDistance());
+    }
+
+    public List<Station> findStationsByLineId(final Long lineId) {
+        final List<Long> stationIds = findStationIdsByLineId(lineId);
         return getSortedStations(stationIds);
     }
 
-    private List<Long> findSectionStationIds(final Long lineId) {
+    private List<Long> findStationIdsByLineId(final Long lineId) {
         return new Sections(sectionDao.findSectionByLineId(lineId))
             .getSortedSections()
             .stream()
@@ -71,7 +82,8 @@ public class SectionService {
         sectionDao.deleteById(sections.deleteSectionByStationId(stationId)); // 상황에 따라 알아서 역 삭제된 상황으로 구간 삭제되고 이어짐.
         if (isMiddleDelete) { // 구간 삭제전에 물어봤던 중간역여부... (구간 삭제되면 중간역으로 나뉜 구것이 없어진 상태라 못 물어봄)
             final Sections updatedSections = new Sections(sectionDao.findSectionByLineId(id));
-            final Section updatedSection = sections.getUpdatedSection(updatedSections); // 기존 구간(sections)에 대해, delete로 업데이트된 구간(updatedSections)을 비교해서,
+            final Section updatedSection = sections.getUpdatedSection(
+                updatedSections); // 기존 구간(sections)에 대해, delete로 업데이트된 구간(updatedSections)을 비교해서,
             // 업데이트해야할 구간1개만 가져온다
             // 기존구간에서  중간역 삭제 상황 1-2-3   ->  1-2  와 2-3 2개 삭제 -> 1개는 id유지 데이터만 변경예정 -> 1개는 실제 삭제(위쪽 코드) -> 1-3은 변경으로 생성 -> update
             sectionDao.update(updatedSection);

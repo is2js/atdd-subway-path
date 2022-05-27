@@ -2,7 +2,6 @@ package wooteco.subway.domain.section;
 
 import java.util.List;
 import java.util.Objects;
-import wooteco.subway.ui.dto.request.LineRequest;
 
 public class Section {
 
@@ -15,10 +14,6 @@ public class Section {
     private final int distance;
     private final Long upStationId;
     private final Long downStationId;
-
-    public Section(final Long id, final LineRequest lineRequest) {
-        this(null, id, lineRequest.getUpStationId(), lineRequest.getDownStationId(), lineRequest.getDistance());
-    }
 
     public Section(final Long lineId, final Long upStationId, final Long downStationId, final int distance) {
         this(null, lineId, upStationId, downStationId, distance);

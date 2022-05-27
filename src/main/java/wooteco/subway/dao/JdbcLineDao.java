@@ -22,6 +22,16 @@ public class JdbcLineDao implements LineDao {
             resultSet.getString("name"),
             resultSet.getString("color")
         );
+//    private static final RowMapper<Line> LINE_JOIN_SECTION_ROW_MAPPER = (resultSet, rowNum) ->
+//        new Line(resultSet.getLong("line_id"),
+//            resultSet.getString("line_name"),
+//            resultSet.getString("line_color"),
+//            new Section(resultSet.getLong("section_id"),
+//                resultSet.getLong("section_id"),
+//                resultSet.getLong("section_up_station_id"),
+//                resultSet.getLong("section_down_station_id"),
+//                resultSet.getInt("section_distance"))
+//        );
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -58,9 +68,31 @@ public class JdbcLineDao implements LineDao {
         }
     }
 
+/*    @Override
+    public List<Line> findAll2() {
+        final String sql = "SELECT * FROM line";
+        return namedParameterJdbcTemplate.query(sql, LINE_ROW_MAPPER);
+    }*/
+
     @Override
     public List<Line> findAll() {
         final String sql = "SELECT * FROM line";
+
+//        final String sql = ""
+//            + "SELECT * "
+//            + "FROM line "
+//            + "LEFT JOIN section ON line.id = section.line_id";
+
+        // join에 쓰는 key -> 겹침 -> AS 지정해줘야 rowMapper가 씀.
+        // section객체 생성에 필요한 모든 데이터를 다 가져온다. 겹치는 필드는 1개만 해서 rowMapper에서 공통으로 쓴다.
+//        final String sql = ""
+//            + "SELECT l.id AS line_id, l.name AS line_name, l.color AS line_color, "
+//            + "s.id AS section_id, "
+//            + "s.up_station_id AS section_up_station_id, s.down_station_id AS section_down_station_id, "
+//            + "s.distance AS section_distance "
+//            + "FROM LINE AS l "
+//            + "LEFT JOIN SECTION AS s ON s.line_id = l.id";
+//        return namedParameterJdbcTemplate.query(sql, LINE_JOIN_SECTION_ROW_MAPPER);
         return namedParameterJdbcTemplate.query(sql, LINE_ROW_MAPPER);
     }
 

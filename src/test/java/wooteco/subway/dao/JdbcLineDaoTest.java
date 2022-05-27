@@ -23,11 +23,13 @@ public class JdbcLineDaoTest {
     @Autowired
     private DataSource dataSource;
     private LineDao lineDao;
+    private SectionDao sectionDao;
 
 
     @BeforeEach
     void set() {
         lineDao = new JdbcLineDao(dataSource);
+        sectionDao = new JdbcSectionDao(dataSource);
     }
 
     @Test
@@ -66,6 +68,10 @@ public class JdbcLineDaoTest {
         //given
         final Line line1 = lineDao.save(이호선_그린);
         final Line line2 = lineDao.save(일호선_파랑);
+
+        System.out.println("line1.toString() = " + line1.toString());
+        System.out.println(
+            "sectionDao.findSectionByLineId(line1.getId()) = " + sectionDao.findSectionByLineId(line1.getId()));
 
         //when
         List<Line> lines = lineDao.findAll();
