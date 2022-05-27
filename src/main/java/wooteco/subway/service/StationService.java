@@ -1,9 +1,9 @@
 package wooteco.subway.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wooteco.subway.dao.SectionDao;
 import wooteco.subway.dao.StationDao;
 import wooteco.subway.domain.Station;
 import wooteco.subway.exception.StationDuplicateException;
@@ -15,9 +15,11 @@ import wooteco.subway.ui.dto.request.StationRequest;
 public class StationService {
 
     private final StationDao stationDao;
+    private final SectionDao sectionDao;
 
-    public StationService(final StationDao stationDao) {
+    public StationService(final StationDao stationDao, final SectionDao sectionDao) {
         this.stationDao = stationDao;
+        this.sectionDao = sectionDao;
     }
 
     public Station create(final StationRequest stationRequest) {
@@ -41,6 +43,11 @@ public class StationService {
     public void delete(final Long id) {
         stationDao.findById(id)
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
+
+        if (Boolean.TRUE.equals(sectionDao.existStation(id))) {
+            throw new IllegalArgumentException("[ERROR] 해당역은 구간에서 사용되고 있습니다.");
+        }
+
         stationDao.deleteById(id);
     }
 
@@ -53,18 +60,7 @@ public class StationService {
         return List.of(upStation, downStation);
     }
 
-    public List<Station> findByIds2(final List<Long> ids) {
-        return ids.stream()
-            .map(id -> stationDao.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다.")))
-            .collect(Collectors.toList());
-    }
-
     public List<Station> findByIds(final List<Long> ids) {
         return stationDao.findByIds(ids);
-/*        ids.stream()
-            .map(id -> stationDao.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다.")))
-            .collect(Collectors.toList());*/
     }
 }

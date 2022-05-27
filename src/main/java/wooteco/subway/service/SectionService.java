@@ -67,11 +67,13 @@ public class SectionService {
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
 
         final Sections sections = new Sections(sectionDao.findSectionByLineId(id));
-        final boolean isMiddleDelete = sections.isMiddleDelete(stationId);
-        sectionDao.deleteById(sections.deleteSectionByStationId(stationId));
-        if (isMiddleDelete) {
-            final Section updatedSection = sections.getUpdatedSection(
-                new Sections(sectionDao.findSectionByLineId(id)));
+        final boolean isMiddleDelete = sections.isMiddleDelete(stationId); // 구간 삭제 전에, 중간역인지 물어봄
+        sectionDao.deleteById(sections.deleteSectionByStationId(stationId)); // 상황에 따라 알아서 역 삭제된 상황으로 구간 삭제되고 이어짐.
+        if (isMiddleDelete) { // 구간 삭제전에 물어봤던 중간역여부... (구간 삭제되면 중간역으로 나뉜 구것이 없어진 상태라 못 물어봄)
+            final Sections updatedSections = new Sections(sectionDao.findSectionByLineId(id));
+            final Section updatedSection = sections.getUpdatedSection(updatedSections); // 기존 구간(sections)에 대해, delete로 업데이트된 구간(updatedSections)을 비교해서,
+            // 업데이트해야할 구간1개만 가져온다
+            // 기존구간에서  중간역 삭제 상황 1-2-3   ->  1-2  와 2-3 2개 삭제 -> 1개는 id유지 데이터만 변경예정 -> 1개는 실제 삭제(위쪽 코드) -> 1-3은 변경으로 생성 -> update
             sectionDao.update(updatedSection);
         }
     }

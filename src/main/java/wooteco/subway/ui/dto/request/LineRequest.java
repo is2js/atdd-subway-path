@@ -27,12 +27,10 @@ public class LineRequest {
                        final Long upStationId,
                        final Long downStationId,
                        final int distance) {
-        Objects.requireNonNull(name, ERROR_NULL);
-        Objects.requireNonNull(color, ERROR_NULL);
-        this.name = name;
-        this.color = color;
-        this.upStationId = upStationId;
-        this.downStationId = downStationId;
+        this.name = Objects.requireNonNull(name, ERROR_NULL);
+        this.color = Objects.requireNonNull(color, ERROR_NULL);
+        this.upStationId = Objects.requireNonNull(upStationId, ERROR_NULL);
+        this.downStationId = Objects.requireNonNull(downStationId, ERROR_NULL);
         this.distance = distance;
     }
 

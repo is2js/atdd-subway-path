@@ -15,11 +15,8 @@ public class SectionRequest {
     }
 
     public SectionRequest(Long upStationId, Long downStationId, int distance) {
-        Objects.requireNonNull(upStationId, ERROR_NULL);
-        Objects.requireNonNull(downStationId, ERROR_NULL);
-        Objects.requireNonNull(distance, ERROR_NULL);
-        this.upStationId = upStationId;
-        this.downStationId = downStationId;
+        this.upStationId = Objects.requireNonNull(upStationId, ERROR_NULL);
+        this.downStationId = Objects.requireNonNull(downStationId, ERROR_NULL);
         this.distance = distance;
     }
 

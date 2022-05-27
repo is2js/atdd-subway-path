@@ -13,8 +13,7 @@ public class StationRequest {
     }
 
     public StationRequest(String name) {
-        Objects.requireNonNull(name, ERROR_NULL);
-        this.name = name;
+        this.name = Objects.requireNonNull(name, ERROR_NULL);
     }
 
     public String getName() {
