@@ -30,10 +30,12 @@ public class SubWayFixtures {
     public static final Station 삼번_잠실역 = new Station(3L, "잠실역");
     public static final Station 사번_사당역 = new Station(4L, "신림역");
     public static final Station 오번_신림역 = new Station(5L, "사당역");
+    public static final Station 육번_서울대역 = new Station(6L, "서울대역");
     public static final SectionRequest SECTION_REQUEST_1번역_2번역_거리5 = new SectionRequest(1L, 2L, 5);
     public static final SectionRequest SECTION_REQUEST_2번역_3번역_거리10 = new SectionRequest(2L, 3L, 10);
     public static final SectionRequest SECTION_REQUEST_3번역_4번역_거리15 = new SectionRequest(3L, 4L, 15);
-    public static final SectionRequest SECTION_REQUEST_4번역_5번역_거리20 = new SectionRequest(4L, 5L, 20);
+    public static final SectionRequest SECTION_REQUEST_1번역_6번역_거리20 = new SectionRequest(1L, 6L, 20);
+    public static final SectionRequest SECTION_REQUEST_6번역_5번역_거리20 = new SectionRequest(6L, 5L, 20);
     public static final Section 일호선_구간_1번역_2번역 = new Section(1L, 1L, 2L, 1);
     public static final Section 일호선_구간_1번역_3번역 = new Section(1L, 1L, 3L, 2);
     public static final Section 일호선_구간_1번역_2번역_거리_10 = new Section(1L, 1L, 2L, 10);
@@ -42,4 +44,6 @@ public class SubWayFixtures {
     public static final Section 일호선_구간_3번역_4번역_거리_5 = new Section(4L, 1L, 3L, 4L, 5);
     public static final Section 일호선_구간_4번역_5번역_거리_3 = new Section(5L, 1L, 4L, 5L, 3);
     public static final Section 일호선_구간_1번역_5번역_거리_31 = new Section(6L, 1L, 1L, 5L, 31);
+    public static final Section 일호선_구간_1번역_6번역_거리_2 = new Section(6L, 1L, 1L, 6L, 2);
+    public static final Section 일호선_구간_6번역_5번역_거리_10 = new Section(6L, 1L, 6L, 5L, 10);
 }

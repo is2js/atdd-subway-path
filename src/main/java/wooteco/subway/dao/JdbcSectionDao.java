@@ -70,7 +70,7 @@ public class JdbcSectionDao implements SectionDao {
     }
 
     @Override
-    public List<Section> findSectionByLineId(final Long lineId) {
+    public List<Section> findSectionsByLineId(final Long lineId) {
         final String sql = "SELECT * FROM section WHERE line_id = :lineId";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("lineId", lineId);
         return namedParameterJdbcTemplate.query(sql, parameters, SECTION_ROW_MAPPER);

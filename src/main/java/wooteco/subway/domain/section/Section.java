@@ -1,6 +1,5 @@
 package wooteco.subway.domain.section;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Section {
@@ -74,16 +73,7 @@ public class Section {
     public boolean addNewDownStationCase(final Section section) {
         return Objects.equals(section.getUpStationId(), downStationId);
     }
-
-
-    public boolean isUpStationIdContained(final List<Long> stationIds) {
-        return stationIds.contains(upStationId);
-    }
-
-    public boolean isDownStationIdContained(final List<Long> stationIds) {
-        return stationIds.contains(downStationId);
-    }
-
+    
     public boolean isSameUpStation(final Section section) {
         return upStationId.equals(section.upStationId);
     }

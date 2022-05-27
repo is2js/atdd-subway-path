@@ -56,7 +56,7 @@ public class ShortestPathFinder {
 
         // + 정팩메에서는 정리후 필드로 못넣는다(static)상태 -> return 기본생성자에 [정리한 필드용 재료]를 변수로 뽑지말고 생성자에 건네준다.
         //final DijkstraShortestPath<Long, DefaultWeightedEdge> shortestPath = new DijkstraShortestPath<>(graph);
-        return new ShortestPathFinder(new DijkstraShortestPath<Long, DefaultWeightedEdge>(graph));
+        return new ShortestPathFinder(new DijkstraShortestPath<>(graph));
     }
 
     private static void addVertex(final List<Long> stations,
@@ -108,7 +108,7 @@ public class ShortestPathFinder {
 
         // 주입받아 생성한 호출직전의 객체 필드를 사용해서 역할을 수행한다.
         // - 문서를 읽djT을 때, null가능성이 있으면 Optional로 받는다.?
-        final Optional<GraphPath<Long, DefaultWeightedEdge>> graphPathOrEmpty = Optional.of(
+        final Optional<GraphPath<Long, DefaultWeightedEdge>> graphPathOrEmpty = Optional.ofNullable(
             shortestPath.getPath(source, target));
         final GraphPath<Long, DefaultWeightedEdge> graphPath = graphPathOrEmpty.orElseThrow(
             () -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));

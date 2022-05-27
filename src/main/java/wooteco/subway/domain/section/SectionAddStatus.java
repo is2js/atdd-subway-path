@@ -22,7 +22,7 @@ public enum SectionAddStatus {
         return Arrays.stream(values())
             .filter(it -> it.condition.test(sections, section))
             .findFirst()
-            .orElseThrow(() -> new IllegalStateException("[ERROR] 새로운 구간을 추가할 수 없습니다."));
+            .orElseThrow(() -> new IllegalStateException("[ERROR] 새로운 구간을 추가할 수 없는 경우입니다."));
     }
 
     private static boolean existAnyUpStationSame(final List<Section> sections, final Section section) {

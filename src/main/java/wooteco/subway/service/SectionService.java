@@ -46,7 +46,7 @@ public class SectionService {
     }
 
     private List<Long> findStationIdsByLineId(final Long lineId) {
-        return new Sections(sectionDao.findSectionByLineId(lineId))
+        return new Sections(sectionDao.findSectionsByLineId(lineId))
             .getSortedSections()
             .stream()
             .flatMap(section -> Stream.of(section.getUpStationId(), section.getDownStationId()))
@@ -63,10 +63,10 @@ public class SectionService {
 
     @Transactional
     public void addSection(final Long lineId, final SectionRequest sectionRequest) {
-        final List<Section> currentSection = sectionDao.findSectionByLineId(lineId);
+        final List<Section> currentSections = sectionDao.findSectionsByLineId(lineId);
         Section newSection = sectionRequest.toEntity(lineId);
-        newSection = sectionDao.save(newSection);
-        new Sections(currentSection).addSection(newSection)
+        newSection = sectionDao.save(newSection); // transactional믿고 일단 저장해서 id배정된 domain으로 sections에 진입한다.
+        new Sections(currentSections).addSection(newSection)
             .ifPresent(sectionDao::update);
     }
 
@@ -77,11 +77,11 @@ public class SectionService {
         stationDao.findById(stationId)
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
 
-        final Sections sections = new Sections(sectionDao.findSectionByLineId(id));
+        final Sections sections = new Sections(sectionDao.findSectionsByLineId(id));
         final boolean isMiddleDelete = sections.isMiddleDelete(stationId); // 구간 삭제 전에, 중간역인지 물어봄
         sectionDao.deleteById(sections.deleteSectionByStationId(stationId)); // 상황에 따라 알아서 역 삭제된 상황으로 구간 삭제되고 이어짐.
         if (isMiddleDelete) { // 구간 삭제전에 물어봤던 중간역여부... (구간 삭제되면 중간역으로 나뉜 구것이 없어진 상태라 못 물어봄)
-            final Sections updatedSections = new Sections(sectionDao.findSectionByLineId(id));
+            final Sections updatedSections = new Sections(sectionDao.findSectionsByLineId(id));
             final Section updatedSection = sections.getUpdatedSection(
                 updatedSections); // 기존 구간(sections)에 대해, delete로 업데이트된 구간(updatedSections)을 비교해서,
             // 업데이트해야할 구간1개만 가져온다

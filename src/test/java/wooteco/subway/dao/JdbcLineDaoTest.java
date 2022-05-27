@@ -71,7 +71,7 @@ public class JdbcLineDaoTest {
 
         System.out.println("line1.toString() = " + line1.toString());
         System.out.println(
-            "sectionDao.findSectionByLineId(line1.getId()) = " + sectionDao.findSectionByLineId(line1.getId()));
+            "sectionDao.findSectionsByLineId(line1.getId()) = " + sectionDao.findSectionsByLineId(line1.getId()));
 
         //when
         List<Line> lines = lineDao.findAll();

@@ -249,7 +249,7 @@ class SectionsTest {
             일호선_구간_2번역_3번역_거리_12, 일호선_구간_1번역_2번역_거리_10));
         final List<Long> expected = List.of(1L, 2L, 3L);
 
-        final List<Long> actual = sections.getTotalStationIds();
+        final List<Long> actual = sections.getUniqueStationIds();
 
         assertThat(actual).isEqualTo(expected);
     }

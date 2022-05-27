@@ -1,5 +1,6 @@
 package wooteco.subway.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static wooteco.subway.testutils.SubWayFixtures.사번_사당역;
 import static wooteco.subway.testutils.SubWayFixtures.삼번_잠실역;
 import static wooteco.subway.testutils.SubWayFixtures.오번_신림역;
@@ -13,7 +14,6 @@ import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_4번역_5
 
 import java.util.List;
 import javax.sql.DataSource;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,6 +78,6 @@ class PathServiceTest {
         final Path actual = pathService.show(pathRequest);
 
         //then
-        Assertions.assertThat(actual.toString()).isEqualTo(expected.toString());
+        assertThat(actual.toString()).isEqualTo(expected.toString());
     }
 }

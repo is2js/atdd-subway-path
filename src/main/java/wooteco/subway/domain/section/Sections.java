@@ -36,7 +36,7 @@ public class Sections {
     }
 
     public Optional<Section> addSection(final Section section) {
-        final SectionAddStatus sectionAddStatus = getAddSectionStatus(section);
+        final SectionAddStatus sectionAddStatus = extractAddSectionStatus(section);
         if (sectionAddStatus.hasMiddleSection()) {
             return Optional.ofNullable(addMiddleSection(section, sectionAddStatus));
         }
@@ -44,15 +44,31 @@ public class Sections {
         return Optional.empty();
     }
 
-    private SectionAddStatus getAddSectionStatus(final Section section) {
-        validateSection(getTotalStationIds(), section);
+    private SectionAddStatus extractAddSectionStatus(final Section section) {
+        validateDuplicateSection(section);
         return SectionAddStatus.from(value, section);
     }
 
-    private void validateSection(final List<Long> stationIds, final Section section) {
-        if (section.isUpStationIdContained(stationIds) && section.isDownStationIdContained(stationIds)) {
+    private void validateDuplicateSection(final Section otherSection) {
+        // 같은 노선인 경우에 대해서만.. a-b-c 라면, a---c를 추가할 수 없다.
+        // -> 다른노선이라면 가능하게 만들어야한다.
+        //TODO section.getUpStationId()의 노선확인, +
+
+        // 수정: 둘다 포함되어있다 -> 상행역역은 상행역으로 && 하행역은 하행역으로 등록되어있는지 확인한다.
+        //   -> 현재:  상행역이 사용된 모든(상+하행)역 안에 포함 && 하행역이 사용된 모든(상+하행)역 안에 포함
+        //   -> 수정:  상행역이 사용된 모든 상행역 안에 포함 && 하행역이 사용된 모든 하행역 안에 포함
+        //   --> 안바꾸면.. 1-6-5를 새롭게 추가할때,, 1-5에  1-6 추가했는데.. 이미 1-5, 1-6의 모든 역: 1,6,5 에 걸리게 됨.
+        //   --> 이미 존재하는 역인지는.. 순서를 유지한체로 확인해야한다. 1-5, 1-6에서 6-5 순서의 연결고리는 없다?
+        // 만약 하나라도 해당하냐? 객체리스트의 contains or 비교로직
+        if (checkDuplicateSection(otherSection)) {
             throw new IllegalStateException(ERROR_ALREADY_CONTAIN);
         }
+    }
+
+    private boolean checkDuplicateSection(final Section otherSection) {
+        return value.stream()
+            .anyMatch(section -> section.isSameUpStation(otherSection)
+                && section.isSameDownStation(otherSection));
     }
 
     private Section addMiddleSection(final Section section, final SectionAddStatus sectionAddStatus) {
@@ -126,7 +142,7 @@ public class Sections {
             .orElseThrow(() -> new IllegalArgumentException(ERROR_NO_STATION));
     }
 
-    public List<Long> getTotalStationIds() {
+    public List<Long> getUniqueStationIds() {
         return this.value.stream()
             .flatMap(it -> Stream.of(it.getUpStationId(), it.getDownStationId()))
             .distinct()
@@ -165,11 +181,11 @@ public class Sections {
     }
 
     public boolean containsStationId(final Long stationId) {
-        return getTotalStationIds().contains(stationId);
+        return getUniqueStationIds().contains(stationId);
     }
 
     private void checkOnlyDefaultSection() {
-        if (getTotalStationIds().size() == 2) {
+        if (getUniqueStationIds().size() == 2) {
             throw new IllegalStateException("[ERROR] 역 2개의 기본 구간만 존재하므로 더이상 구간 삭제할 수 없습니다.");
         }
     }

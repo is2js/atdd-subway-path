@@ -155,7 +155,7 @@ class LineServiceTest {
             () -> assertThatThrownBy(() -> lineService.findById(line.getId()))
                 .isInstanceOf(LineNotFoundException.class)
                 .hasMessage("[ERROR] 해당 노선이 없습니다."),
-            () -> assertThat(sectionDao.findSectionByLineId(line.getId())).isEmpty()
+            () -> assertThat(sectionDao.findSectionsByLineId(line.getId())).isEmpty()
         );
     }
 
@@ -176,7 +176,7 @@ class LineServiceTest {
 
         final Line line = lineService.create(lineRequest);
         final Section expected = new Section(line.getId(), 1L, 2L, 10);
-        final List<Section> sections = sectionDao.findSectionByLineId(line.getId());
+        final List<Section> sections = sectionDao.findSectionsByLineId(line.getId());
 
         assertThat(sections).usingRecursiveComparison()
             .ignoringFields("id")
