@@ -9,8 +9,8 @@ public class LineRequest {
 
     private String name;
     private String color;
-    private Long upStationId;
-    private Long downStationId;
+    private long upStationId;
+    private long downStationId;
     private int distance;
 
 
@@ -24,13 +24,13 @@ public class LineRequest {
 
     public LineRequest(final String name,
                        final String color,
-                       final Long upStationId,
-                       final Long downStationId,
+                       final long upStationId,
+                       final long downStationId,
                        final int distance) {
         this.name = Objects.requireNonNull(name, ERROR_NULL);
         this.color = Objects.requireNonNull(color, ERROR_NULL);
-        this.upStationId = Objects.requireNonNull(upStationId, ERROR_NULL);
-        this.downStationId = Objects.requireNonNull(downStationId, ERROR_NULL);
+        this.upStationId = upStationId;
+        this.downStationId = downStationId;
         this.distance = distance;
     }
 
@@ -42,11 +42,11 @@ public class LineRequest {
         return color;
     }
 
-    public Long getUpStationId() {
+    public long getUpStationId() {
         return upStationId;
     }
 
-    public Long getDownStationId() {
+    public long getDownStationId() {
         return downStationId;
     }
 

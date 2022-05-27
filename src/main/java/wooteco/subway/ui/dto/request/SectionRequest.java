@@ -1,30 +1,29 @@
 package wooteco.subway.ui.dto.request;
 
-import java.util.Objects;
 import wooteco.subway.domain.section.Section;
 
 public class SectionRequest {
 
     private static final String ERROR_NULL = "[ERROR] 이름에 빈칸 입력은 허용하지 않습니다.";
 
-    private Long upStationId;
-    private Long downStationId;
+    private long upStationId;
+    private long downStationId;
     private int distance;
 
     private SectionRequest() {
     }
 
-    public SectionRequest(Long upStationId, Long downStationId, int distance) {
-        this.upStationId = Objects.requireNonNull(upStationId, ERROR_NULL);
-        this.downStationId = Objects.requireNonNull(downStationId, ERROR_NULL);
+    public SectionRequest(long upStationId, long downStationId, int distance) {
+        this.upStationId = upStationId;
+        this.downStationId = downStationId;
         this.distance = distance;
     }
 
-    public Long getUpStationId() {
+    public long getUpStationId() {
         return upStationId;
     }
 
-    public Long getDownStationId() {
+    public long getDownStationId() {
         return downStationId;
     }
 
