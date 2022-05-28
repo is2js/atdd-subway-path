@@ -22,6 +22,7 @@ public class JdbcLineDao implements LineDao {
             resultSet.getString("name"),
             resultSet.getString("color")
         );
+
 //    private static final RowMapper<Line> LINE_JOIN_SECTION_ROW_MAPPER = (resultSet, rowNum) ->
 //        new Line(resultSet.getLong("line_id"),
 //            resultSet.getString("line_name"),
@@ -45,7 +46,7 @@ public class JdbcLineDao implements LineDao {
 
     @Override
     public boolean existsName(final Line line) {
-        final String sql = "SELECT EXISTS (SELECT * FROM line WHERE name = :name)";
+        final String sql = "SELECT EXISTS (SELECT 1 FROM LINE WHERE name = :name)";
         final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(line);
         return Boolean.TRUE.equals(namedParameterJdbcTemplate.queryForObject(sql, parameters, Boolean.class));
     }
@@ -59,7 +60,13 @@ public class JdbcLineDao implements LineDao {
     @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<Line> findById(final Long id) {
-        final String sql = "SELECT * FROM line WHERE id = :id";
+        final String sql = ""
+            + "SELECT "
+            + "     l.id AS id, l.name AS name, l.COLOR AS color "
+            + "FROM "
+            + "     LINE l "
+            + "WHERE "
+            + "     l.id = :id";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
         try {
             return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, parameters, LINE_ROW_MAPPER));
@@ -68,44 +75,33 @@ public class JdbcLineDao implements LineDao {
         }
     }
 
-/*    @Override
-    public List<Line> findAll2() {
-        final String sql = "SELECT * FROM line";
-        return namedParameterJdbcTemplate.query(sql, LINE_ROW_MAPPER);
-    }*/
-
     @Override
     public List<Line> findAll() {
-        final String sql = "SELECT * FROM line";
+        final String sql = ""
+            + "SELECT "
+            + "    l.ID as id, l.NAME as name, l.COLOR as color "
+            + "FROM "
+            + "     LINE l";
 
-//        final String sql = ""
-//            + "SELECT * "
-//            + "FROM line "
-//            + "LEFT JOIN section ON line.id = section.line_id";
-
-        // join에 쓰는 key -> 겹침 -> AS 지정해줘야 rowMapper가 씀.
-        // section객체 생성에 필요한 모든 데이터를 다 가져온다. 겹치는 필드는 1개만 해서 rowMapper에서 공통으로 쓴다.
-//        final String sql = ""
-//            + "SELECT l.id AS line_id, l.name AS line_name, l.color AS line_color, "
-//            + "s.id AS section_id, "
-//            + "s.up_station_id AS section_up_station_id, s.down_station_id AS section_down_station_id, "
-//            + "s.distance AS section_distance "
-//            + "FROM LINE AS l "
-//            + "LEFT JOIN SECTION AS s ON s.line_id = l.id";
-//        return namedParameterJdbcTemplate.query(sql, LINE_JOIN_SECTION_ROW_MAPPER);
         return namedParameterJdbcTemplate.query(sql, LINE_ROW_MAPPER);
     }
 
     @Override
     public void update(final Line line) {
-        final String sql = "UPDATE line SET name = :name, color = :color WHERE id = :id";
+        final String sql = ""
+            + "UPDATE line l "
+            + "SET l.name = :name, l.color = :color "
+            + "WHERE l.id = :id";
         final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(line);
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
     @Override
     public void deleteById(final Long id) {
-        final String sql = "DELETE FROM line WHERE id = :id";
+        final String sql = ""
+            + "DELETE "
+            + "FROM line "
+            + "WHERE id = :id";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
         namedParameterJdbcTemplate.update(sql, parameters);
     }

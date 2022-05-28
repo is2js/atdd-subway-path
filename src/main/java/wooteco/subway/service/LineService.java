@@ -50,7 +50,8 @@ public class LineService {
     }
 
     public Line findById(final Long id) {
-        return lineDao.findById(id).orElseThrow(() -> new LineNotFoundException("[ERROR] 해당 노선이 없습니다."));
+        return lineDao.findById(id)
+            .orElseThrow(() -> new LineNotFoundException("[ERROR] 해당 노선이 없습니다."));
     }
 
     @Transactional
