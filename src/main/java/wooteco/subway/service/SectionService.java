@@ -14,7 +14,6 @@ import wooteco.subway.domain.section.Section;
 import wooteco.subway.domain.section.Sections;
 import wooteco.subway.exception.LineNotFoundException;
 import wooteco.subway.exception.StationNotFoundException;
-import wooteco.subway.ui.dto.request.LineRequest;
 import wooteco.subway.ui.dto.request.SectionRequest;
 
 @Service
@@ -30,16 +29,6 @@ public class SectionService {
         this.lineDao = lineDao;
     }
 
-    public void create(final Long lineId, final LineRequest lineRequest) {
-        //dao로 넘겨주기 전에 section(빈Id entity or domain)을 만들고 dao로 넘겨준다.
-        sectionDao.save(createSection(lineId, lineRequest));
-    }
-
-    private Section createSection(final Long lineId, final LineRequest lineRequest) {
-        return new Section(lineId, lineRequest.getUpStationId(), lineRequest.getDownStationId(),
-            lineRequest.getDistance());
-    }
-
     public List<Station> findStationsByLineId(final Long lineId) {
         final List<Long> stationIds = findStationIdsByLineId(lineId);
         return getSortedStations(stationIds);
@@ -47,7 +36,7 @@ public class SectionService {
 
     private List<Long> findStationIdsByLineId(final Long lineId) {
         return new Sections(sectionDao.findSectionsByLineId(lineId))
-            .getSortedSections()
+            .getConnectedSections()
             .stream()
             .flatMap(section -> Stream.of(section.getUpStationId(), section.getDownStationId()))
             .distinct()

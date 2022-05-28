@@ -83,7 +83,7 @@ class SectionsTest {
         //given & when
         final Sections sections = new Sections(List.of(
             일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
-        final Section targetSection = new Section(1L, 1L, 4L, 15);
+        final Section targetSection = new Section(1L, 1L, 4L, 11);
 
         //then
         assertThatThrownBy(() -> sections.addSection(targetSection))
@@ -233,7 +233,7 @@ class SectionsTest {
         final Sections sections = new Sections(List.of(
             일호선_구간_2번역_3번역_거리_12, 일호선_구간_1번역_2번역_거리_10));
 
-        final Sections actual = new Sections(sections.getSortedSections());
+        final Sections actual = new Sections(sections.getConnectedSections());
 
         final Sections expected = new Sections(List.of(
             일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
@@ -243,7 +243,7 @@ class SectionsTest {
 
     @DisplayName("")
     @Test
-    void getTotalStationIds() {
+    void getUniqueStationIds() {
 
         final Sections sections = new Sections(List.of(
             일호선_구간_2번역_3번역_거리_12, 일호선_구간_1번역_2번역_거리_10));

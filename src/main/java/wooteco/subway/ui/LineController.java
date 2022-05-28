@@ -46,9 +46,19 @@ public class LineController {
         //  -> 현재는, request에 있는 상하행종점 역 id로 조회만해서보내준다.
         //  -> 기본 구간이 있어야, addSection이 가능한 것이었다. -> sectinoDao에 save를 추가한다.
 
-        //하위도메인을 만들기 위해선, 무조건 상위도메인의 id를 끌고와야한다.
-        sectionService.create(createdLine.getId(), lineRequest);
+        // default section생성도, 메인 LineSerivce내부에서 처리하게 한다. 일련의 연속된 업무처리기 때문에.
+        //sectionService.create(createdLine.getId(), lineRequest);
 
+        // TODO REFACTOR 1: controller에서 각각 모으면 -> service내부에서 dao로 처리?!
+        //  그러려면, 상위도메인이 필드객체로 가지고 있어야한다 ( service내에서 모으려면 dto로 반환해야함)
+        //  상위도메인이 하위도메인 or 갖다쓰는 타도메인을 필드객체로 가진다면, dto 변환 이전에 service가 dao를 통해 모아진 상태로
+        //  controller에는 1개만 반환할 수 있다.
+        //하위도메인을 만들기 위해선, 무조건 상위도메인의 id를 끌고와야한다.
+        // -> Lineservice내부에서 sectionDao로 처리
+
+        //TODO: station에서 불러올게 아니라, LINE -> SECTION -> 거기에 사용된 Station들을 불러오도록
+        // -> LINE이 하위도메인 SECTIONS를 가지도록 리팩토링하고, -> 거기서 STATIONS들을 뽑아내도록
+        // -> TODO REFACTOR 2
         final List<Station> stations = stationService.findUpAndDownStations(lineRequest);
         final LineResponse lineResponse = new LineResponse(createdLine, stations);
         return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId()))

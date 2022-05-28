@@ -30,7 +30,7 @@ public class Sections {
     }
 
     private void validateSections(final List<Section> sections) {
-        if (sections.size() == 0) {
+        if (sections.isEmpty()) {
             throw new IllegalArgumentException(ERROR_INVALID_SECTIONS);
         }
     }
@@ -90,7 +90,7 @@ public class Sections {
         return section.createUpToMiddleSection(sameDownStationSection);
     }
 
-    public List<Section> getSortedSections() {
+    public List<Section> getConnectedSections() {
         final Section firstSection = findFirstSection();
         return concatSections(firstSection, findTheRestSections(firstSection));
     }
