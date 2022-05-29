@@ -10,6 +10,7 @@ import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_
 import static wooteco.subway.testutils.SubWayFixtures.SECTION_REQUEST_1번역_2번역_거리5;
 import static wooteco.subway.testutils.SubWayFixtures.SECTION_REQUEST_2번역_3번역_거리10;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_강남역;
+import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_선릉역;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_역삼역;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_잠실역;
 
@@ -27,6 +28,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     void addSection_new_station() {
         requestPostStation(STATION_REQUEST_강남역, "/stations");
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
+        requestPostStation(STATION_REQUEST_선릉역, "/stations");
         requestPostLine(LINE_REQUEST_신분당선_STATION_1_2, "/lines");
 
         final ExtractableResponse<Response> response = requestPostSection(SECTION_REQUEST_2번역_3번역_거리10,
