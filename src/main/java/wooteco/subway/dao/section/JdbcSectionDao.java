@@ -78,7 +78,6 @@ public class JdbcSectionDao implements SectionDao {
 
     @Override
     public List<Section> findSectionsByLineId(final Long lineId) {
-        final String sql2 = "SELECT * FROM section WHERE line_id = :lineId";
         final String sql = ""
             + "SELECT s.ID as id, s.LINE_ID AS line_id, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
@@ -122,7 +121,16 @@ public class JdbcSectionDao implements SectionDao {
 
     @Override
     public List<Section> findAll() {
-        final String sql = "SELECT * FROM section";
+        final String sql = ""
+            + "SELECT s.ID as id, s.LINE_ID AS line_id, "
+            + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
+            + "     dst.ID AS down_station_id, dst.NAME AS down_station_name, "
+            + "     s.DISTANCE "
+            + "FROM section s"
+            + "     LEFT JOIN STATION ust "
+            + "     ON s.UP_STATION_ID = ust.ID "
+            + "     LEFT JOIN STATION dst "
+            + "     ON s.DOWN_STATION_ID = dst.ID ";
         return namedParameterJdbcTemplate.query(sql, SECTION_ROW_MAPPER);
     }
 
