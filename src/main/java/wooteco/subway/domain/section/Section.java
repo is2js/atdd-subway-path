@@ -29,6 +29,10 @@ public class Section {
         this.distance = distance;
     }
 
+    public Section(final Long id, final Section section) {
+        this(id, section.getLineId(), section.getUpStationId(), section.getDownStationId(), section.getDistance());
+    }
+
     private void validateStations(final long upStationId, final long downStationId) {
         if (Objects.equals(upStationId, downStationId)) {
             throw new IllegalArgumentException(ERROR_SAME_STATION);

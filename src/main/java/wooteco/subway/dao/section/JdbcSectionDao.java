@@ -39,14 +39,15 @@ public class JdbcSectionDao implements SectionDao {
 
     @Override
     public Section save(final Section section) {
-        final MapSqlParameterSource parameters = new MapSqlParameterSource()
+/*        final MapSqlParameterSource parameters2 = new MapSqlParameterSource()
             .addValue("line_id", section.getLineId())
             .addValue("up_station_id", section.getUpStationId())
             .addValue("down_station_id", section.getDownStationId())
-            .addValue("distance", section.getDistance());
+            .addValue("distance", section.getDistance());*/
+
+        final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(section);
         final Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-        return new Section(id, section.getLineId(), section.getUpStationId(), section.getDownStationId(),
-            section.getDistance());
+        return new Section(id, section);
     }
 
     @Override
