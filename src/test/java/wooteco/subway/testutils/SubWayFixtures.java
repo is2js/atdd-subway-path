@@ -24,7 +24,9 @@ public class SubWayFixtures {
     public static final StationRequest STATION_REQUEST_사당역 = new StationRequest("사당역");
     public static final StationRequest STATION_REQUEST_신림역 = new StationRequest("신림역");
     public static final StationRequest STATION_REQUEST_서울대역 = new StationRequest("서울대역");
+    public static final Station 강남역 = new Station("강남역");
     public static final Station 선릉역 = new Station("선릉역");
+    public static final Station 잠실역 = new Station("잠실역");
     public static final Station 일번역_강남 = new Station(1L, "강남역");
     public static final Station 이번역_선릉 = new Station(2L, "선릉역");
     public static final Station 삼번_잠실역 = new Station(3L, "잠실역");

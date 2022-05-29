@@ -59,7 +59,6 @@ public class JdbcSectionDao implements SectionDao {
     @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<Section> findById(final Long id) {
-        //final String sql2 = "SELECT * FROM section WHERE id = :id";
         final String sql = ""
             + "SELECT s.ID as id, s.LINE_ID AS line_id, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
@@ -69,7 +68,7 @@ public class JdbcSectionDao implements SectionDao {
             + "     LEFT JOIN STATION ust "
             + "     ON s.UP_STATION_ID = ust.ID "
             + "     LEFT JOIN STATION dst "
-            + "     ON s.UP_STATION_ID = dst.ID "
+            + "     ON s.DOWN_STATION_ID = dst.ID "
             + "WHERE s.id = :id";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
         try {
@@ -81,7 +80,18 @@ public class JdbcSectionDao implements SectionDao {
 
     @Override
     public List<Section> findSectionsByLineId(final Long lineId) {
-        final String sql = "SELECT * FROM section WHERE line_id = :lineId";
+        final String sql2 = "SELECT * FROM section WHERE line_id = :lineId";
+        final String sql = ""
+            + "SELECT s.ID as id, s.LINE_ID AS line_id, "
+            + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
+            + "     dst.ID AS down_station_id, dst.NAME AS down_station_name, "
+            + "     s.DISTANCE "
+            + "FROM section s"
+            + "     LEFT JOIN STATION ust "
+            + "     ON s.UP_STATION_ID = ust.ID "
+            + "     LEFT JOIN STATION dst "
+            + "     ON s.DOWN_STATION_ID = dst.ID "
+            + "WHERE s.LINE_ID = :lineId";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("lineId", lineId);
         return namedParameterJdbcTemplate.query(sql, parameters, SECTION_ROW_MAPPER);
     }

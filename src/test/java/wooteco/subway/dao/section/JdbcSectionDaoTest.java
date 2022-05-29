@@ -2,12 +2,15 @@ package wooteco.subway.dao.section;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static wooteco.subway.testutils.SubWayFixtures.강남역;
 import static wooteco.subway.testutils.SubWayFixtures.백번_백역;
 import static wooteco.subway.testutils.SubWayFixtures.백일번_백일역;
+import static wooteco.subway.testutils.SubWayFixtures.선릉역;
 import static wooteco.subway.testutils.SubWayFixtures.이백번_이백역;
 import static wooteco.subway.testutils.SubWayFixtures.이백일번_이백일역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역;
+import static wooteco.subway.testutils.SubWayFixtures.잠실역;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -19,6 +22,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import wooteco.subway.dao.station.JdbcStationDao;
+import wooteco.subway.dao.station.StationDao;
+import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 
 @JdbcTest
@@ -27,10 +33,12 @@ class JdbcSectionDaoTest {
     @Autowired
     private DataSource dataSource;
     private SectionDao sectionDao;
+    private StationDao stationDao;
 
     @BeforeEach
     void setUp() {
         sectionDao = new JdbcSectionDao(dataSource);
+        stationDao = new JdbcStationDao(dataSource);
     }
 
     @DisplayName("구간을 생성한다.")
@@ -66,6 +74,9 @@ class JdbcSectionDaoTest {
     void findAllByLineId() {
         //given
         final Long lineId = 1L;
+        final Station 일번역 = stationDao.save(강남역);
+        final Station 이번역 = stationDao.save(선릉역);
+        final Station 삼번역 = stationDao.save(잠실역);
         final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
         final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
 
@@ -74,6 +85,10 @@ class JdbcSectionDaoTest {
 
         //then
         assertThat(sections).isNotEmpty();
+
+        stationDao.deleteById(일번역.getId());
+        stationDao.deleteById(이번역.getId());
+        stationDao.deleteById(삼번역.getId());
 
         sectionDao.deleteById(createdA.getId());
         sectionDao.deleteById(createdB.getId());
