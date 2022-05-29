@@ -18,6 +18,7 @@ public class Name {
     }
 
     private void validateName(final String name) {
+        System.out.println("name = " + name);
         checkEmpty(name);
         checkIncludeBlank(name);
         checkValidLengthOfName(name);

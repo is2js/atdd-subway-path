@@ -1,13 +1,8 @@
 package wooteco.subway.dao.section;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static wooteco.subway.testutils.SubWayFixtures.강남역;
-import static wooteco.subway.testutils.SubWayFixtures.백번_백역;
-import static wooteco.subway.testutils.SubWayFixtures.백일번_백일역;
 import static wooteco.subway.testutils.SubWayFixtures.선릉역;
-import static wooteco.subway.testutils.SubWayFixtures.이백번_이백역;
-import static wooteco.subway.testutils.SubWayFixtures.이백일번_이백일역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역;
 import static wooteco.subway.testutils.SubWayFixtures.잠실역;
@@ -120,34 +115,33 @@ class JdbcSectionDaoTest {
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    @DisplayName("수정된 구간정보를 일괄 업데이트 한다.")
+    @DisplayName("수정된 구간 정보를 업데이트 한다.")
     @Test
-    void batchUpdate() {
+    void update() {
         //given
-        final Station 일번역 = stationDao.save(강남역);
-        final Station 이번역 = stationDao.save(선릉역);
-        final Station 삼번역 = stationDao.save(잠실역);
-        final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
-        final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
+        final Station 일번역 = stationDao.save(new Station("강남역"));
+        final Station 이번역 = stationDao.save(new Station("선릉역"));
+        final Station 백번역 = stationDao.save(new Station(100L, "백번역"));
+        final Station 백일번역 = stationDao.save(new Station(101L, "백일번역"));
 
-        final Section updatedA = new Section(createdA.getId(), 1L, 백번_백역, 백일번_백일역, 100);
-        final Section updatedB = new Section(createdB.getId(), 1L, 이백번_이백역, 이백일번_이백일역, 200);
+        final Section createdA = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
+
+        final Section updatedA = new Section(createdA.getId(), createdA.getLineId(), 백번역, 백일번역, 100);
 
         //when
-        sectionDao.batchUpdate(List.of(updatedA, updatedB));
+        sectionDao.update(updatedA);
 
         //then
-        assertAll(
-            () -> assertThat(sectionDao.findById(createdA.getId()).get().getDistance()).isEqualTo(100),
-            () -> assertThat(sectionDao.findById(createdB.getId()).get().getDistance()).isEqualTo(200)
-        );
+        assertThat(sectionDao.findById(createdA.getId())
+            .get()
+            .getDistance()).isEqualTo(100);
 
         stationDao.deleteById(일번역.getId());
         stationDao.deleteById(이번역.getId());
-        stationDao.deleteById(삼번역.getId());
+        stationDao.deleteById(백번역.getId());
+        stationDao.deleteById(백일번역.getId());
 
         sectionDao.deleteById(createdA.getId());
-        sectionDao.deleteById(createdB.getId());
     }
 
     @DisplayName("stationId이 주어지면, 구간 중에 해당 지하철역이 존재하는지 확인한다.")

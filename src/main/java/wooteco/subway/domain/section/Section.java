@@ -27,7 +27,7 @@ public class Section {
     public Section(final Long id, final long lineId, final Station upStation, final Station downStation,
                    final int distance) {
         validateSameStations(upStation, downStation);
-        validateDistance(distance);
+        validateInValidDistance(distance);
         this.id = id;
         this.lineId = lineId;
         this.upStation = upStation;
@@ -41,7 +41,7 @@ public class Section {
         }
     }
 
-    private void validateDistance(final int distance) {
+    private void validateInValidDistance(final int distance) {
         if (distance <= INVALID_DISTANCE_STANDARD) {
             throw new IllegalArgumentException(ERROR_INVALID_DISTANCE);
         }

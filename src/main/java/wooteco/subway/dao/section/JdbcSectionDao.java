@@ -5,10 +5,8 @@ import java.util.Optional;
 import javax.sql.DataSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import wooteco.subway.domain.Station;
@@ -69,7 +67,7 @@ public class JdbcSectionDao implements SectionDao {
             + "     ON s.UP_STATION_ID = ust.ID "
             + "     LEFT JOIN STATION dst "
             + "     ON s.DOWN_STATION_ID = dst.ID "
-            + "WHERE s.id = :id";
+            + "WHERE s.ID = :id";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
         try {
             return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, parameters, SECTION_ROW_MAPPER));
@@ -104,15 +102,21 @@ public class JdbcSectionDao implements SectionDao {
     }
 
     @Override
-    public void batchUpdate(final List<Section> sections) {
-        final String sql = "UPDATE section SET up_station_id = :upStationId, down_station_id = :downStationId, distance = :distance WHERE id = :id";
-        namedParameterJdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(sections));
-    }
-
-    @Override
     public void update(final Section section) {
-        final String sql = "UPDATE section SET up_station_id = :upStationId, down_station_id = :downStationId, distance = :distance WHERE id = :id";
-        final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(section);
+        final String sql = ""
+            + "UPDATE "
+            + "     section "
+            + "SET "
+            + "     up_station_id = :upStationId, "
+            + "     down_station_id = :downStationId, "
+            + "     distance = :distance "
+            + "WHERE "
+            + "     id = :id";
+
+        final MapSqlParameterSource parameters = new MapSqlParameterSource("id", section.getId())
+            .addValue("upStationId", section.getUpStation().getId())
+            .addValue("downStationId", section.getDownStation().getId())
+            .addValue("distance", section.getDistance());
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
