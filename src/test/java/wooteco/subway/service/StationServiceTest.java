@@ -98,8 +98,8 @@ class StationServiceTest {
         final Station 분당_1역 = stationDao.save(new Station("분당_1역"));
         final Station 분당_2역 = stationDao.save(new Station("분당_2역"));
         final Station 분당_3역 = stationDao.save(new Station("분당_3역"));
-        final Section 구간1_2 = sectionDao.save(new Section(1L, 분당_1역.getId(), 분당_2역.getId(), 10));
-        final Section 구간2_3 = sectionDao.save(new Section(1L, 분당_2역.getId(), 분당_3역.getId(), 10));
+        final Section 구간1_2 = sectionDao.save(new Section(1L, 분당_1역, 분당_2역, 10));
+        final Section 구간2_3 = sectionDao.save(new Section(1L, 분당_2역, 분당_3역, 10));
 
         //when & then
         assertThatThrownBy(() -> stationService.delete(분당_2역.getId()))

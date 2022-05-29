@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static wooteco.subway.testutils.SubWayFixtures.이번역_선릉;
+import static wooteco.subway.testutils.SubWayFixtures.일번역_강남;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역_거리_10;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역_거리_22;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_2번역_3번역_거리_12;
@@ -21,7 +23,7 @@ class SectionTest {
         final int distance = 1;
 
         //then
-        assertDoesNotThrow(() -> new Section(1L, lineId, 1L, 2L, distance));
+        assertDoesNotThrow(() -> new Section(1L, lineId, 일번역_강남, 이번역_선릉, distance));
     }
 
     @DisplayName("구간 생성시, 상행 종점과 하행 종점이 같으면 예외를 발생한다.")
@@ -32,7 +34,7 @@ class SectionTest {
         final int distance = 1;
 
         //then
-        assertThatThrownBy(() -> new Section(1L, lineId, 1L, 1L, distance))
+        assertThatThrownBy(() -> new Section(1L, lineId, 일번역_강남, 일번역_강남, distance))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 상행 종점과 하행 종점이 같을 수 없습니다.");
     }
@@ -45,7 +47,7 @@ class SectionTest {
         final int distance = 0;
 
         //then
-        assertThatThrownBy(() -> new Section(1L, lineId, 1L, 2L, distance))
+        assertThatThrownBy(() -> new Section(1L, lineId, 일번역_강남, 이번역_선릉, distance))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 부적절한 거리가 입력되었습니다. 0보다 큰 거리를 입력해주세요.");
     }
@@ -59,10 +61,10 @@ class SectionTest {
 
         //then
         assertAll(
-            () -> assertThat(middleToDownSection.getUpStationId()).isEqualTo(
-                일호선_구간_1번역_2번역_거리_10.getDownStationId()),
-            () -> assertThat(middleToDownSection.getDownStationId()).isEqualTo(
-                일호선_구간_1번역_3번역_거리_22.getDownStationId())
+            () -> assertThat(middleToDownSection.getUpStation()).isEqualTo(
+                일호선_구간_1번역_2번역_거리_10.getDownStation()),
+            () -> assertThat(middleToDownSection.getDownStation()).isEqualTo(
+                일호선_구간_1번역_3번역_거리_22.getDownStation())
         );
     }
 
@@ -75,10 +77,10 @@ class SectionTest {
 
         //then
         assertAll(
-            () -> assertThat(upToMiddleSection.getUpStationId()).isEqualTo(
-                일호선_구간_1번역_3번역_거리_22.getUpStationId()),
-            () -> assertThat(upToMiddleSection.getDownStationId()).isEqualTo(
-                일호선_구간_2번역_3번역_거리_12.getUpStationId())
+            () -> assertThat(upToMiddleSection.getUpStation()).isEqualTo(
+                일호선_구간_1번역_3번역_거리_22.getUpStation()),
+            () -> assertThat(upToMiddleSection.getDownStation()).isEqualTo(
+                일호선_구간_2번역_3번역_거리_12.getUpStation())
         );
     }
 
@@ -91,8 +93,8 @@ class SectionTest {
 
         //then
         assertAll(
-            () -> assertThat(newSection.getUpStationId()).isEqualTo(일호선_구간_1번역_2번역_거리_10.getUpStationId()),
-            () -> assertThat(newSection.getDownStationId()).isEqualTo(일호선_구간_2번역_3번역_거리_12.getDownStationId())
+            () -> assertThat(newSection.getUpStation()).isEqualTo(일호선_구간_1번역_2번역_거리_10.getUpStation()),
+            () -> assertThat(newSection.getDownStation()).isEqualTo(일호선_구간_2번역_3번역_거리_12.getDownStation())
         );
     }
 }

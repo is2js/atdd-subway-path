@@ -2,6 +2,10 @@ package wooteco.subway.dao.section;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static wooteco.subway.testutils.SubWayFixtures.백번_백역;
+import static wooteco.subway.testutils.SubWayFixtures.백일번_백일역;
+import static wooteco.subway.testutils.SubWayFixtures.이백번_이백역;
+import static wooteco.subway.testutils.SubWayFixtures.이백일번_이백일역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역;
 
@@ -101,8 +105,8 @@ class JdbcSectionDaoTest {
         final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
         final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
 
-        final Section updatedA = new Section(createdA.getId(), 1L, 100L, 101L, 100);
-        final Section updatedB = new Section(createdB.getId(), 1L, 200L, 201L, 200);
+        final Section updatedA = new Section(createdA.getId(), 1L, 백번_백역, 백일번_백일역, 100);
+        final Section updatedB = new Section(createdB.getId(), 1L, 이백번_이백역, 이백일번_이백일역, 200);
 
         //when
         sectionDao.batchUpdate(List.of(updatedA, updatedB));

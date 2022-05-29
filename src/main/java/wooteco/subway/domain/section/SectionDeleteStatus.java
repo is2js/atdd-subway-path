@@ -27,7 +27,7 @@ public enum SectionDeleteStatus {
 
     private static boolean isFirstSection(final List<Section> sections, final Long stationId) {
         final Long upStationId = sections.stream()
-            .flatMap(section -> Stream.of(section.getUpStationId(), section.getDownStationId()))
+            .flatMap(section -> Stream.of(section.getUpStation().getId(), section.getDownStation().getId()))
             .distinct()
             .min(Comparator.comparing(it -> it))
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 첫 구간을 찾을 수 없습니다."));
@@ -36,7 +36,7 @@ public enum SectionDeleteStatus {
 
     private static boolean isLastSection(final List<Section> sections, final Long stationId) {
         final Long downStationId = sections.stream()
-            .flatMap(section -> Stream.of(section.getUpStationId(), section.getDownStationId()))
+            .flatMap(section -> Stream.of(section.getUpStation().getId(), section.getDownStation().getId()))
             .distinct()
             .max(Comparator.comparing(it -> it))
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 마지막 구간을 찾을 수 없습니다."));

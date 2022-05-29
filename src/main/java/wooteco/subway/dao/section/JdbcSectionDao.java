@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 
 @Repository
@@ -20,8 +21,8 @@ public class JdbcSectionDao implements SectionDao {
         new Section(
             resultSet.getLong("id"),
             resultSet.getLong("line_id"),
-            resultSet.getLong("up_station_id"),
-            resultSet.getLong("down_station_id"),
+            new Station(resultSet.getLong("up_station_id"), resultSet.getString("up_station_name")),
+            new Station(resultSet.getLong("down_station_id"), resultSet.getString("down_station_name")),
             resultSet.getInt("distance")
         )
     );
@@ -39,13 +40,10 @@ public class JdbcSectionDao implements SectionDao {
 
     @Override
     public Section save(final Section section) {
-/*        final MapSqlParameterSource parameters2 = new MapSqlParameterSource()
-            .addValue("line_id", section.getLineId())
-            .addValue("up_station_id", section.getUpStationId())
-            .addValue("down_station_id", section.getDownStationId())
-            .addValue("distance", section.getDistance());*/
-
-        final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(section);
+        final MapSqlParameterSource parameters = new MapSqlParameterSource("line_id", section.getLineId())
+            .addValue("up_station_id", section.getUpStation().getId())
+            .addValue("down_station_id", section.getDownStation().getId())
+            .addValue("distance", section.getDistance());
         final Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
         return new Section(id, section);
     }
@@ -61,7 +59,18 @@ public class JdbcSectionDao implements SectionDao {
     @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<Section> findById(final Long id) {
-        final String sql = "SELECT * FROM section WHERE id = :id";
+        //final String sql2 = "SELECT * FROM section WHERE id = :id";
+        final String sql = ""
+            + "SELECT s.ID as id, s.LINE_ID AS line_id, "
+            + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
+            + "     dst.ID AS down_station_id, dst.NAME AS down_station_name, "
+            + "     s.DISTANCE "
+            + "FROM section s"
+            + "     LEFT JOIN STATION ust "
+            + "     ON s.UP_STATION_ID = ust.ID "
+            + "     LEFT JOIN STATION dst "
+            + "     ON s.UP_STATION_ID = dst.ID "
+            + "WHERE s.id = :id";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
         try {
             return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, parameters, SECTION_ROW_MAPPER));

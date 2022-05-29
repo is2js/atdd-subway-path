@@ -144,7 +144,7 @@ public class Sections {
 
     public List<Long> getUniqueStationIds() {
         return this.value.stream()
-            .flatMap(it -> Stream.of(it.getUpStationId(), it.getDownStationId()))
+            .flatMap(it -> Stream.of(it.getUpStation().getId(), it.getDownStation().getId()))
             .distinct()
             .sorted()
             .collect(Collectors.toList());
@@ -192,9 +192,9 @@ public class Sections {
 
     private Long deleteMiddle(final Long stationId) {
         final Section upToMiddleSection = findSectionByCondition(
-            it -> Objects.equals(it.getDownStationId(), stationId));
+            it -> Objects.equals(it.getDownStation().getId(), stationId));
         final Section middleToDownSection = findSectionByCondition(
-            it -> Objects.equals(it.getUpStationId(), stationId));
+            it -> Objects.equals(it.getUpStation().getId(), stationId));
         value.removeIf(it -> it.equals(upToMiddleSection));
         final Section updated = upToMiddleSection.createUpToDownSection(middleToDownSection);
         value.add(updated);
@@ -203,14 +203,14 @@ public class Sections {
     }
 
     private Long deleteUpStation(final Long stationId) {
-        final Section firstSection = findSectionByCondition(it -> Objects.equals(it.getUpStationId(), stationId));
+        final Section firstSection = findSectionByCondition(it -> Objects.equals(it.getUpStation().getId(), stationId));
         value.removeIf(it -> it.equals(firstSection));
         return firstSection.getId();
     }
 
     private Long deleteDownStation(final Long stationId) {
         final Section lastSection = findSectionByCondition(
-            it -> Objects.equals(it.getDownStationId(), stationId));
+            it -> Objects.equals(it.getDownStation().getId(), stationId));
         value.removeIf(it -> it.equals(lastSection));
         return lastSection.getId();
     }

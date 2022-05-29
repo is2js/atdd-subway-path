@@ -43,7 +43,7 @@ public class ShortestPathFinder {
                                 final WeightedMultigraph<Long, DefaultWeightedEdge> graph) {
         for (final Section section : sections) {
             graph.setEdgeWeight(
-                graph.addEdge(section.getUpStationId(), section.getDownStationId()),
+                graph.addEdge(section.getUpStation().getId(), section.getDownStation().getId()),
                 section.getDistance()
             );
         }

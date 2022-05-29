@@ -48,7 +48,7 @@ class SectionServiceTest {
         final Line 신분당선 = lineDao.save(new Line("신분당선", "red"));
         final Station 신분당_1역 = stationDao.save(new Station("신분당_1역"));
         final Station 신분당_3역 = stationDao.save(new Station("신분당_3역"));
-        sectionDao.save(new Section(lineId, 신분당_1역.getId(), 신분당_3역.getId(), 10));
+        sectionDao.save(new Section(lineId, 신분당_1역, 신분당_3역, 10));
 
         final List<Station> stations = sectionService.findStationsByLineId(lineId);
 
@@ -63,7 +63,7 @@ class SectionServiceTest {
         final Station 신분당_1역 = stationDao.save(new Station("신분당_1역"));
         final Station 신분당_2역 = stationDao.save(new Station("신분당_2역"));
         final Station 신분당_3역 = stationDao.save(new Station("신분당_3역"));
-        sectionDao.save(new Section(lineId, 신분당_1역.getId(), 신분당_3역.getId(), 10));
+        sectionDao.save(new Section(lineId, 신분당_1역, 신분당_3역, 10));
 
         final SectionRequest sectionRequest = new SectionRequest(신분당_1역.getId(), 신분당_2역.getId(), 3);
 
@@ -77,8 +77,8 @@ class SectionServiceTest {
         final Station 분당_1역 = stationDao.save(new Station("분당_1역"));
         final Station 분당_2역 = stationDao.save(new Station("분당_2역"));
         final Station 분당_3역 = stationDao.save(new Station("분당_3역"));
-        sectionDao.save(new Section(분당선.getId(), 분당_1역.getId(), 분당_2역.getId(), 10));
-        sectionDao.save(new Section(분당선.getId(), 분당_2역.getId(), 분당_3역.getId(), 10));
+        sectionDao.save(new Section(분당선.getId(), 분당_1역, 분당_2역, 10));
+        sectionDao.save(new Section(분당선.getId(), 분당_2역, 분당_3역, 10));
 
         Assertions.assertDoesNotThrow(() -> sectionService.deleteSection(분당선.getId(), 분당_2역.getId()));
     }

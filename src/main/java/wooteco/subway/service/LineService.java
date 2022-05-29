@@ -5,10 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wooteco.subway.dao.line.LineDao;
 import wooteco.subway.dao.section.SectionDao;
+import wooteco.subway.dao.station.StationDao;
 import wooteco.subway.domain.Line;
+import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 import wooteco.subway.exception.LineDuplicateException;
 import wooteco.subway.exception.LineNotFoundException;
+import wooteco.subway.exception.StationNotFoundException;
 import wooteco.subway.ui.dto.request.LineRequest;
 
 @Service
@@ -16,23 +19,32 @@ public class LineService {
 
     private final LineDao lineDao;
     private final SectionDao sectionDao;
+    private final StationDao stationDao;
 
-    public LineService(final LineDao lineDao, final SectionDao sectionDao) {
+    public LineService(final LineDao lineDao, final SectionDao sectionDao, final StationDao stationDao) {
         this.lineDao = lineDao;
         this.sectionDao = sectionDao;
+        this.stationDao = stationDao;
     }
 
     @Transactional
     public Line create(final LineRequest lineRequest) {
         final Line targetLine = lineRequest.toEntity();
         checkDuplicateName(targetLine);
-        final Line createdLine = lineDao.save(targetLine);
+        final Line created = lineDao.save(targetLine);
 
-        final Section targetSection = new Section(createdLine.getId(), lineRequest.getUpStationId(),
-            lineRequest.getDownStationId(), lineRequest.getDistance());
+        final Station upStation = stationDao.findById(lineRequest.getUpStationId())
+            .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
+        final Station downStation = stationDao.findById(lineRequest.getDownStationId())
+            .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
+
+        final Section targetSection = new Section(created.getId(),
+            upStation,
+            downStation,
+            lineRequest.getDistance());
         sectionDao.save(targetSection);
 
-        return createdLine;
+        return created;
     }
 
     private void checkDuplicateName(final Line line) {

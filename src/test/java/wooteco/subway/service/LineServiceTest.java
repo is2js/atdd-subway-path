@@ -7,6 +7,8 @@ import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_2호선_STATI
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_분당선_STATION_1_3;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_중앙선_STATION_1_3;
+import static wooteco.subway.testutils.SubWayFixtures.이번역_선릉;
+import static wooteco.subway.testutils.SubWayFixtures.일번역_강남;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -19,6 +21,8 @@ import wooteco.subway.dao.line.JdbcLineDao;
 import wooteco.subway.dao.line.LineDao;
 import wooteco.subway.dao.section.JdbcSectionDao;
 import wooteco.subway.dao.section.SectionDao;
+import wooteco.subway.dao.station.JdbcStationDao;
+import wooteco.subway.dao.station.StationDao;
 import wooteco.subway.domain.Line;
 import wooteco.subway.domain.section.Section;
 import wooteco.subway.exception.LineDuplicateException;
@@ -33,13 +37,15 @@ class LineServiceTest {
 
     private LineDao lineDao;
     private SectionDao sectionDao;
+    private StationDao stationDao;
     private LineService lineService;
 
     @BeforeEach
     void setUp() {
         this.lineDao = new JdbcLineDao(dataSource);
         this.sectionDao = new JdbcSectionDao(dataSource);
-        this.lineService = new LineService(lineDao, sectionDao);
+        this.stationDao = new JdbcStationDao(dataSource);
+        this.lineService = new LineService(lineDao, sectionDao, stationDao);
     }
 
     @DisplayName("새로운 호선을 생성한다")
@@ -175,7 +181,7 @@ class LineServiceTest {
         final LineRequest lineRequest = new LineRequest("1호선", "green", 1L, 2L, 10);
 
         final Line line = lineService.create(lineRequest);
-        final Section expected = new Section(line.getId(), 1L, 2L, 10);
+        final Section expected = new Section(line.getId(), 일번역_강남, 이번역_선릉, 10);
         final List<Section> sections = sectionDao.findSectionsByLineId(line.getId());
 
         assertThat(sections).usingRecursiveComparison()
