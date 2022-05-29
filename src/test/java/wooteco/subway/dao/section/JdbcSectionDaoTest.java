@@ -1,4 +1,4 @@
-package wooteco.subway.dao;
+package wooteco.subway.dao.section;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

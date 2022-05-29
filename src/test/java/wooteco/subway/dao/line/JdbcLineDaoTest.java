@@ -1,4 +1,4 @@
-package wooteco.subway.dao;
+package wooteco.subway.dao.line;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.DuplicateKeyException;
+import wooteco.subway.dao.section.JdbcSectionDao;
+import wooteco.subway.dao.section.SectionDao;
 import wooteco.subway.domain.Line;
 import wooteco.subway.ui.dto.request.LineRequest;
 
