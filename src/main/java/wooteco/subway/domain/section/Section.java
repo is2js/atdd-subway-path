@@ -9,17 +9,17 @@ public class Section {
     private static final int INVALID_DISTANCE_STANDARD = 0;
 
     private final Long id;
-    private final Long lineId;
+    private final long lineId;
     private final int distance;
-    private final Long upStationId;
-    private final Long downStationId;
+    private final long upStationId;
+    private final long downStationId;
 
-    public Section(final Long lineId, final Long upStationId, final Long downStationId, final int distance) {
+    public Section(final long lineId, final long upStationId, final long downStationId, final int distance) {
         this(null, lineId, upStationId, downStationId, distance);
     }
 
-    public Section(final Long id, final Long lineId,
-                   final Long upStationId, final Long downStationId, final int distance) {
+    public Section(final Long id, final long lineId,
+                   final long upStationId, final long downStationId, final int distance) {
         validateStations(upStationId, downStationId);
         validateDistance(distance);
         this.id = id;
@@ -29,7 +29,7 @@ public class Section {
         this.distance = distance;
     }
 
-    private void validateStations(final Long upStationId, final Long downStationId) {
+    private void validateStations(final long upStationId, final long downStationId) {
         if (Objects.equals(upStationId, downStationId)) {
             throw new IllegalArgumentException(ERROR_SAME_STATION);
         }
@@ -73,17 +73,17 @@ public class Section {
     public boolean addNewDownStationCase(final Section section) {
         return Objects.equals(section.getUpStationId(), downStationId);
     }
-    
+
     public boolean isSameUpStation(final Section section) {
-        return upStationId.equals(section.upStationId);
+        return Objects.equals(upStationId, section.upStationId);
     }
 
     public boolean isSameDownStation(final Section section) {
-        return downStationId.equals(section.downStationId);
+        return Objects.equals(downStationId, section.downStationId);
     }
 
     public boolean isConnected(final Section section) {
-        return downStationId.equals(section.upStationId);
+        return Objects.equals(downStationId, section.upStationId);
     }
 
     public Long getId() {
@@ -107,7 +107,7 @@ public class Section {
     }
 
     public boolean isSameOppositeStation(final Section section) {
-        return downStationId.equals(section.upStationId);
+        return Objects.equals(downStationId, section.upStationId);
     }
 
     @Override
