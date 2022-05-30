@@ -9,7 +9,7 @@ import static wooteco.subway.acceptance.AcceptanceFixtures.requestPostStation;
 import static wooteco.subway.acceptance.AcceptanceFixtures.requestPutLine;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_분당선_STATION_1_3;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선2_FOR_PUT;
-import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2;
+import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2_거리_10;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_강남역;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_역삼역;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_잠실역;
@@ -32,7 +32,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         //given & when
         requestPostStation(STATION_REQUEST_강남역, "/stations");
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
-        ExtractableResponse<Response> response = requestPostLine(LINE_REQUEST_신분당선_STATION_1_2,
+        ExtractableResponse<Response> response = requestPostLine(LINE_REQUEST_신분당선_STATION_1_2_거리_10,
             "/lines");
 
         // then
@@ -50,7 +50,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
         requestPostStation(STATION_REQUEST_역삼역, "/stations");
 
-        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2, "/lines");
+        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2_거리_10, "/lines");
         requestPostLine(LINE_REQUEST_분당선_STATION_1_3, "/lines");
 
         //when
@@ -69,7 +69,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         //given
         requestPostStation(STATION_REQUEST_강남역, "/stations");
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
-        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2, "/lines");
+        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2_거리_10, "/lines");
 
         //when
         ExtractableResponse<Response> response = requestGetLines("/lines/1");
@@ -84,7 +84,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         //given
         requestPostStation(STATION_REQUEST_강남역, "/stations");
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
-        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2, "/lines");
+        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2_거리_10, "/lines");
 
         //when
         ExtractableResponse<Response> response = requestPutLine(LINE_REQUEST_신분당선2_FOR_PUT,
@@ -100,7 +100,7 @@ class LineAcceptanceTest extends AcceptanceTest {
         //given
         requestPostStation(STATION_REQUEST_강남역, "/stations");
         requestPostStation(STATION_REQUEST_잠실역, "/stations");
-        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2, "/lines");
+        requestPostLine(LINE_REQUEST_신분당선_STATION_1_2_거리_10, "/lines");
 
         //when
         ExtractableResponse<Response> response = requestDeleteLine("/lines/1");

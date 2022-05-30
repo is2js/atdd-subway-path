@@ -13,7 +13,7 @@ public class Station {
 
     public Station(final Long id, String name) {
         this.id = id;
-        this.name = new Name(name);
+        this.name = Objects.requireNonNull(new Name(name), "[ERROR] 이름을 null일 수 없습니다.");
     }
 
     public Long getId() {

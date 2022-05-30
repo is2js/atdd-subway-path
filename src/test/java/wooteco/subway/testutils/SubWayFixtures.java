@@ -8,7 +8,8 @@ import wooteco.subway.ui.dto.request.SectionRequest;
 import wooteco.subway.ui.dto.request.StationRequest;
 
 public class SubWayFixtures {
-    public static final LineRequest LINE_REQUEST_신분당선_STATION_1_2 = new LineRequest("신분당선", "bg-red-600", 1L, 2L, 10);
+    public static final LineRequest LINE_REQUEST_신분당선_STATION_1_2_거리_10 = new LineRequest("신분당선", "bg-red-600", 1L, 2L,
+        10);
     public static final LineRequest LINE_REQUEST_2호선_STATION_1_5_거리55 = new LineRequest("신분당선", "bg-red-600", 1L, 5L,
         55);
     public static final LineRequest LINE_REQUEST_신분당선2_FOR_PUT = new LineRequest("신분당선2", "bg-red-600");

@@ -24,7 +24,6 @@ import wooteco.subway.dao.station.StationDao;
 import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
-import wooteco.subway.ui.dto.request.LineRequest;
 
 @JdbcTest
 public class JdbcLineDaoTest {
@@ -50,13 +49,13 @@ public class JdbcLineDaoTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
-        final Section sectionA = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(2L, 이번역, 삼번역, 12));
 
         final Line 이호선_그린_entity = new Line("2호선", "green");
 
         //when
         final Line 이호선_그린_domain = lineDao.save(이호선_그린_entity);
+        final Section sectionA = sectionDao.save(new Section(이호선_그린_domain.getId(), 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(이호선_그린_domain.getId(), 이번역, 삼번역, 12));
 
         //then
         Assertions.assertThat(이호선_그린_domain).usingRecursiveComparison()
@@ -92,15 +91,15 @@ public class JdbcLineDaoTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
-        final Section sectionA = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(2L, 이번역, 삼번역, 12));
 
         final Line 일호선 = lineDao.save(일호선_파랑);
         final Line 이호선 = lineDao.save(이호선_그린);
 
+        final Section sectionA = sectionDao.save(new Section(일호선.getId(), 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(이호선.getId(), 이번역, 삼번역, 12));
+
         //when
         List<Line> lines = lineDao.findAll();
-        System.out.println("lines = " + lines);
 
         //then
         assertThat(lines).hasSize(2);
@@ -120,8 +119,8 @@ public class JdbcLineDaoTest {
 
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
-        final Section section = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
         final Line line = lineDao.save(이호선_그린);
+        final Section section = sectionDao.save(new Section(line.getId(), 일번역, 이번역, 10));
 
         final Line actual = lineDao.findById(line.getId())
             .orElse(null);
@@ -142,11 +141,13 @@ public class JdbcLineDaoTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
-        final Section sectionA = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(2L, 이번역, 삼번역, 12));
 
         final Line created = lineDao.save(이호선_그린);
 
+        final Section sectionA = sectionDao.save(new Section(created.getId(), 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(created.getId(), 이번역, 삼번역, 12));
+
+        System.out.println("lineDao.findAll() = " + lineDao.findAll());
         //when
         lineDao.deleteById(created.getId());
 
@@ -167,20 +168,21 @@ public class JdbcLineDaoTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
-        final Section sectionA = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(2L, 이번역, 삼번역, 12));
 
-        final Line created = lineDao.save(이호선_그린);
-        final LineRequest lineRequest = new LineRequest("1호선", "green", 1L, 2L, 10);
-        final Line updated = lineRequest.toEntity(created.getId());
+        final Line target = lineDao.save(이호선_그린); // 내부에서 section join시 3번까지... 위에서 미리 생겨서...
+
+        final Section sectionA = sectionDao.save(new Section(target.getId(), 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(target.getId(), 이번역, 삼번역, 12));
+
+        final Line lineForUpdate = new Line(target.getId(), "일호선", "green");
 
         //when
-        lineDao.update(updated);
-        final Line updateLine = lineDao.findById(created.getId())
+        lineDao.update(lineForUpdate);
+        final Line updatedLine = lineDao.findById(target.getId())
             .orElseThrow();
 
         //then
-        assertThat(updateLine.getName()).isEqualTo(updateLine.getName());
+        assertThat(updatedLine.getName()).isEqualTo(lineForUpdate.getName());
 
         stationDao.deleteById(일번역.getId());
         stationDao.deleteById(이번역.getId());
@@ -188,6 +190,6 @@ public class JdbcLineDaoTest {
         sectionDao.deleteById(sectionA.getId());
         sectionDao.deleteById(sectionB.getId());
 
-        lineDao.deleteById(updateLine.getId());
+        lineDao.deleteById(updatedLine.getId());
     }
 }
