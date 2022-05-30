@@ -50,7 +50,7 @@ public class LineController {
     public List<LineResponse> findAllLine() {
         final List<Line> lines = lineService.findAll();
         return lines.stream()
-            .map(line -> new LineResponse(line, sectionService.findStationsByLineId(line.getId())))
+            .map(LineResponse::new)
             .collect(Collectors.toList());
     }
 
