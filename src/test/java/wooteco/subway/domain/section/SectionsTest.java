@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static wooteco.subway.testutils.SubWayFixtures.사번_사당역;
 import static wooteco.subway.testutils.SubWayFixtures.삼번_잠실역;
-import static wooteco.subway.testutils.SubWayFixtures.이번역_선릉;
-import static wooteco.subway.testutils.SubWayFixtures.일번역_강남;
+import static wooteco.subway.testutils.SubWayFixtures.이번_선릉역;
+import static wooteco.subway.testutils.SubWayFixtures.일번_강남역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역_거리_10;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역_거리_22;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_2번역_3번역_거리_12;
@@ -47,7 +47,7 @@ class SectionsTest {
         //given & when
         final Sections sections = new Sections(List.of(
             일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
-        final Section targetSection = new Section(1L, 일번역_강남, 사번_사당역, 8);
+        final Section targetSection = new Section(1L, 일번_강남역, 사번_사당역, 8);
 
         //then
         assertDoesNotThrow(() -> sections.addSection(targetSection));
@@ -59,7 +59,7 @@ class SectionsTest {
         //given & when
         final Sections sections = new Sections(List.of(
             일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
-        final Section targetSection = new Section(1L, 일번역_강남, 이번역_선릉, 12);
+        final Section targetSection = new Section(1L, 일번_강남역, 이번_선릉역, 12);
 
         //then
         assertThatThrownBy(() -> sections.addSection(targetSection))
@@ -73,7 +73,7 @@ class SectionsTest {
         //given & when
         final Sections sections = new Sections(List.of(
             일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
-        final Section targetSection = new Section(1L, 이번역_선릉, 사번_사당역, 13);
+        final Section targetSection = new Section(1L, 이번_선릉역, 사번_사당역, 13);
 
         //then
         assertThatThrownBy(() -> sections.addSection(targetSection))
@@ -87,7 +87,7 @@ class SectionsTest {
         //given & when
         final Sections sections = new Sections(List.of(
             일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12));
-        final Section targetSection = new Section(1L, 일번역_강남, 사번_사당역, 11);
+        final Section targetSection = new Section(1L, 일번_강남역, 사번_사당역, 11);
 
         //then
         assertThatThrownBy(() -> sections.addSection(targetSection))
@@ -101,7 +101,7 @@ class SectionsTest {
     void addSection_same_up_station() {
         //given
         final Sections sections_1_3 = new Sections(List.of(일호선_구간_1번역_3번역_거리_22));
-        final Section section_1_2 = new Section(3L, 1L, 일번역_강남, 이번역_선릉, 15);
+        final Section section_1_2 = new Section(3L, 1L, 일번_강남역, 이번_선릉역, 15);
 
         // when
         final Section section_2_3 = sections_1_3.addSection(section_1_2).get();
@@ -120,7 +120,7 @@ class SectionsTest {
     void addSection_same_down_station() {
         //given
         final Sections sections_1_3 = new Sections(List.of(일호선_구간_1번역_3번역_거리_22));
-        final Section section_2_3 = new Section(3L, 1L, 이번역_선릉, 삼번_잠실역, 15);
+        final Section section_2_3 = new Section(3L, 1L, 이번_선릉역, 삼번_잠실역, 15);
 
         //when
         final Section section_1_2 = sections_1_3.addSection(section_2_3).get();
@@ -138,7 +138,7 @@ class SectionsTest {
     void addSection_end_station() {
         //given
         final Sections section_2_3 = new Sections(List.of(일호선_구간_2번역_3번역_거리_12));
-        final Section section_1_2 = new Section(3L, 1L, 일번역_강남, 이번역_선릉, 15);
+        final Section section_1_2 = new Section(3L, 1L, 일번_강남역, 이번_선릉역, 15);
 
         //when
         final Section update = section_2_3.addSection(section_1_2)
@@ -188,7 +188,7 @@ class SectionsTest {
 
         //then
         assertAll(
-            () -> assertThat(actual.get(0).getUpStation()).isEqualTo(이번역_선릉),
+            () -> assertThat(actual.get(0).getUpStation()).isEqualTo(이번_선릉역),
             () -> assertThat(actual).hasSize(1)
         );
     }
@@ -206,7 +206,7 @@ class SectionsTest {
 
         //then
         assertAll(
-            () -> assertThat(actual.get(actual.size() - 1).getDownStation()).isEqualTo(이번역_선릉),
+            () -> assertThat(actual.get(actual.size() - 1).getDownStation()).isEqualTo(이번_선릉역),
             () -> assertThat(actual).hasSize(1)
         );
     }
@@ -224,7 +224,7 @@ class SectionsTest {
 
         //then
         assertAll(
-            () -> assertThat(actual.get(0).getUpStation()).isEqualTo(일번역_강남),
+            () -> assertThat(actual.get(0).getUpStation()).isEqualTo(일번_강남역),
             () -> assertThat(actual.get(actual.size() - 1).getDownStation()).isEqualTo(삼번_잠실역),
             () -> assertThat(actual).hasSize(1)
         );

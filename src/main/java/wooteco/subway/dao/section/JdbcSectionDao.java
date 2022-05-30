@@ -131,6 +131,7 @@ public class JdbcSectionDao implements SectionDao {
             + "     ON s.UP_STATION_ID = ust.ID "
             + "     LEFT JOIN STATION dst "
             + "     ON s.DOWN_STATION_ID = dst.ID ";
+
         return namedParameterJdbcTemplate.query(sql, SECTION_ROW_MAPPER);
     }
 

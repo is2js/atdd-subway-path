@@ -79,8 +79,8 @@ class JdbcSectionDaoTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
-        final Section createdA = sectionDao.save(일호선_구간_1번역_2번역);
-        final Section createdB = sectionDao.save(일호선_구간_1번역_3번역);
+        final Section createdA = sectionDao.save(new Section(1L, 일번역, 이번역, 1));
+        final Section createdB = sectionDao.save(new Section(1L, 일번역, 삼번역, 2));
 
         //when
         final List<Section> sections = sectionDao.findSectionsByLineId(lineId);

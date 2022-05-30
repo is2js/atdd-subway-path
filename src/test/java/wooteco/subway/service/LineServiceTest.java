@@ -7,8 +7,8 @@ import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_2호선_STATI
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_분당선_STATION_1_3;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_신분당선_STATION_1_2;
 import static wooteco.subway.testutils.SubWayFixtures.LINE_REQUEST_중앙선_STATION_1_3;
-import static wooteco.subway.testutils.SubWayFixtures.이번역_선릉;
-import static wooteco.subway.testutils.SubWayFixtures.일번역_강남;
+import static wooteco.subway.testutils.SubWayFixtures.이번_선릉역;
+import static wooteco.subway.testutils.SubWayFixtures.일번_강남역;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -181,7 +181,7 @@ class LineServiceTest {
         final LineRequest lineRequest = new LineRequest("1호선", "green", 1L, 2L, 10);
 
         final Line line = lineService.create(lineRequest);
-        final Section expected = new Section(line.getId(), 일번역_강남, 이번역_선릉, 10);
+        final Section expected = new Section(line.getId(), 일번_강남역, 이번_선릉역, 10);
         final List<Section> sections = sectionDao.findSectionsByLineId(line.getId());
 
         assertThat(sections).usingRecursiveComparison()

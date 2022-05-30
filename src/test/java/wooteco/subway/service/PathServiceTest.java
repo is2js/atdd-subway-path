@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static wooteco.subway.testutils.SubWayFixtures.사번_사당역;
 import static wooteco.subway.testutils.SubWayFixtures.삼번_잠실역;
 import static wooteco.subway.testutils.SubWayFixtures.오번_신림역;
-import static wooteco.subway.testutils.SubWayFixtures.이번역_선릉;
-import static wooteco.subway.testutils.SubWayFixtures.일번역_강남;
+import static wooteco.subway.testutils.SubWayFixtures.이번_선릉역;
+import static wooteco.subway.testutils.SubWayFixtures.일번_강남역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역_거리_10;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_5번역_거리_31;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_2번역_3번역_거리_12;
@@ -49,8 +49,8 @@ class PathServiceTest {
     @Test
     void show() {
         final List<Station> stations = List.of(
-            일번역_강남,
-            이번역_선릉,
+            일번_강남역,
+            이번_선릉역,
             삼번_잠실역,
             사번_사당역,
             오번_신림역

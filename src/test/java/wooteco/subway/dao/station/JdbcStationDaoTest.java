@@ -3,7 +3,7 @@ package wooteco.subway.dao.station;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static wooteco.subway.testutils.SubWayFixtures.선릉역;
-import static wooteco.subway.testutils.SubWayFixtures.일번역_강남;
+import static wooteco.subway.testutils.SubWayFixtures.일번_강남역;
 
 import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,10 +30,10 @@ public class JdbcStationDaoTest {
     @DisplayName("지하철역을 저장한다.")
     void save() {
         //given
-        final Station created = stationDao.save(일번역_강남);
+        final Station created = stationDao.save(일번_강남역);
 
         //when & then
-        assertThat(일번역_강남.getId()).isEqualTo(일번역_강남.getId());
+        assertThat(일번_강남역.getId()).isEqualTo(일번_강남역.getId());
 
         stationDao.deleteById(created.getId());
     }
@@ -56,7 +56,7 @@ public class JdbcStationDaoTest {
     void findAll() {
         //given
         final Station created_1 = stationDao.save(선릉역);
-        final Station created_2 = stationDao.save(일번역_강남);
+        final Station created_2 = stationDao.save(일번_강남역);
 
         //when & then
         assertThat(stationDao.findAll()).hasSize(2);
