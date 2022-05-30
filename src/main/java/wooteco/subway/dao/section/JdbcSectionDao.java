@@ -137,7 +137,7 @@ public class JdbcSectionDao implements SectionDao {
 
     @Override
     public Boolean existStation(final Long id) {
-        final String sql = "SELECT EXISTS (SELECT * FROM section WHERE up_station_id =:id OR down_station_id =:id)";
+        final String sql = "SELECT EXISTS (SELECT 1 FROM section WHERE up_station_id =:id OR down_station_id =:id)";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
         return namedParameterJdbcTemplate.queryForObject(sql, parameters, Boolean.class);
     }

@@ -40,7 +40,7 @@ public class JdbcStationDao implements StationDao {
 
     @Override
     public boolean existsName(final Station station) {
-        final String sql = "SELECT EXISTS (SELECT * FROM station WHERE name = :name)";
+        final String sql = "SELECT EXISTS (SELECT 1 FROM station WHERE name = :name)";
         final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(station);
         return Boolean.TRUE.equals(namedParameterJdbcTemplate.queryForObject(sql, parameters, Boolean.class));
     }

@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Station {
 
-    private Long id;
-    private Name name;
+    private final Long id;
+    private final Name name;
 
     public Station(final String name) {
         this(null, name);
@@ -13,7 +13,7 @@ public class Station {
 
     public Station(final Long id, String name) {
         this.id = id;
-        this.name = Objects.requireNonNull(new Name(name), "[ERROR] 이름을 null일 수 없습니다.");
+        this.name = new Name(name);
     }
 
     public Long getId() {

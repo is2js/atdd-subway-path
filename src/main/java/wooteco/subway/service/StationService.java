@@ -8,7 +8,6 @@ import wooteco.subway.dao.station.StationDao;
 import wooteco.subway.domain.Station;
 import wooteco.subway.exception.StationDuplicateException;
 import wooteco.subway.exception.StationNotFoundException;
-import wooteco.subway.ui.dto.request.LineRequest;
 import wooteco.subway.ui.dto.request.StationRequest;
 
 @Service
@@ -50,14 +49,6 @@ public class StationService {
         }
 
         stationDao.deleteById(id);
-    }
-
-    public List<Station> findUpAndDownStations(final LineRequest lineRequest) {
-        final Station upStation = stationDao.findById(lineRequest.getUpStationId())
-            .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
-        final Station downStation = stationDao.findById(lineRequest.getDownStationId())
-            .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
-        return List.of(upStation, downStation);
     }
 
     public List<Station> findByIds(final List<Long> ids) {

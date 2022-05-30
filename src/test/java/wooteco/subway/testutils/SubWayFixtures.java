@@ -14,8 +14,6 @@ public class SubWayFixtures {
         55);
     public static final LineRequest LINE_REQUEST_신분당선2_FOR_PUT = new LineRequest("신분당선2", "bg-red-600");
     public static final LineRequest LINE_REQUEST_분당선_STATION_1_3 = new LineRequest("분당선", "bg-red-601", 1L, 3L, 12);
-    public static final LineRequest LINE_REQUEST_중앙선_STATION_1_3 = new LineRequest("중앙선", "bg-red-602", 1L, 3L, 12);
-    public static final LineRequest LINE_REQUEST_2호선_STATION_1_3 = new LineRequest("2호선", "bg-red-603", 1L, 3L, 12);
     public static final Line 일호선_파랑 = new Line("1호선", "blue");
     public static final Line 이호선_그린 = new Line("2호선", "green");
     public static final StationRequest STATION_REQUEST_강남역 = new StationRequest("강남역");

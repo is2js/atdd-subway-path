@@ -1,12 +1,10 @@
 package wooteco.subway.dao.line;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,13 +19,6 @@ import wooteco.subway.exception.LineNotFoundException;
 
 @Repository
 public class JdbcLineDao implements LineDao {
-
-    private static final RowMapper<Line> LINE_ROW_MAPPER = (resultSet, rowNum) ->
-        new Line(
-            resultSet.getLong("id"),
-            resultSet.getString("name"),
-            resultSet.getString("color"),
-            new Sections(Collections.emptyList()));
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -52,25 +43,6 @@ public class JdbcLineDao implements LineDao {
         return new Line(id, line.getName(), line.getColor());
     }
 
-//    @SuppressWarnings("ConstantConditions")
-//    @Override
-//    public Optional<Line> findById2(final Long id) {
-//        final String sql = ""
-//            + "SELECT "
-//            + "     l.id AS id, l.name AS name, l.COLOR AS color "
-//            + "FROM "
-//            + "     LINE l "
-//            + "WHERE "
-//            + "     l.id = :id";
-//        final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
-//        try {
-//            return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, parameters, LINE_ROW_MAPPER));
-//        } catch (EmptyResultDataAccessException e) {
-//            return Optional.empty();
-//        }
-//    }
-
-    @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<Line> findById(final Long id) {
         final String sql = ""
@@ -95,7 +67,7 @@ public class JdbcLineDao implements LineDao {
     }
 
     private Optional<Line> toLine(final List<Map<String, Object>> rows) {
-        validateNotFoundLine(rows);
+        validateNotFoundLine(rows); // 인덱싱 전 list size 검증
 
         return Optional.of(new Line((Long) rows.get(0).get("line_id"),
             (String) rows.get(0).get("line_name"),
@@ -111,12 +83,13 @@ public class JdbcLineDao implements LineDao {
 
     private Sections toSections(final List<Map<String, Object>> rows) {
         return new Sections(rows.stream()
-            .map(row -> toSection(row))
+            .map(this::toSection)
             .collect(Collectors.toList()));
     }
 
     private Section toSection(final Map<String, Object> row) {
-        return new Section((Long) row.get("section_id"), (Long) row.get("line_id"),
+        return new Section((Long) row.get("section_id"),
+            (Long) row.get("line_id"),
             new Station((Long) row.get("up_station_id"), (String) row.get("up_station_name")),
             new Station((Long) row.get("down_station_id"), (String) row.get("down_station_name")),
             (int) row.get("distance"));

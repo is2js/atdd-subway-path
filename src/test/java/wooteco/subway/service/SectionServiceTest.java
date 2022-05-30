@@ -45,7 +45,6 @@ class SectionServiceTest {
     @Test
     void findSectionStationsByLineId() {
         final Long lineId = 1L;
-        final Line 신분당선 = lineDao.save(new Line("신분당선", "red"));
         final Station 신분당_1역 = stationDao.save(new Station("신분당_1역"));
         final Station 신분당_3역 = stationDao.save(new Station("신분당_3역"));
         sectionDao.save(new Section(lineId, 신분당_1역, 신분당_3역, 10));
@@ -59,7 +58,6 @@ class SectionServiceTest {
     @Test
     void addSection() {
         final Long lineId = 1L;
-        final Line 신분당선 = lineDao.save(new Line("신분당선", "red"));
         final Station 신분당_1역 = stationDao.save(new Station("신분당_1역"));
         final Station 신분당_2역 = stationDao.save(new Station("신분당_2역"));
         final Station 신분당_3역 = stationDao.save(new Station("신분당_3역"));

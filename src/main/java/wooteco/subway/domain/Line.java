@@ -8,25 +8,21 @@ public class Line {
 
     private static final String ERROR_NULL = "[ERROR] 이름에 빈칸 입력은 허용하지 않습니다.";
 
-    private Long id;
-    private Name name;
-    private String color;
-    private Sections sections;
+    private final Long id;
+    private final Name name;
+    private final String color;
+    private final Sections sections;
 
 
     public Line(final String name, final String color) {
         this(null, name, color, new Sections(Collections.emptyList()));
     }
 
-    public Line(String name, String color, final Sections sections) {
-        this(null, name, color, sections);
-    }
-
     public Line(final Long id, final String name, final String color) {
         this(id, name, color, new Sections(Collections.emptyList()));
     }
 
-    public Line(Long id, final String name, final String color, final Sections sections) {
+    public Line(final Long id, final String name, final String color, final Sections sections) {
         this.id = id;
         this.name = new Name(Objects.requireNonNull(name, ERROR_NULL));
         this.color = Objects.requireNonNull(color, ERROR_NULL);

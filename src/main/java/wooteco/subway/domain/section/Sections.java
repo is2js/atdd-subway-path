@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import wooteco.subway.domain.Station;
 import wooteco.subway.exception.SectionNotFoundException;
 
 public class Sections {
@@ -130,13 +129,6 @@ public class Sections {
             .flatMap(it -> Stream.of(it.getUpStation().getId(), it.getDownStation().getId()))
             .distinct()
             .sorted()
-            .collect(Collectors.toList());
-    }
-
-    public List<Station> getUniqueStations() {
-        return value.stream()
-            .flatMap(it -> Stream.of(it.getUpStation(), it.getDownStation()))
-            .distinct()
             .collect(Collectors.toList());
     }
 
