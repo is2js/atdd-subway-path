@@ -16,7 +16,6 @@ import wooteco.subway.exception.SectionNotFoundException;
 
 public class Sections {
 
-    private static final String ERROR_INVALID_SECTIONS = "[ERROR] 존재하지 않는 구간입니다.";
     private static final String ERROR_ALREADY_CONTAIN = "[ERROR] 추가할 구간 속 지하철역이 기존 구간에 이미 존재합니다.";
     private static final String ERROR_INVALID_DISTANCE = "[ERROR] 기존 구간보다 긴 구간을 추가할 순 없습니다.";
     private static final String ERROR_NO_STATION = "[ERROR] 해당 종점을 가지는 구간이 존재 하지 않습니다.";
@@ -25,14 +24,7 @@ public class Sections {
     private final List<Section> value;
 
     public Sections(final List<Section> sections) {
-        validateSections(sections);
         this.value = new ArrayList<>(sections);
-    }
-
-    private void validateSections(final List<Section> sections) {
-        if (sections.isEmpty()) {
-            throw new IllegalArgumentException(ERROR_INVALID_SECTIONS);
-        }
     }
 
     public Optional<Section> addSection(final Section section) {
@@ -50,16 +42,6 @@ public class Sections {
     }
 
     private void validateDuplicateSection(final Section otherSection) {
-        // 같은 노선인 경우에 대해서만.. a-b-c 라면, a---c를 추가할 수 없다.
-        // -> 다른노선이라면 가능하게 만들어야한다.
-        //TODO section.getUpStationId()의 노선확인, +
-
-        // 수정: 둘다 포함되어있다 -> 상행역역은 상행역으로 && 하행역은 하행역으로 등록되어있는지 확인한다.
-        //   -> 현재:  상행역이 사용된 모든(상+하행)역 안에 포함 && 하행역이 사용된 모든(상+하행)역 안에 포함
-        //   -> 수정:  상행역이 사용된 모든 상행역 안에 포함 && 하행역이 사용된 모든 하행역 안에 포함
-        //   --> 안바꾸면.. 1-6-5를 새롭게 추가할때,, 1-5에  1-6 추가했는데.. 이미 1-5, 1-6의 모든 역: 1,6,5 에 걸리게 됨.
-        //   --> 이미 존재하는 역인지는.. 순서를 유지한체로 확인해야한다. 1-5, 1-6에서 6-5 순서의 연결고리는 없다?
-        // 만약 하나라도 해당하냐? 객체리스트의 contains or 비교로직
         if (checkDuplicateSection(otherSection)) {
             throw new IllegalStateException(ERROR_ALREADY_CONTAIN);
         }

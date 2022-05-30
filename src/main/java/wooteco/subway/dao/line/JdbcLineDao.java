@@ -1,9 +1,11 @@
 package wooteco.subway.dao.line;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,6 +14,10 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import wooteco.subway.domain.Line;
+import wooteco.subway.domain.Station;
+import wooteco.subway.domain.section.Section;
+import wooteco.subway.domain.section.Sections;
+import wooteco.subway.exception.LineNotFoundException;
 
 @Repository
 public class JdbcLineDao implements LineDao {
@@ -20,19 +26,8 @@ public class JdbcLineDao implements LineDao {
         new Line(
             resultSet.getLong("id"),
             resultSet.getString("name"),
-            resultSet.getString("color")
-        );
-
-//    private static final RowMapper<Line> LINE_JOIN_SECTION_ROW_MAPPER = (resultSet, rowNum) ->
-//        new Line(resultSet.getLong("line_id"),
-//            resultSet.getString("line_name"),
-//            resultSet.getString("line_color"),
-//            new Section(resultSet.getLong("section_id"),
-//                resultSet.getLong("section_id"),
-//                resultSet.getLong("section_up_station_id"),
-//                resultSet.getLong("section_down_station_id"),
-//                resultSet.getInt("section_distance"))
-//        );
+            resultSet.getString("color"),
+            new Sections(Collections.emptyList()));
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -57,33 +52,104 @@ public class JdbcLineDao implements LineDao {
         return new Line(id, line.getName(), line.getColor());
     }
 
+//    @SuppressWarnings("ConstantConditions")
+//    @Override
+//    public Optional<Line> findById2(final Long id) {
+//        final String sql = ""
+//            + "SELECT "
+//            + "     l.id AS id, l.name AS name, l.COLOR AS color "
+//            + "FROM "
+//            + "     LINE l "
+//            + "WHERE "
+//            + "     l.id = :id";
+//        final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
+//        try {
+//            return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, parameters, LINE_ROW_MAPPER));
+//        } catch (EmptyResultDataAccessException e) {
+//            return Optional.empty();
+//        }
+//    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public Optional<Line> findById(final Long id) {
         final String sql = ""
             + "SELECT "
-            + "     l.id AS id, l.name AS name, l.COLOR AS color "
+            + "     l.id AS line_id, l.name AS line_name, l.COLOR AS line_color, "
+            + "     s.ID AS section_id, s.DISTANCE AS distance, "
+            + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
+            + "     dst.ID AS down_station_id, dst.NAME AS down_station_name "
             + "FROM "
             + "     LINE l "
+            + "     LEFT JOIN SECTION s "
+            + "     ON l.ID = s.LINE_ID "
+            + "     LEFT JOIN STATION ust "
+            + "     ON s.UP_STATION_ID = ust.ID "
+            + "     LEFT JOIN STATION dst "
+            + "     ON s.DOWN_STATION_ID = dst.ID "
             + "WHERE "
             + "     l.id = :id";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
-        try {
-            return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, parameters, LINE_ROW_MAPPER));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
+        final List<Map<String, Object>> rows = namedParameterJdbcTemplate.queryForList(sql, parameters);
+        return toLine(rows);
+    }
+
+    private Optional<Line> toLine(final List<Map<String, Object>> rows) {
+        validateNotFoundLine(rows);
+
+        return Optional.of(new Line((Long) rows.get(0).get("line_id"),
+            (String) rows.get(0).get("line_name"),
+            (String) rows.get(0).get("line_color"),
+            toSections(rows)));
+    }
+
+    private void validateNotFoundLine(final List<Map<String, Object>> rows) {
+        if (rows.isEmpty()) {
+            throw new LineNotFoundException("[ERROR] 해당 노선이 없습니다.");
         }
+    }
+
+    private Sections toSections(final List<Map<String, Object>> rows) {
+        return new Sections(rows.stream()
+            .map(row -> toSection(row))
+            .collect(Collectors.toList()));
+    }
+
+    private Section toSection(final Map<String, Object> row) {
+        return new Section((Long) row.get("section_id"), (Long) row.get("line_id"),
+            new Station((Long) row.get("up_station_id"), (String) row.get("up_station_name")),
+            new Station((Long) row.get("down_station_id"), (String) row.get("down_station_name")),
+            (int) row.get("distance"));
     }
 
     @Override
     public List<Line> findAll() {
         final String sql = ""
             + "SELECT "
-            + "    l.ID as id, l.NAME as name, l.COLOR as color "
+            + "     l.id AS line_id, l.name AS line_name, l.COLOR AS line_color, "
+            + "     s.ID AS section_id, s.DISTANCE AS distance, "
+            + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
+            + "     dst.ID AS down_station_id, dst.NAME AS down_station_name "
             + "FROM "
-            + "     LINE l";
+            + "     LINE l "
+            + "     LEFT JOIN SECTION s "
+            + "     ON l.ID = s.LINE_ID "
+            + "     LEFT JOIN STATION ust "
+            + "     ON s.UP_STATION_ID = ust.ID "
+            + "     LEFT JOIN STATION dst "
+            + "     ON s.DOWN_STATION_ID = dst.ID ";
 
-        return namedParameterJdbcTemplate.query(sql, LINE_ROW_MAPPER);
+        final List<Map<String, Object>> rows = namedParameterJdbcTemplate.queryForList(sql,
+            new MapSqlParameterSource());
+
+        return rows.stream() //row들을 map list로 받아 도는데
+            .collect(Collectors.groupingBy(
+                row -> (Long) row.get("line_id"))) // line_id별로 그룹핑하여 map<Long(line_id), rowMap>으로 만들어놓고
+            .values()// 그룹핑된 상태로, 그룹별 rows를
+            .stream()// 돌면서
+            .map(rowsByLine -> toLine(
+                rowsByLine).get()) // rows로 section -> sections -> Line까지 만들어낸다( 그루핑에 사용된 line_id를 안쓰고, 내부에 포함되어 있어서, key가 필요없이 values를 돔)
+            .collect(Collectors.toList()); // 각 그룹별 만들어진 line을 list로 모아 반환한다.
     }
 
     @Override

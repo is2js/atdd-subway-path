@@ -13,8 +13,6 @@ create table if not exists LINE
     primary key (id)
 );
 
--- noinspection SqlNoDataSourceInspection,SqlDialectInspection
-
 create table if not exists SECTION
 (
     id              bigint auto_increment not null,

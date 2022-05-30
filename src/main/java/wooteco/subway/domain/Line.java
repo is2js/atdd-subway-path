@@ -1,6 +1,10 @@
 package wooteco.subway.domain;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import wooteco.subway.domain.section.Section;
+import wooteco.subway.domain.section.Sections;
 
 public class Line {
 
@@ -9,28 +13,27 @@ public class Line {
     private Long id;
     private Name name;
     private String color;
-//    private Section section;
+    private Sections sections;
 
 
-    public Line(String name, String color) {
-        this(null, name, color);
+    public Line(final String name, final String color) {
+        this(null, name, color, new Sections(Collections.emptyList()));
     }
 
-    public Line(Long id, final String name, final String color) {
+    public Line(String name, String color, final Sections sections) {
+        this(null, name, color, sections);
+    }
+
+    public Line(final Long id, final String name, final String color) {
+        this(id, name, color, new Sections(Collections.emptyList()));
+    }
+
+    public Line(Long id, final String name, final String color, final Sections sections) {
         this.id = id;
         this.name = new Name(Objects.requireNonNull(name, ERROR_NULL));
         this.color = Objects.requireNonNull(color, ERROR_NULL);
-        // 객체를 필드로 가지며, 인자로 안받을 땐, 기본값을 넣어줘야한다... 일급이라면, null대신 빈list를 빈 인자로서 가지도록 넣어줬을 것이다. new Sections(Collections.emptyList())
-        // 포장된 것으로서 null을 가질순 있다.
-//        this.section = null;
+        this.sections = sections;
     }
-
-//    public Line(final Long id, final String name, final String color, final Section section) {
-//        this.id = id;
-//        this.name = new Name(Objects.requireNonNull(name, ERROR_NULL));
-//        this.color = Objects.requireNonNull(color, ERROR_NULL);
-//        this.section = section;
-//    }
 
     public Long getId() {
         return id;
@@ -44,6 +47,10 @@ public class Line {
         return color;
     }
 
+    public List<Section> getSections() {
+        return sections.getValue();
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -53,12 +60,22 @@ public class Line {
             return false;
         }
         final Line line = (Line) o;
-        return Objects.equals(getId(), line.getId()) && Objects.equals(getName(), line.getName())
-            && Objects.equals(getColor(), line.getColor());
+        return Objects.equals(id, line.id) && Objects.equals(name, line.name)
+            && Objects.equals(color, line.color) && Objects.equals(sections, line.sections);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getColor());
+        return Objects.hash(id, name, color, sections);
+    }
+
+    @Override
+    public String toString() {
+        return "Line{" +
+            "id=" + id +
+            ", name=" + name +
+            ", color='" + color + '\'' +
+            ", sections=" + sections +
+            '}';
     }
 }

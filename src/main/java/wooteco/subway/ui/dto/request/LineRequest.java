@@ -35,7 +35,7 @@ public class LineRequest {
     }
 
     public Line toEntity(final Long id) {
-        return new Line(id, this.name, this.color);
+        return new Line(this.name, this.color);
     }
 
     public Line toEntity() {
