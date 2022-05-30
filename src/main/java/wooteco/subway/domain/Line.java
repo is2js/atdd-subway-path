@@ -1,9 +1,7 @@
 package wooteco.subway.domain;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
-import wooteco.subway.domain.section.Section;
 import wooteco.subway.domain.section.Sections;
 
 public class Line {
@@ -47,8 +45,8 @@ public class Line {
         return color;
     }
 
-    public List<Section> getSections() {
-        return sections.getValue();
+    public Sections getSections() {
+        return sections;
     }
 
     @Override

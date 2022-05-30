@@ -14,17 +14,22 @@ public class LineResponse {
     private LineResponse() {
     }
 
-    public LineResponse(Long id, String name, String color) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-    }
-
     public LineResponse(final Line line, final List<Station> stations) {
         this.id = line.getId();
         this.name = line.getName();
         this.color = line.getColor();
         this.stations = stations
+            .stream()
+            .map(StationResponse::new)
+            .collect(Collectors.toList());
+    }
+
+    public LineResponse(final Line line) {
+        this.id = line.getId();
+        this.name = line.getName();
+        this.color = line.getColor();
+        this.stations = line.getSections()
+            .getUniqueStations()
             .stream()
             .map(StationResponse::new)
             .collect(Collectors.toList());
