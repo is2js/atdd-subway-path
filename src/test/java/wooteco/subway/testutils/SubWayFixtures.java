@@ -27,6 +27,8 @@ public class SubWayFixtures {
     public static final Station 강남역 = new Station("강남역");
     public static final Station 선릉역 = new Station("선릉역");
     public static final Station 잠실역 = new Station("잠실역");
+    public static final Station 사당역 = new Station("사당역");
+    public static final Station 신림역 = new Station("신림역");
     public static final Station 일번_강남역 = new Station(1L, "강남역");
     public static final Station 이번_선릉역 = new Station(2L, "선릉역");
     public static final Station 삼번_잠실역 = new Station(3L, "잠실역");

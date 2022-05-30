@@ -1,16 +1,11 @@
 package wooteco.subway.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static wooteco.subway.testutils.SubWayFixtures.사번_사당역;
-import static wooteco.subway.testutils.SubWayFixtures.삼번_잠실역;
-import static wooteco.subway.testutils.SubWayFixtures.오번_신림역;
-import static wooteco.subway.testutils.SubWayFixtures.이번_선릉역;
-import static wooteco.subway.testutils.SubWayFixtures.일번_강남역;
-import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역_거리_10;
-import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_5번역_거리_31;
-import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_2번역_3번역_거리_12;
-import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_3번역_4번역_거리_5;
-import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_4번역_5번역_거리_3;
+import static wooteco.subway.testutils.SubWayFixtures.강남역;
+import static wooteco.subway.testutils.SubWayFixtures.사당역;
+import static wooteco.subway.testutils.SubWayFixtures.선릉역;
+import static wooteco.subway.testutils.SubWayFixtures.신림역;
+import static wooteco.subway.testutils.SubWayFixtures.잠실역;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -48,36 +43,37 @@ class PathServiceTest {
     @DisplayName("")
     @Test
     void show() {
-        final List<Station> stations = List.of(
-            일번_강남역,
-            이번_선릉역,
-            삼번_잠실역,
-            사번_사당역,
-            오번_신림역
-        );
-        for (Station station : stations) {
-            stationDao.save(station);
-        }
+        final Station 일번역 = stationDao.save(강남역);
+        final Station 이번역 = stationDao.save(선릉역);
+        final Station 삼번역 = stationDao.save(잠실역);
+        final Station 사번역 = stationDao.save(사당역);
+        final Station 오번역 = stationDao.save(신림역);
 
         final List<Section> sections = List.of(
-            일호선_구간_1번역_2번역_거리_10,
-            일호선_구간_2번역_3번역_거리_12,
-            일호선_구간_3번역_4번역_거리_5,
-            일호선_구간_4번역_5번역_거리_3,
-            일호선_구간_1번역_5번역_거리_31
+            new Section(1L, 일번역, 이번역, 10),
+            new Section(2L, 이번역, 삼번역, 12),
+            new Section(1L, 삼번역, 사번역, 5),
+            new Section(1L, 사번역, 오번역, 3),
+            new Section(1L, 일번역, 오번역, 31)
         );
         for (final Section section : sections) {
             sectionDao.save(section);
         }
 
-        final Path expected = new Path(List.of(1L, 2L, 3L, 4L, 5L), 30);
+        final Path expected = new Path(List.of(일번역.getId(), 이번역.getId(), 삼번역.getId(), 사번역.getId(), 오번역.getId()), 30);
 
-        final PathRequest pathRequest = new PathRequest(1L, 5L, 15);
+        final PathRequest pathRequest = new PathRequest(일번역.getId(), 오번역.getId(), 15);
 
         //when
         final Path actual = pathService.show(pathRequest);
 
         //then
         assertThat(actual.toString()).isEqualTo(expected.toString());
+
+        stationDao.deleteById(일번역.getId());
+        stationDao.deleteById(이번역.getId());
+        stationDao.deleteById(삼번역.getId());
+        stationDao.deleteById(사번역.getId());
+        stationDao.deleteById(오번역.getId());
     }
 }
