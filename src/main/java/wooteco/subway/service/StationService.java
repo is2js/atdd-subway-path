@@ -12,6 +12,7 @@ import wooteco.subway.ui.dto.request.LineRequest;
 import wooteco.subway.ui.dto.request.StationRequest;
 
 @Service
+@Transactional(readOnly = true)
 public class StationService {
 
     private final StationDao stationDao;
@@ -22,6 +23,7 @@ public class StationService {
         this.sectionDao = sectionDao;
     }
 
+    @Transactional
     public Station create(final StationRequest stationRequest) {
         final Station station = stationRequest.toEntity();
         checkDuplicateName(station);
@@ -34,7 +36,6 @@ public class StationService {
         }
     }
 
-    @Transactional(readOnly = true)
     public List<Station> show() {
         return stationDao.findAll();
     }
@@ -51,7 +52,6 @@ public class StationService {
         stationDao.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
     public List<Station> findUpAndDownStations(final LineRequest lineRequest) {
         final Station upStation = stationDao.findById(lineRequest.getUpStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));

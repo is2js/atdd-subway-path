@@ -15,6 +15,7 @@ import wooteco.subway.exception.StationNotFoundException;
 import wooteco.subway.ui.dto.request.LineRequest;
 
 @Service
+@Transactional(readOnly = true)
 public class LineService {
 
     private final LineDao lineDao;
@@ -38,12 +39,7 @@ public class LineService {
         final Station downStation = stationDao.findById(lineRequest.getDownStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
 
-        final Section targetSection = new Section(created.getId(),
-            upStation,
-            downStation,
-            lineRequest.getDistance());
-        sectionDao.save(targetSection);
-
+        sectionDao.save(new Section(created.getId(), upStation, downStation, lineRequest.getDistance()));
         return created;
     }
 
@@ -53,11 +49,7 @@ public class LineService {
         }
     }
 
-    @Transactional(readOnly = true)
     public List<Line> findAll() {
-//        final List<Line> lines = lineDao.findAll()
-//            .stream()
-//            .map(line -> new LineResponse(line, findStationsByLine(line))).collect(Collectors.toList());
         return lineDao.findAll();
     }
 

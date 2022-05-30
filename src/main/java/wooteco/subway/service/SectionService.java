@@ -17,6 +17,7 @@ import wooteco.subway.exception.StationNotFoundException;
 import wooteco.subway.ui.dto.request.SectionRequest;
 
 @Service
+@Transactional(readOnly = true)
 public class SectionService {
 
     private final SectionDao sectionDao;
@@ -58,7 +59,7 @@ public class SectionService {
         final Station downStation = stationDao.findById(sectionRequest.getDownStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
         Section newSection = sectionRequest.toEntity(lineId, upStation, downStation);
-        
+
         newSection = sectionDao.save(newSection); // transactional믿고 일단 저장해서 id배정된 domain으로 sections에 진입한다.
         new Sections(currentSections).addSection(newSection)
             .ifPresent(sectionDao::update);
