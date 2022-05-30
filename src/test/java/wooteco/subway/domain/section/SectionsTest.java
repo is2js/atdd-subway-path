@@ -12,7 +12,6 @@ import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역_거리_22;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_2번역_3번역_거리_12;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -31,14 +30,6 @@ class SectionsTest {
 
         //then
         assertDoesNotThrow(() -> new Sections(sections));
-    }
-
-    @DisplayName("특정 노선에 구간이 존재하지 않는다면 구간정보를 생성할 수 없다.")
-    @Test
-    void create_fail() {
-        assertThatThrownBy(() -> new Sections(new ArrayList<>()))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("[ERROR] 존재하지 않는 구간입니다.");
     }
 
     @DisplayName("기존 구간정보와 상행, 하행 종점 중 하나만 같은 구간은 구간 등록이 가능하다.")
