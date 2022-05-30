@@ -243,7 +243,7 @@ class LineServiceTest {
         stationDao.deleteById(일번역.getId());
         stationDao.deleteById(이번역.getId());
 
-        lineService.delete(line.getId());
+        lineDao.deleteById(line.getId());
         sectionDao.deleteByLineId(line.getId());
     }
 }
