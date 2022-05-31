@@ -60,25 +60,25 @@
 - [x] 노선에 구간정보 추가
 - [x] 구간/구간들 도메인 생성
 - [x] 구간 등록
-    - [x] [예외]상행역과 하행역이 이미 노선에 모두 등록되어 있다면 추가할 수 없음
-    - [x] [예외]상행역과 하행역 둘 중 하나도 포함되어있지 않으면 추가할 수 없음
-    - [x] [예외] 역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 등록을 할 수 없음
-    - [x] 하나의 노선에는 갈래길이 허용되지 않기 때문에 새로운 구간이 추가되기 전에 갈래길이 생기지 않도록 기존 구간을 변경
+	- [x] [예외]상행역과 하행역이 이미 노선에 모두 등록되어 있다면 추가할 수 없음
+	- [x] [예외]상행역과 하행역 둘 중 하나도 포함되어있지 않으면 추가할 수 없음
+	- [x] [예외] 역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 등록을 할 수 없음
+	- [x] 하나의 노선에는 갈래길이 허용되지 않기 때문에 새로운 구간이 추가되기 전에 갈래길이 생기지 않도록 기존 구간을 변경
 - [x] 노선에 포함된 구간 정보를 통해 상행 종점부터 하행 종점까지의 역 목록을 응답
 - [x] 구간 제거
-    - [x] [예외] 구간내 존재하지 않는 지하철역은 구간 제거할 수 없음
-    - [x] [예외] 구간이 하나인 노선에서 마지막 구간을 제거할 수 없음
+	- [x] [예외] 구간내 존재하지 않는 지하철역은 구간 제거할 수 없음
+	- [x] [예외] 구간이 하나인 노선에서 마지막 구간을 제거할 수 없음
 - 구간 관리 API
-    - 스펙은 [API 문서v2](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/c682be69ae4e412c9e3905a59ef7b7ed#Line) 참고
+	- 스펙은 [API 문서v2](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/c682be69ae4e412c9e3905a59ef7b7ed#Line)
+	  참고
 
 - 테스트용 front
-    - https://d2owgqwkhzq0my.cloudfront.net/
+	- https://d2owgqwkhzq0my.cloudfront.net/
 
 # 경로 추가 미션
 
-- 테스트용 front: 
-    - https://d2owgqwkhzq0my.cloudfront.net/
-
+- 테스트용 front:
+	- https://d2owgqwkhzq0my.cloudfront.net/
 
 ## 1단계 기능 요구 사항
 
@@ -92,9 +92,10 @@
 		- [x] 10km~50km: 5km 까지 마다 100원 추가
 		- [x] 50km 초과: 8km 까지 마다 100원 추가
 
-- [ ] 입력 값들에 대한 예외 구현
+- [x] 입력 값들에 대한 예외 구현
 	- [ERROR] 조회시 출발역과 도착역이 같을 경우 예외를 발생시킨다.
 	- [ERROR] 갈 수 없는 경로일 경우 예외를 발생시킨다.
+- [x] Line 테이블 extraFare 필드 추가
 
 ### 힌트
 
@@ -117,7 +118,7 @@
 	- 5km 마다 100원 추가
 	  ```java
 	  private int calculateOverFare(int distance) {
-	  return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+	      return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
 	  }
 	  ```
 - 지하철 운임은 거리비례제로 책정됩니다. (실제 경로가 아닌 최단거리 기준)
@@ -133,18 +134,18 @@
     ```java
     @Test
     public void getDijkstraShortestPath() {
-    WeightedMultigraph<String, DefaultWeightedEdge> graph
-    #ERROR!
-    graph.addVertex("v1");
-    graph.addVertex("v2");
-    graph.addVertex("v3");
-    graph.setEdgeWeight(graph.addEdge("v1", "v2"), 2);
-    graph.setEdgeWeight(graph.addEdge("v2", "v3"), 2);
-    graph.setEdgeWeight(graph.addEdge("v1", "v3"), 100);
-    DijkstraShortestPath dijkstraShortestPath
-    #ERROR!
-    List<String> shortestPath
-    #ERROR!
-    assertThat(shortestPath.size()).isEqualTo(3);
+    	WeightedMultigraph<String, DefaultWeightedEdge> graph
+    	#ERROR!
+    	graph.addVertex("v1");
+    	graph.addVertex("v2");
+    	graph.addVertex("v3");
+    	graph.setEdgeWeight(graph.addEdge("v1", "v2"), 2);
+    	graph.setEdgeWeight(graph.addEdge("v2", "v3"), 2);
+    	graph.setEdgeWeight(graph.addEdge("v1", "v3"), 100);
+    	DijkstraShortestPath dijkstraShortestPath
+    	#ERROR!
+    	List<String> shortestPath
+    	#ERROR!
+    	assertThat(shortestPath.size()).isEqualTo(3);
     }
     ```
