@@ -130,7 +130,7 @@ public class JdbcLineDao implements LineDao {
     public void update(final Line line) {
         final String sql = ""
             + "UPDATE line l "
-            + "SET l.name = :name, l.color = :color "
+            + "SET l.name = :name, l.color = :color, l.EXTRA_FARE = :extraFare "
             + "WHERE l.id = :id";
         final BeanPropertySqlParameterSource parameters = new BeanPropertySqlParameterSource(line);
         namedParameterJdbcTemplate.update(sql, parameters);
