@@ -40,14 +40,14 @@ public class JdbcLineDao implements LineDao {
     public Line save(final Line line) {
         final SqlParameterSource parameters = new BeanPropertySqlParameterSource(line);
         final Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-        return new Line(id, line.getName(), line.getColor());
+        return new Line(id, line.getName(), line.getColor(), line.getExtraFare());
     }
 
     @Override
     public Optional<Line> findById(final Long id) {
         final String sql = ""
             + "SELECT "
-            + "     l.id AS line_id, l.name AS line_name, l.COLOR AS line_color, "
+            + "     l.id AS line_id, l.name AS line_name, l.COLOR AS line_color, l.EXTRA_FARE AS line_extra_fare, "
             + "     s.ID AS section_id, s.DISTANCE AS distance, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
             + "     dst.ID AS down_station_id, dst.NAME AS down_station_name "
@@ -72,6 +72,7 @@ public class JdbcLineDao implements LineDao {
         return Optional.of(new Line((Long) rows.get(0).get("line_id"),
             (String) rows.get(0).get("line_name"),
             (String) rows.get(0).get("line_color"),
+            (int) rows.get(0).get("line_extra_fare"),
             toSections(rows)));
     }
 
@@ -99,7 +100,7 @@ public class JdbcLineDao implements LineDao {
     public List<Line> findAll() {
         final String sql = ""
             + "SELECT "
-            + "     l.id AS line_id, l.name AS line_name, l.COLOR AS line_color, "
+            + "     l.ID AS line_id, l.NAME AS line_name, l.COLOR AS line_color, l.EXTRA_FARE AS line_extra_fare, "
             + "     s.ID AS section_id, s.DISTANCE AS distance, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
             + "     dst.ID AS down_station_id, dst.NAME AS down_station_name "

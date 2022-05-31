@@ -9,13 +9,14 @@ import wooteco.subway.ui.dto.request.StationRequest;
 
 public class SubWayFixtures {
     public static final LineRequest LINE_REQUEST_신분당선_STATION_1_2_거리_10 = new LineRequest("신분당선", "bg-red-600", 1L, 2L,
-        10);
+        10, 900);
     public static final LineRequest LINE_REQUEST_2호선_STATION_1_5_거리55 = new LineRequest("신분당선", "bg-red-600", 1L, 5L,
-        55);
-    public static final LineRequest LINE_REQUEST_신분당선2_FOR_PUT = new LineRequest("신분당선2", "bg-red-600");
-    public static final LineRequest LINE_REQUEST_분당선_STATION_1_3 = new LineRequest("분당선", "bg-red-601", 1L, 3L, 12);
-    public static final Line 일호선_파랑 = new Line("1호선", "blue");
-    public static final Line 이호선_그린 = new Line("2호선", "green");
+        55, 900);
+    public static final LineRequest LINE_REQUEST_신분당선2_FOR_PUT = new LineRequest("신분당선2", "bg-red-600", 900);
+    public static final LineRequest LINE_REQUEST_분당선_STATION_1_3 = new LineRequest("분당선", "bg-red-601", 1L, 3L, 12,
+        900);
+    public static final Line 일호선_파랑 = new Line("1호선", "blue", 900);
+    public static final Line 이호선_그린 = new Line("2호선", "green", 900);
     public static final StationRequest STATION_REQUEST_강남역 = new StationRequest("강남역");
     public static final StationRequest STATION_REQUEST_잠실역 = new StationRequest("잠실역");
     public static final StationRequest STATION_REQUEST_역삼역 = new StationRequest("역삼역");

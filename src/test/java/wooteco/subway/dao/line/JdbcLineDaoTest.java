@@ -50,7 +50,7 @@ public class JdbcLineDaoTest {
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
 
-        final Line 이호선_그린_entity = new Line("2호선", "green");
+        final Line 이호선_그린_entity = new Line("2호선", "green", 900);
 
         //when
         final Line 이호선_그린_domain = lineDao.save(이호선_그린_entity);
@@ -174,7 +174,7 @@ public class JdbcLineDaoTest {
         final Section sectionA = sectionDao.save(new Section(target.getId(), 일번역, 이번역, 10));
         final Section sectionB = sectionDao.save(new Section(target.getId(), 이번역, 삼번역, 12));
 
-        final Line lineForUpdate = new Line(target.getId(), "일호선", "green");
+        final Line lineForUpdate = new Line(target.getId(), "일호선", "green", 900);
 
         //when
         lineDao.update(lineForUpdate);

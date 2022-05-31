@@ -11,21 +11,23 @@ public class Line {
     private final Long id;
     private final Name name;
     private final String color;
+    private final int extraFare;
     private final Sections sections;
 
 
-    public Line(final String name, final String color) {
-        this(null, name, color, new Sections(Collections.emptyList()));
+    public Line(final String name, final String color, final int extraFare) {
+        this(null, name, color, extraFare, new Sections(Collections.emptyList()));
     }
 
-    public Line(final Long id, final String name, final String color) {
-        this(id, name, color, new Sections(Collections.emptyList()));
+    public Line(final Long id, final String name, final String color, final int extraFare) {
+        this(id, name, color, extraFare, new Sections(Collections.emptyList()));
     }
 
-    public Line(final Long id, final String name, final String color, final Sections sections) {
+    public Line(final Long id, final String name, final String color, final int extraFare, final Sections sections) {
         this.id = id;
         this.name = new Name(Objects.requireNonNull(name, ERROR_NULL));
         this.color = Objects.requireNonNull(color, ERROR_NULL);
+        this.extraFare = extraFare;
         this.sections = sections;
     }
 
@@ -45,6 +47,10 @@ public class Line {
         return sections;
     }
 
+    public int getExtraFare() {
+        return extraFare;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -54,13 +60,14 @@ public class Line {
             return false;
         }
         final Line line = (Line) o;
-        return Objects.equals(id, line.id) && Objects.equals(name, line.name)
-            && Objects.equals(color, line.color) && Objects.equals(sections, line.sections);
+        return getExtraFare() == line.getExtraFare() && Objects.equals(getId(), line.getId())
+            && Objects.equals(getName(), line.getName()) && Objects.equals(getColor(), line.getColor())
+            && Objects.equals(getSections(), line.getSections());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, color, sections);
+        return Objects.hash(getId(), getName(), getColor(), getExtraFare(), getSections());
     }
 
     @Override
@@ -69,6 +76,7 @@ public class Line {
             "id=" + id +
             ", name=" + name +
             ", color='" + color + '\'' +
+            ", extraFare=" + extraFare +
             ", sections=" + sections +
             '}';
     }

@@ -53,7 +53,8 @@ class LineServiceTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
 
-        final Line line = lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10));
+        final Line line = lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10,
+            900));
 
         //when & then
         assertThat(line.getId()).isNotNull();
@@ -69,11 +70,11 @@ class LineServiceTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
 
-        lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10));
+        lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10, 900));
 
         //when & then
         assertThatThrownBy(
-            () -> lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10)))
+            () -> lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10, 900)))
             .isInstanceOf(LineDuplicateException.class)
             .hasMessage("[ERROR] 이미 존재하는 노선입니다.");
 
@@ -90,8 +91,8 @@ class LineServiceTest {
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
 
-        lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10));
-        lineService.create(new LineRequest("분당선", "bg-red-600", 일번역.getId(), 삼번역.getId(), 12));
+        lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10, 900));
+        lineService.create(new LineRequest("분당선", "bg-red-600", 일번역.getId(), 삼번역.getId(), 12, 900));
 
         //then
         final List<Line> lines = lineService.findAll();
@@ -111,7 +112,8 @@ class LineServiceTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 삼번역 = stationDao.save(잠실역);
 
-        final Line expected = lineService.create(new LineRequest("분당선", "bg-red-600", 일번역.getId(), 삼번역.getId(), 12));
+        final Line expected = lineService.create(new LineRequest("분당선", "bg-red-600", 일번역.getId(), 삼번역.getId(), 12,
+            900));
 
         //when
         final Line actual = lineService.findById(expected.getId());
@@ -139,8 +141,9 @@ class LineServiceTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
 
-        final Line line = lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10));
-        final LineRequest lineRequest = new LineRequest("돌범선", "WHITE");
+        final Line line = lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10,
+            900));
+        final LineRequest lineRequest = new LineRequest("돌범선", "WHITE", 900);
 
         //when
         lineService.update(line.getId(), lineRequest);
@@ -156,7 +159,7 @@ class LineServiceTest {
     @Test
     void update_fail_invalid_id() {
         //given
-        final LineRequest lineRequest = new LineRequest("돌범선", "WHITE");
+        final LineRequest lineRequest = new LineRequest("돌범선", "WHITE", 900);
 
         //when & then
         assertThatThrownBy(() -> lineService.update(-1L, lineRequest))
@@ -172,9 +175,11 @@ class LineServiceTest {
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
 
-        final Line create1 = lineService.create(new LineRequest("중앙선", "bg-red-600", 일번역.getId(), 삼번역.getId(), 12));
-        final Line create2 = lineService.create(new LineRequest("2호선", "bg-red-601", 일번역.getId(), 삼번역.getId(), 12));
-        final LineRequest lineRequest = new LineRequest(create2.getName(), create2.getColor());
+        final Line create1 = lineService.create(new LineRequest("중앙선", "bg-red-600", 일번역.getId(), 삼번역.getId(), 12,
+            900));
+        final Line create2 = lineService.create(new LineRequest("2호선", "bg-red-601", 일번역.getId(), 삼번역.getId(), 12,
+            900));
+        final LineRequest lineRequest = new LineRequest(create2.getName(), create2.getColor(), 900);
 
         //when & then
         assertThatThrownBy(() -> lineService.update(create1.getId(), lineRequest))
@@ -197,7 +202,8 @@ class LineServiceTest {
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
 
-        final Line line = lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10));
+        final Line line = lineService.create(new LineRequest("신분당선", "bg-red-600", 일번역.getId(), 이번역.getId(), 10,
+            900));
 
         //when
         lineService.delete(line.getId());
@@ -230,7 +236,7 @@ class LineServiceTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
 
-        final LineRequest lineRequest = new LineRequest("1호선", "green", 일번역.getId(), 이번역.getId(), 10);
+        final LineRequest lineRequest = new LineRequest("1호선", "green", 일번역.getId(), 이번역.getId(), 10, 900);
 
         final Line line = lineService.create(lineRequest);
         final Section expected = new Section(line.getId(), 일번역, 이번역, 10);

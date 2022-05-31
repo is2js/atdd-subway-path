@@ -71,7 +71,7 @@ class SectionServiceTest {
     @DisplayName("기존 구간에 일부 구간을 삭제한다.")
     @Test
     void deleteSection() {
-        final Line 분당선 = lineDao.save(new Line("분당선", "red"));
+        final Line 분당선 = lineDao.save(new Line("분당선", "red", 900));
         final Station 분당_1역 = stationDao.save(new Station("분당_1역"));
         final Station 분당_2역 = stationDao.save(new Station("분당_2역"));
         final Station 분당_3역 = stationDao.save(new Station("분당_3역"));
