@@ -30,9 +30,9 @@ public class LineService {
 
     @Transactional
     public Line create(final LineRequest lineRequest) {
-        final Line targetLine = lineRequest.toEntity();
-        checkDuplicateName(targetLine);
-        final Line created = lineDao.save(targetLine);
+        final Line line = lineRequest.toEntity();
+        checkDuplicateName(line);
+        final Line created = lineDao.save(line);
 
         final Station upStation = stationDao.findById(lineRequest.getUpStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
