@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wooteco.subway.dao.section.SectionDao;
+import wooteco.subway.domain.path.JgraphtShortestPathFinder;
 import wooteco.subway.domain.path.Path;
 import wooteco.subway.domain.path.ShortestPathFinder;
 import wooteco.subway.domain.section.Sections;
@@ -22,8 +23,9 @@ public class PathService {
     public Path show(final PathRequest pathRequest) {
         final Sections sections = new Sections(sectionDao.findAll());
         final List<Long> stationIds = sections.getUniqueStationIds();
-        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stationIds, sections.getValue());
+        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds,
+            sections.getValue());
 
-        return shortestPathFinder.find(pathRequest.getSource(), pathRequest.getTarget());
+        return jgraphtShortestPathFinder.find(pathRequest.getSource(), pathRequest.getTarget());
     }
 }

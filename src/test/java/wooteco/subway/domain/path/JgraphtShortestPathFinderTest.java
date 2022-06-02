@@ -20,13 +20,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import wooteco.subway.domain.section.Section;
 
-class ShortestPathFinderTest {
+class JgraphtShortestPathFinderTest {
 
     @Test
     void create() {
-        // 2. graph를 만들 재료들을 생성자 주입하여 -> 정리 -> 필드(상태값)으로 가져 상황을 만든다.
-        //    - 재료들에 외부라이브러리도 추가하되 -> 바뀔 수  있는 구상체로서, 추상체로 인터페이스도 만들어주면 좋다.
-        //    - 여러 라이브러리들 중 하나의 구상체라고 가정 -> if로 하나를 선택하기 보다는 외부 factory를 주입받아 거기서 조달받아 1개로 받기
         final List<Long> stationIds = List.of(1L, 2L, 3L);
 
         final List<Section> sections = List.of(
@@ -36,7 +33,7 @@ class ShortestPathFinderTest {
         );
 
         // when & then (수행)
-        assertDoesNotThrow(() -> ShortestPathFinder.of(stationIds, sections));
+        assertDoesNotThrow(() -> JgraphtShortestPathFinder.of(stationIds, sections));
     }
 
     @Test
@@ -53,7 +50,7 @@ class ShortestPathFinderTest {
         );
 
         // then(수행)
-        assertThatThrownBy(() -> ShortestPathFinder.of(stationIds, sections))
+        assertThatThrownBy(() -> JgraphtShortestPathFinder.of(stationIds, sections))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 지하철역이 부족하여 경로를 만들 수 없습니다.");
     }
@@ -68,7 +65,7 @@ class ShortestPathFinderTest {
         final List<Section> sections = List.of();
 
         // when & then (수행)
-        assertThatThrownBy(() -> ShortestPathFinder.of(stationIds, sections))
+        assertThatThrownBy(() -> JgraphtShortestPathFinder.of(stationIds, sections))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 구간이 비어서 경로를 만들 수 없습니다.");
     }
@@ -91,8 +88,8 @@ class ShortestPathFinderTest {
         final Long target = 5L;
 
         // when
-        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stationIds, sections);
-        final Path actual = shortestPathFinder.find(source, target);
+        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
+        final Path actual = jgraphtShortestPathFinder.find(source, target);
 
         // 예상
         final Path expected = new Path(List.of(1L, 2L, 3L, 4L, 5L), 30);
@@ -117,8 +114,8 @@ class ShortestPathFinderTest {
         );
 
         // when
-        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stationIds, sections);
-        final Path actual = shortestPathFinder.find(source, target);
+        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
+        final Path actual = jgraphtShortestPathFinder.find(source, target);
 
         // 예상
         final Path expected = new Path(List.of(source, target), expectedDistance);
@@ -143,8 +140,8 @@ class ShortestPathFinderTest {
         );
 
         // when
-        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stationIds, sections);
-        final Path actual = shortestPathFinder.find(source, target);
+        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
+        final Path actual = jgraphtShortestPathFinder.find(source, target);
 
         // 예상
         final Path expected = new Path(expectedStationIds, expectedDistance);
@@ -176,10 +173,10 @@ class ShortestPathFinderTest {
         final Long source = 1L;
         final Long target = 1L;
 
-        final ShortestPathFinder shortestPathFinder = ShortestPathFinder.of(stationIds, sections);
+        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
 
         // when
-        assertThatThrownBy(() -> shortestPathFinder.find(source, target))
+        assertThatThrownBy(() -> jgraphtShortestPathFinder.find(source, target))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 경로를 찾으려면 같은 역을 입력할 수 없습니다.");
     }
