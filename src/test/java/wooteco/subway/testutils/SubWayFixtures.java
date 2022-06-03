@@ -3,6 +3,7 @@ package wooteco.subway.testutils;
 import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
+import wooteco.subway.domain.section.Sections;
 import wooteco.subway.ui.dto.request.LineRequest;
 import wooteco.subway.ui.dto.request.SectionRequest;
 import wooteco.subway.ui.dto.request.StationRequest;
@@ -41,6 +42,7 @@ public class SubWayFixtures {
     public static final Section 일호선_구간_1번역_3번역 = new Section(1L, 일번_강남역, 삼번_잠실역, 2);
     public static final Section 일호선_구간_1번역_2번역_거리_10 = new Section(1L, 일번_강남역, 이번_선릉역, 10);
     public static final Section 일호선_구간_2번역_3번역_거리_12 = new Section(2L, 이번_선릉역, 삼번_잠실역, 12);
+    public static final Sections 일호선_구간_1_2_3 = new Sections(일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12);
     public static final Section 일호선_구간_1번역_3번역_거리_22 = new Section(3L, 1L, 일번_강남역, 삼번_잠실역, 22);
     public static final Section 일호선_구간_3번역_4번역_거리_5 = new Section(4L, 1L, 삼번_잠실역, 사번_사당역, 5);
     public static final Section 일호선_구간_4번역_5번역_거리_3 = new Section(5L, 1L, 사번_사당역, 오번_신림역, 3);

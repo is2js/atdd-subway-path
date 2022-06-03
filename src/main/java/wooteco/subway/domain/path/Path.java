@@ -1,17 +1,18 @@
 package wooteco.subway.domain.path;
 
 import java.util.List;
+import wooteco.subway.domain.Station;
 
 public class Path {
 
     private static final int DEFAULT_FARE = 1250;
     private static final int FIRST_ADDITIONAL_FARE_DISTANCE = 10;
     private static final int SECOND_ADDITIONAL_FARE_DISTANCE = 50;
-    private final List<Long> stationIds;
+    private final List<Station> stations;
     private final int distance;
 
-    public Path(final List<Long> stationIds, final int distance) {
-        this.stationIds = stationIds;
+    public Path(final List<Station> stations, final int distance) {
+        this.stations = stations;
         this.distance = distance;
     }
 
@@ -32,8 +33,8 @@ public class Path {
         return ((distance - 1) / unitDistance + 1) * 100;
     }
 
-    public List<Long> getStationIds() {
-        return List.copyOf(stationIds);
+    public List<Station> getStations() {
+        return List.copyOf(stations);
     }
 
     public int getDistance() {
@@ -43,7 +44,7 @@ public class Path {
     @Override
     public String toString() {
         return "Path{" +
-            "stationIds=" + stationIds +
+            "stations=" + stations +
             ", distance=" + distance +
             '}';
     }

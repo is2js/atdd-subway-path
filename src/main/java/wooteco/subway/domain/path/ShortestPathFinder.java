@@ -1,5 +1,7 @@
 package wooteco.subway.domain.path;
 
+import wooteco.subway.domain.Station;
+
 public interface ShortestPathFinder {
-    Path find(Long source, Long target);
+    Path find(Station source, Station target);
 }

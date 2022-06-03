@@ -37,7 +37,7 @@ class PathServiceTest {
     void setUp() {
         this.stationDao = new JdbcStationDao(dataSource);
         this.sectionDao = new JdbcSectionDao(dataSource);
-        this.pathService = new PathService(this.sectionDao);
+        this.pathService = new PathService(this.sectionDao, this.stationDao);
     }
 
     @DisplayName("")
@@ -56,11 +56,12 @@ class PathServiceTest {
             new Section(1L, 사번역, 오번역, 3),
             new Section(1L, 일번역, 오번역, 31)
         );
+
         for (final Section section : sections) {
             sectionDao.save(section);
         }
 
-        final Path expected = new Path(List.of(일번역.getId(), 이번역.getId(), 삼번역.getId(), 사번역.getId(), 오번역.getId()), 30);
+        final Path expected = new Path(List.of(일번역, 이번역, 삼번역, 사번역, 오번역), 30);
 
         final PathRequest pathRequest = new PathRequest(일번역.getId(), 오번역.getId(), 15);
 

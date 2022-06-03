@@ -8,48 +8,51 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
+import wooteco.subway.domain.section.Sections;
 
 public class JgraphtShortestPathFinder implements ShortestPathFinder {
 
-    private final ShortestPathAlgorithm<Long, DefaultWeightedEdge> shortestPath;
+    private final ShortestPathAlgorithm<Station, DefaultWeightedEdge> shortestPath;
 
     private JgraphtShortestPathFinder(
-        final ShortestPathAlgorithm<Long, DefaultWeightedEdge> shortestPath) {
+        final ShortestPathAlgorithm<Station, DefaultWeightedEdge> shortestPath) {
         this.shortestPath = shortestPath;
     }
 
-    public static JgraphtShortestPathFinder of(final List<Long> stations, final List<Section> sections) {
-        validateStations(stations);
-        validateSections(sections);
-
-        final WeightedMultigraph<Long, DefaultWeightedEdge> graph =
+    public static JgraphtShortestPathFinder of(final Sections sections) {
+        final WeightedMultigraph<Station, DefaultWeightedEdge> graph =
             new WeightedMultigraph<>(DefaultWeightedEdge.class);
 
+        final List<Station> stations = sections.getUniqueStations();
+        validateStations(stations);
+        validateSections(sections.getValue());
+
         addVertex(stations, graph);
-        addEdge(sections, graph);
+        addEdge(sections.getValue(), graph);
 
         return new JgraphtShortestPathFinder(new DijkstraShortestPath<>(graph));
     }
 
-    private static void addVertex(final List<Long> stations,
-                                  final WeightedMultigraph<Long, DefaultWeightedEdge> graph) {
-        for (final Long stationId : stations) {
-            graph.addVertex(stationId);
+    private static void addVertex(final List<Station> stations,
+                                  final WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
+        for (final Station station : stations) {
+            graph.addVertex(station);
         }
     }
 
     private static void addEdge(final List<Section> sections,
-                                final WeightedMultigraph<Long, DefaultWeightedEdge> graph) {
+                                final WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
         for (final Section section : sections) {
             graph.setEdgeWeight(
-                graph.addEdge(section.getUpStation().getId(), section.getDownStation().getId()),
+                graph.addEdge(section.getUpStation(), section.getDownStation()),
                 section.getDistance()
             );
         }
     }
 
-    private static void validateStations(final List<Long> stations) {
+    private static void validateStations(final List<Station> stations) {
         checkNull(stations);
         checkCountOfStations(stations);
     }
@@ -58,8 +61,8 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
         Objects.requireNonNull(object, "[ERROR] 빈칸 입력은 허용하지 않는다.");
     }
 
-    private static void checkCountOfStations(final List<Long> stationids) {
-        if (stationids.size() <= 1) {
+    private static void checkCountOfStations(final List<Station> stations) {
+        if (stations.size() <= 1) {
             throw new IllegalArgumentException("[ERROR] 지하철역이 부족하여 경로를 만들 수 없습니다.");
         }
     }
@@ -76,20 +79,21 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
     }
 
     @Override
-    public Path find(final Long source, final Long target) {
-        validateStationIds(source, target);
+    public Path find(final Station source, final Station target) {
+        validateInvalidStations(source, target);
 
-        final GraphPath<Long, DefaultWeightedEdge> graphPath = findShortestPath(source, target)
+        final GraphPath<Station, DefaultWeightedEdge> graphPath = findShortestPath(source, target)
             .orElseThrow(() -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
 
         return new Path(graphPath.getVertexList(), (int) graphPath.getWeight());
     }
 
-    private Optional<GraphPath<Long, DefaultWeightedEdge>> findShortestPath(final Long source, final Long target) {
+    private Optional<GraphPath<Station, DefaultWeightedEdge>> findShortestPath(final Station source,
+                                                                               final Station target) {
         return Optional.ofNullable(shortestPath.getPath(source, target));
     }
 
-    private void validateStationIds(final Long source, final Long target) {
+    private void validateInvalidStations(final Station source, final Station target) {
         if (Objects.equals(source, target)) {
             throw new IllegalArgumentException("[ERROR] 경로를 찾으려면 같은 역을 입력할 수 없습니다.");
         }
