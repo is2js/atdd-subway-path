@@ -88,8 +88,8 @@ class JgraphtShortestPathFinderTest {
         final Long target = 5L;
 
         // when
-        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
-        final Path actual = jgraphtShortestPathFinder.find(source, target);
+        final ShortestPathFinder shortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
+        final Path actual = shortestPathFinder.find(source, target);
 
         // 예상
         final Path expected = new Path(List.of(1L, 2L, 3L, 4L, 5L), 30);
@@ -114,8 +114,8 @@ class JgraphtShortestPathFinderTest {
         );
 
         // when
-        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
-        final Path actual = jgraphtShortestPathFinder.find(source, target);
+        final ShortestPathFinder shortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
+        final Path actual = shortestPathFinder.find(source, target);
 
         // 예상
         final Path expected = new Path(List.of(source, target), expectedDistance);
@@ -140,8 +140,8 @@ class JgraphtShortestPathFinderTest {
         );
 
         // when
-        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
-        final Path actual = jgraphtShortestPathFinder.find(source, target);
+        final ShortestPathFinder shortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
+        final Path actual = shortestPathFinder.find(source, target);
 
         // 예상
         final Path expected = new Path(expectedStationIds, expectedDistance);
@@ -173,10 +173,10 @@ class JgraphtShortestPathFinderTest {
         final Long source = 1L;
         final Long target = 1L;
 
-        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
+        final ShortestPathFinder shortestPathFinder = JgraphtShortestPathFinder.of(stationIds, sections);
 
         // when
-        assertThatThrownBy(() -> jgraphtShortestPathFinder.find(source, target))
+        assertThatThrownBy(() -> shortestPathFinder.find(source, target))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 경로를 찾으려면 같은 역을 입력할 수 없습니다.");
     }

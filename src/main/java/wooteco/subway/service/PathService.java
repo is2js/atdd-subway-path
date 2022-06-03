@@ -23,9 +23,9 @@ public class PathService {
     public Path show(final PathRequest pathRequest) {
         final Sections sections = new Sections(sectionDao.findAll());
         final List<Long> stationIds = sections.getUniqueStationIds();
-        final ShortestPathFinder jgraphtShortestPathFinder = JgraphtShortestPathFinder.of(stationIds,
+        final ShortestPathFinder shortestPathFinder = JgraphtShortestPathFinder.of(stationIds,
             sections.getValue());
 
-        return jgraphtShortestPathFinder.find(pathRequest.getSource(), pathRequest.getTarget());
+        return shortestPathFinder.find(pathRequest.getSource(), pathRequest.getTarget());
     }
 }

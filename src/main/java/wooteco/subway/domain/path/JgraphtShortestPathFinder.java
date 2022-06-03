@@ -79,15 +79,14 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
     public Path find(final Long source, final Long target) {
         validateStationIds(source, target);
 
-        final GraphPath<Long, DefaultWeightedEdge> graphPath = findShortedPath(source, target)
+        final GraphPath<Long, DefaultWeightedEdge> graphPath = findShortestPath(source, target)
             .orElseThrow(() -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
 
         return new Path(graphPath.getVertexList(), (int) graphPath.getWeight());
     }
 
-    private Optional<GraphPath<Long, DefaultWeightedEdge>> findShortedPath(final Long source, final Long target) {
-        return Optional.ofNullable(
-            shortestPath.getPath(source, target));
+    private Optional<GraphPath<Long, DefaultWeightedEdge>> findShortestPath(final Long source, final Long target) {
+        return Optional.ofNullable(shortestPath.getPath(source, target));
     }
 
     private void validateStationIds(final Long source, final Long target) {

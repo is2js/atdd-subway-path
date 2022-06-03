@@ -29,11 +29,11 @@ public class Path {
     }
 
     private int calculateOverFare(final int distance, final int unitDistance) {
-        return (int) (Math.ceil((distance - 1) / unitDistance) + 1) * 100;
+        return ((distance - 1) / unitDistance + 1) * 100;
     }
 
     public List<Long> getStationIds() {
-        return stationIds;
+        return List.copyOf(stationIds);
     }
 
     public int getDistance() {

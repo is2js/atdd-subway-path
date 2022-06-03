@@ -97,7 +97,6 @@
 	- [ERROR] 갈 수 없는 경로일 경우 예외를 발생시킨다.
 - [x] Line 테이블 extraFare 필드 추가
 
-### 힌트
 
 - 경로 조회 API 구현하기
 	- 경로 조회 API
@@ -122,6 +121,9 @@
 	  }
 	  ```
 - 지하철 운임은 거리비례제로 책정됩니다. (실제 경로가 아닌 최단거리 기준)
+
+<details>
+<summmary>라이브러리 관련 힌트 </summmary>
 
 - 라이브러리 활용 힌트
 	- 최단 경로 라이브러리
@@ -149,3 +151,37 @@
     	assertThat(shortestPath.size()).isEqualTo(3);
     }
     ```
+
+</details>
+
+## 2단계 요구사항
+
+### 노선별 추가 요금
+
+- 추가된 요금 정책을 반영한다.
+	- [ ] 추가 요금이 있는 노선을 이용할 경우 (거리별)측정된 요금에 추가한다.
+	- [ ] 경로 중 추가요금이 있는 노선을 환승하여 이용할 경우 가장 높은 금액의 추가요금만 적용한다.
+
+### 연령별 요금 할인
+
+- [ ] 청소년: 운임에서 350원 공제한 금액의 20% 할인
+- [ ] 어린이: 운임에서 350원 공제한 금액의 50% 할인
+
+  ```
+  - 청소년: 13세 이상~19세 미만
+  - 어린이: 6세 이상~13세 미만
+  ```
+
+### 노선별 추가요금 구현시 힌트
+
+- LINE 테이블에 추가 요금 컬럼 추가 필요
+  ```sql
+  create table if not exists LINE
+  (
+  id bigint auto_increment not null,
+  name varchar(255) not null unique,
+  color varchar(20) not null,
+  extraFare int,  <---- 컬럼 추가
+  primary key(id)
+  );
+  ```

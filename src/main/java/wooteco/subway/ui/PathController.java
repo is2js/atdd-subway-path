@@ -29,7 +29,10 @@ public class PathController {
     public ResponseEntity<PathResponse> showPath(PathRequest pathRequest) {
         final Path path = pathService.show(pathRequest);
 
-        final List<Station> stations = stationService.findByIds(path.getStationIds());
+        final List<Long> stationIds = path.getStationIds();
+        System.out.println("[라이브러리] stationIds = " + stationIds);
+        final List<Station> stations = stationService.findByIds(stationIds);
+        System.out.println("[findByIds] stations = " + stations);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(PathResponse.from(stations, path));
