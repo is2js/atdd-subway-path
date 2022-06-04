@@ -23,6 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import wooteco.subway.domain.Station;
+import wooteco.subway.domain.fare.Fare;
 import wooteco.subway.domain.section.Sections;
 
 class JgraphtShortestPathFinderTest {
@@ -55,7 +56,7 @@ class JgraphtShortestPathFinderTest {
         final Path actual = shortestPathFinder.find(일번_강남역, 오번_신림역);
 
         // 예상
-        final Path expected = new Path(List.of(일번_강남역, 이번_선릉역, 삼번_잠실역, 사번_사당역, 오번_신림역), 30);
+        final Path expected = new Path(List.of(일번_강남역, 이번_선릉역, 삼번_잠실역, 사번_사당역, 오번_신림역), 30, new Fare());
 
         // 검증
         assertThat(actual.toString()).isEqualTo(expected.toString());
@@ -85,7 +86,7 @@ class JgraphtShortestPathFinderTest {
         final Path actual = shortestPathFinder.find(source, target);
 
         // 예상
-        final Path expected = new Path(List.of(source, target), expectedDistance);
+        final Path expected = new Path(List.of(source, target), expectedDistance, new Fare());
 
         // 검증
         assertThat(actual.toString()).isEqualTo(expected.toString());
@@ -109,7 +110,7 @@ class JgraphtShortestPathFinderTest {
         final Path actual = shortestPathFinder.find(source, target);
 
         // 예상
-        final Path expected = new Path(expectedStations, expectedDistance);
+        final Path expected = new Path(expectedStations, expectedDistance, new Fare());
 
         // 검증
         assertThat(actual.toString()).isEqualTo(expected.toString());

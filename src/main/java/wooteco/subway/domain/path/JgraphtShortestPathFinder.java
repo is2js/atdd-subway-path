@@ -10,6 +10,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import wooteco.subway.domain.Station;
+import wooteco.subway.domain.fare.Fare;
 import wooteco.subway.domain.section.Section;
 import wooteco.subway.domain.section.Sections;
 
@@ -94,7 +95,7 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
         final GraphPath<Station, SectionEdge> graphPath = findShortestPath(source, target)
             .orElseThrow(() -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
 
-        return new Path(graphPath.getVertexList(), (int) graphPath.getWeight());
+        return new Path(graphPath.getVertexList(), (int) graphPath.getWeight(), new Fare());
     }
 
     private Optional<GraphPath<Station, SectionEdge>> findShortestPath(final Station source,

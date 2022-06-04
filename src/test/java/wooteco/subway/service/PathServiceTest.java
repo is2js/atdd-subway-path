@@ -19,6 +19,7 @@ import wooteco.subway.dao.section.SectionDao;
 import wooteco.subway.dao.station.JdbcStationDao;
 import wooteco.subway.dao.station.StationDao;
 import wooteco.subway.domain.Station;
+import wooteco.subway.domain.fare.Fare;
 import wooteco.subway.domain.path.Path;
 import wooteco.subway.domain.section.Section;
 import wooteco.subway.ui.dto.request.PathRequest;
@@ -61,7 +62,7 @@ class PathServiceTest {
             sectionDao.save(section);
         }
 
-        final Path expected = new Path(List.of(일번역, 이번역, 삼번역, 사번역, 오번역), 30);
+        final Path expected = new Path(List.of(일번역, 이번역, 삼번역, 사번역, 오번역), 30, new Fare());
 
         final PathRequest pathRequest = new PathRequest(일번역.getId(), 오번역.getId(), 15);
 
