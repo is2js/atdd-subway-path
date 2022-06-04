@@ -19,8 +19,8 @@ public class PathResponse {
         this.fare = calculateFare;
     }
 
-    public static PathResponse from(final List<Station> stations, final Path path) {
-        return new PathResponse(stations, path.getDistance(), path.calculateFare());
+    public static PathResponse from(final Path path) {
+        return new PathResponse(path.getStations(), path.getDistance(), path.calculateFare());
     }
 
     public List<Station> getStations() {

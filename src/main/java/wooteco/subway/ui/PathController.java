@@ -25,6 +25,6 @@ public class PathController {
         final Path path = pathService.show(pathRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(PathResponse.from(path.getStations(), path));
+            .body(PathResponse.from(path));
     }
 }
