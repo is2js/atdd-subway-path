@@ -2,14 +2,20 @@ package wooteco.subway.domain.path;
 
 import java.util.List;
 import java.util.Objects;
+import org.jgrapht.GraphPath;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.fare.Fare;
+import wooteco.subway.domain.path.JgraphtShortestPathFinder.SectionEdge;
 
 public class Path {
 
     private final List<Station> stations;
     private final int distance;
-    private Fare fare;
+    private final Fare fare;
+
+    public Path(final GraphPath<Station, SectionEdge> graphPath, final Fare fare) {
+        this(graphPath.getVertexList(), (int) graphPath.getWeight(), fare);
+    }
 
     public Path(final List<Station> stations, final int distance, final Fare fare) {
         this.stations = stations;
