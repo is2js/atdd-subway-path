@@ -3,6 +3,7 @@ package wooteco.subway.domain.path;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -14,16 +15,16 @@ import wooteco.subway.domain.section.Sections;
 
 public class JgraphtShortestPathFinder implements ShortestPathFinder {
 
-    private final ShortestPathAlgorithm<Station, DefaultWeightedEdge> shortestPath;
+    private final ShortestPathAlgorithm<Station, SectionEdge> shortestPath;
 
     private JgraphtShortestPathFinder(
-        final ShortestPathAlgorithm<Station, DefaultWeightedEdge> shortestPath) {
+        final ShortestPathAlgorithm<Station, SectionEdge> shortestPath) {
         this.shortestPath = shortestPath;
     }
 
     public static JgraphtShortestPathFinder of(final Sections sections) {
-        final WeightedMultigraph<Station, DefaultWeightedEdge> graph =
-            new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        final WeightedMultigraph<Station, SectionEdge> graph =
+            new WeightedMultigraph<>(SectionEdge.class);
 
         final List<Station> stations = sections.getUniqueStations();
         validateStations(stations);
@@ -36,20 +37,28 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
     }
 
     private static void addVertex(final List<Station> stations,
-                                  final WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
+                                  final WeightedMultigraph<Station, SectionEdge> graph) {
         for (final Station station : stations) {
             graph.addVertex(station);
         }
     }
 
     private static void addEdge(final List<Section> sections,
-                                final WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        for (final Section section : sections) {
-            graph.setEdgeWeight(
-                graph.addEdge(section.getUpStation(), section.getDownStation()),
-                section.getDistance()
-            );
+                                final WeightedMultigraph<Station, SectionEdge> graph) {
+
+        final List<SectionEdge> sectionEdges = toEdge(sections);
+
+        for (final SectionEdge sectionEdge : sectionEdges) {
+            graph.addEdge(sectionEdge.getSourceVertex(),
+                sectionEdge.getTargetVertex(),
+                sectionEdge);
         }
+    }
+
+    private static List<SectionEdge> toEdge(final List<Section> sections) {
+        return sections.stream()
+            .map(SectionEdge::new)
+            .collect(Collectors.toList());
     }
 
     private static void validateStations(final List<Station> stations) {
@@ -82,14 +91,14 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
     public Path find(final Station source, final Station target) {
         validateInvalidStations(source, target);
 
-        final GraphPath<Station, DefaultWeightedEdge> graphPath = findShortestPath(source, target)
+        final GraphPath<Station, SectionEdge> graphPath = findShortestPath(source, target)
             .orElseThrow(() -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
 
         return new Path(graphPath.getVertexList(), (int) graphPath.getWeight());
     }
 
-    private Optional<GraphPath<Station, DefaultWeightedEdge>> findShortestPath(final Station source,
-                                                                               final Station target) {
+    private Optional<GraphPath<Station, SectionEdge>> findShortestPath(final Station source,
+                                                                       final Station target) {
         return Optional.ofNullable(shortestPath.getPath(source, target));
     }
 
@@ -98,4 +107,41 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
             throw new IllegalArgumentException("[ERROR] 경로를 찾으려면 같은 역을 입력할 수 없습니다.");
         }
     }
+
+    private static class SectionEdge extends DefaultWeightedEdge {
+        private final Section section;
+
+        private SectionEdge(final Section section) {
+            this.section = section;
+        }
+
+        public Station getSourceVertex() {
+            return section.getUpStation();
+        }
+
+        public Station getTargetVertex() {
+            return section.getDownStation();
+        }
+
+        @Override
+        protected double getWeight() {
+            return section.getDistance();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

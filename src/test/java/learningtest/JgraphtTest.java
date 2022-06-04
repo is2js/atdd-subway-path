@@ -1,4 +1,4 @@
-package unittest;
+package learningtest;
 
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -7,11 +7,10 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.junit.jupiter.api.Test;
 
-public class JgraphTest {
+public class JgraphtTest {
 
     @Test
     void study_library() {
-
         final WeightedMultigraph<String, DefaultWeightedEdge> graph =
             new WeightedMultigraph<>(DefaultWeightedEdge.class);
 
@@ -26,6 +25,7 @@ public class JgraphTest {
 
         final DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
         final List<String> shortestPath = dijkstraShortestPath.getPath("v3", "v1").getVertexList();
+        final List edgeList = dijkstraShortestPath.getPath("v3", "v1").getEdgeList();
 
         Assertions.assertThat(shortestPath.size()).isEqualTo(3);
     }
