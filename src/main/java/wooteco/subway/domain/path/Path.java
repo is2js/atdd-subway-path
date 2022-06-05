@@ -9,20 +9,24 @@ import wooteco.subway.domain.path.JgraphtShortestPathFinder.SectionEdge;
 
 public class Path {
 
+    private final Fare fare;
     private final List<Station> stations;
     private final int distance;
     private final int maxExtraFare;
-    private final Fare fare;
+    private final int age;
 
-    public Path(final List<Station> stations, final int distance, final int maxExtraFare, final Fare fare) {
+    public Path(final Fare fare, final List<Station> stations, final int distance, final int maxExtraFare,
+                final int age) {
         this.stations = stations;
         this.distance = distance;
         this.maxExtraFare = maxExtraFare;
         this.fare = fare;
+        this.age = age;
     }
 
-    public static Path of(final GraphPath<Station, SectionEdge> graphPath, final Fare fare) {
-        return new Path(graphPath.getVertexList(), (int) graphPath.getWeight(), calculateMaxExtraFare(graphPath), fare);
+    public static Path of(final Fare fare, final GraphPath<Station, SectionEdge> graphPath, final int age) {
+        return new Path(fare, graphPath.getVertexList(), (int) graphPath.getWeight(), calculateMaxExtraFare(graphPath),
+            age);
     }
 
     private static int calculateMaxExtraFare(final GraphPath<Station, SectionEdge> graphPath) {
@@ -36,6 +40,7 @@ public class Path {
     public int calculateFare() {
         Fare resultFare = this.fare.applyDistancePolicy(distance);
         resultFare = resultFare.applyMaxLineExtraFarePolicy(maxExtraFare);
+        resultFare = resultFare.applyAgeDiscountPolicy(age);
 
         return resultFare.getValue();
     }

@@ -2,11 +2,14 @@ package wooteco.subway.domain.fare;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class FareTest {
@@ -52,4 +55,24 @@ class FareTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @ParameterizedTest
+    @MethodSource("applyAgeDiscountPolicy_methodSource")
+    void applyAgeDiscountPolicy(final int age, final Fare expected) {
+        final Fare fare = new Fare();
+
+        final Fare actual = fare.applyAgeDiscountPolicy(age);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    public Stream<Arguments> applyAgeDiscountPolicy_methodSource() {
+        return Stream.of(
+            Arguments.of(5, new Fare(1250)),
+            Arguments.of(6, new Fare((int) ((1250 - 350) * (1 - 0.5)))),
+            Arguments.of(12, new Fare((int) ((1250 - 350) * (1 - 0.5)))),
+            Arguments.of(13, new Fare((int) ((1250 - 350) * (1 - 0.2)))),
+            Arguments.of(18, new Fare((int) ((1250 - 350) * (1 - 0.2)))),
+            Arguments.of(20, new Fare(1250))
+        );
+    }
 }

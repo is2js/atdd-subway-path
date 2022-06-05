@@ -33,6 +33,6 @@ public class PathService {
         final Station target = stationDao.findById(pathRequest.getTarget())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 찾는 지하철역이 없습니다."));
 
-        return shortestPathFinder.find(source, target);
+        return shortestPathFinder.find(source, target, pathRequest.getAge());
     }
 }

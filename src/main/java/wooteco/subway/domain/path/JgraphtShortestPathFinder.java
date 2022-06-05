@@ -16,6 +16,7 @@ import wooteco.subway.domain.section.Sections;
 
 public class JgraphtShortestPathFinder implements ShortestPathFinder {
 
+    private static final int ERROR_INVALID_AGE_STANDARD = 0;
     private final ShortestPathAlgorithm<Station, SectionEdge> shortestPath;
 
     private JgraphtShortestPathFinder(
@@ -89,13 +90,20 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
     }
 
     @Override
-    public Path find(final Station source, final Station target) {
+    public Path find(final Station source, final Station target, final int age) {
         validateInvalidStations(source, target);
+        validateInvalidAge(age);
 
         final GraphPath<Station, SectionEdge> graphPath = findShortestPath(source, target)
             .orElseThrow(() -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
 
-        return Path.of(graphPath, new Fare());
+        return Path.of(new Fare(), graphPath, age);
+    }
+
+    private void validateInvalidAge(final int age) {
+        if (age <= ERROR_INVALID_AGE_STANDARD) {
+            throw new IllegalArgumentException("[ERROR] 나이는 1살 이상이어야 합니다.");
+        }
     }
 
     private Optional<GraphPath<Station, SectionEdge>> findShortestPath(final Station source,

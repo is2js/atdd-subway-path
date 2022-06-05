@@ -17,20 +17,6 @@ public class Fare {
         this.value = value;
     }
 
-    public int applyDistancePolicy2(final int distance) {
-        if (distance <= FIRST_ADDITIONAL_FARE_DISTANCE) {
-            return value;
-        }
-        if (distance <= SECOND_ADDITIONAL_FARE_DISTANCE) {
-            return value + calculateOverFare(distance - FIRST_ADDITIONAL_FARE_DISTANCE, 5);
-        }
-
-        return value
-            + calculateOverFare(
-            Math.min(distance, SECOND_ADDITIONAL_FARE_DISTANCE) - FIRST_ADDITIONAL_FARE_DISTANCE, 5)
-            + calculateOverFare(distance - SECOND_ADDITIONAL_FARE_DISTANCE, 8);
-    }
-
     public Fare applyDistancePolicy(final int distance) {
         if (distance <= FIRST_ADDITIONAL_FARE_DISTANCE) {
             return new Fare(value);
@@ -53,6 +39,25 @@ public class Fare {
 
     public Fare applyMaxLineExtraFarePolicy(final int maxExtraFare) {
         return new Fare(value + maxExtraFare);
+    }
+
+    /*
+- [ ] 청소년: 운임에서 350원 공제한 금액의 20% 할인
+- [ ] 어린이: 운임에서 350원 공제한 금액의 50% 할인
+
+  ```
+  - 청소년: 13세 이상~19세 미만
+  - 어린이: 6세 이상~13세 미만
+  ```
+  */
+    public Fare applyAgeDiscountPolicy(final int age) {
+        if (6 <= age && age < 13) {
+            return new Fare((int) ((value - 350) * (1 - 0.5)));
+        }
+        if (13 <= age && age < 19) {
+            return new Fare((int) ((value - 350) * (1 - 0.2)));
+        }
+        return new Fare(value);
     }
 
     public int getValue() {

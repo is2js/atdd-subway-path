@@ -25,7 +25,7 @@ public class PathRequest {
         return target;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 
