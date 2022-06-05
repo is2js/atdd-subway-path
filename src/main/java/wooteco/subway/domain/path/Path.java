@@ -34,7 +34,9 @@ public class Path {
     }
 
     public int calculateFare() {
-        final Fare resultFare = this.fare.applyDistancePolicy(distance);
+        Fare resultFare = this.fare.applyDistancePolicy(distance);
+        resultFare = resultFare.applyMaxLineExtraFarePolicy(maxExtraFare);
+
         return resultFare.getValue();
     }
 

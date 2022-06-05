@@ -51,6 +51,10 @@ public class Fare {
         return ((distance - 1) / unitDistance + 1) * 100;
     }
 
+    public Fare applyMaxLineExtraFarePolicy(final int maxExtraFare) {
+        return new Fare(value + maxExtraFare);
+    }
+
     public int getValue() {
         return value;
     }

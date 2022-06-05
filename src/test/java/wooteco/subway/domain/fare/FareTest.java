@@ -26,12 +26,26 @@ class FareTest {
 
     @ParameterizedTest
     @CsvSource(value = {"9, 1250", "10, 1250", "11,1350", "15,1350", "16, 1450", "50, 2050", "51,2150"})
-    void calculate(final int distance, final int expected) {
+    void applyDistancePolicy(final int distance, final int expected) {
         //given
         final Fare fare = new Fare();
 
         //when
         final int actual = fare.applyDistancePolicy(distance)
+            .getValue();
+
+        //then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"900, 2150", "1000, 2250"})
+    void applyMaxLineExtraFarePolicy(final int maxExtraFare, final int expected) {
+        //given
+        final Fare fare = new Fare();
+
+        //when
+        final int actual = fare.applyMaxLineExtraFarePolicy(maxExtraFare)
             .getValue();
 
         //then
