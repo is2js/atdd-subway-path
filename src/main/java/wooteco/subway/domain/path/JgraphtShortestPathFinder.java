@@ -95,7 +95,7 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
         final GraphPath<Station, SectionEdge> graphPath = findShortestPath(source, target)
             .orElseThrow(() -> new IllegalStateException("[ERROR] 해당 경로가 존재하지 않습니다."));
 
-        return new Path(graphPath, new Fare());
+        return Path.of(graphPath, new Fare());
     }
 
     private Optional<GraphPath<Station, SectionEdge>> findShortestPath(final Station source,
@@ -114,6 +114,10 @@ public class JgraphtShortestPathFinder implements ShortestPathFinder {
 
         private SectionEdge(final Section section) {
             this.section = section;
+        }
+
+        public int toLineExtraFare() {
+            return section.getLine().getExtraFare();
         }
 
         public Station getSourceVertex() {

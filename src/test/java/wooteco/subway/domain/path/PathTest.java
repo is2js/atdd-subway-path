@@ -18,7 +18,7 @@ class PathTest {
     @CsvSource(value = {"9,1250", "10,1250", "11,1350", "15,1350", "16, 1450", "50, 2050", "51,2150"})
     void calculateFare(final int distance, final int expected) {
 
-        final Path path = new Path(List.of(일번_강남역, 이번_선릉역, 삼번_잠실역), distance, new Fare());
+        final Path path = new Path(List.of(일번_강남역, 이번_선릉역, 삼번_잠실역), distance, 900, new Fare());
         final int actual = path.calculateFare();
 
         Assertions.assertThat(actual).isEqualTo(expected);

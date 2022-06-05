@@ -56,7 +56,7 @@ class JgraphtShortestPathFinderTest {
         final Path actual = shortestPathFinder.find(일번_강남역, 오번_신림역);
 
         // 예상
-        final Path expected = new Path(List.of(일번_강남역, 이번_선릉역, 삼번_잠실역, 사번_사당역, 오번_신림역), 30, new Fare());
+        final Path expected = new Path(List.of(일번_강남역, 이번_선릉역, 삼번_잠실역, 사번_사당역, 오번_신림역), 30, 900, new Fare());
 
         // 검증
         assertThat(actual.toString()).isEqualTo(expected.toString());
@@ -86,7 +86,7 @@ class JgraphtShortestPathFinderTest {
         final Path actual = shortestPathFinder.find(source, target);
 
         // 예상
-        final Path expected = new Path(List.of(source, target), expectedDistance, new Fare());
+        final Path expected = new Path(List.of(source, target), expectedDistance, 900, new Fare());
 
         // 검증
         assertThat(actual.toString()).isEqualTo(expected.toString());
@@ -110,7 +110,7 @@ class JgraphtShortestPathFinderTest {
         final Path actual = shortestPathFinder.find(source, target);
 
         // 예상
-        final Path expected = new Path(expectedStations, expectedDistance, new Fare());
+        final Path expected = new Path(expectedStations, expectedDistance, 900, new Fare());
 
         // 검증
         assertThat(actual.toString()).isEqualTo(expected.toString());

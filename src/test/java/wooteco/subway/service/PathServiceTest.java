@@ -70,7 +70,7 @@ class PathServiceTest {
             sectionDao.save(section);
         }
 
-        final Path expected = new Path(List.of(일번역, 이번역, 삼번역, 사번역, 오번역), 30, new Fare());
+        final Path expected = new Path(List.of(일번역, 이번역, 삼번역, 사번역, 오번역), 30, 900, new Fare());
 
         final PathRequest pathRequest = new PathRequest(일번역.getId(), 오번역.getId(), 15);
 

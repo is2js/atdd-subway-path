@@ -11,16 +11,26 @@ public class Path {
 
     private final List<Station> stations;
     private final int distance;
+    private final int maxExtraFare;
     private final Fare fare;
 
-    public Path(final GraphPath<Station, SectionEdge> graphPath, final Fare fare) {
-        this(graphPath.getVertexList(), (int) graphPath.getWeight(), fare);
-    }
-
-    public Path(final List<Station> stations, final int distance, final Fare fare) {
+    public Path(final List<Station> stations, final int distance, final int maxExtraFare, final Fare fare) {
         this.stations = stations;
         this.distance = distance;
+        this.maxExtraFare = maxExtraFare;
         this.fare = fare;
+    }
+
+    public static Path of(final GraphPath<Station, SectionEdge> graphPath, final Fare fare) {
+        return new Path(graphPath.getVertexList(), (int) graphPath.getWeight(), calculateMaxExtraFare(graphPath), fare);
+    }
+
+    private static int calculateMaxExtraFare(final GraphPath<Station, SectionEdge> graphPath) {
+        return graphPath.getEdgeList()
+            .stream()
+            .mapToInt(SectionEdge::toLineExtraFare)
+            .max()
+            .orElseThrow(() -> new IllegalStateException("[ERROR] 최단경로 상의 노선 중 가장 비싼 추가요금을 찾을 수 없습니다."));
     }
 
     public int calculateFare() {
