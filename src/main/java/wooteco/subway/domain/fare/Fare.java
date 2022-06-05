@@ -17,7 +17,7 @@ public class Fare {
         this.value = value;
     }
 
-    public int calculate(final int distance) {
+    public int applyDistancePolicy2(final int distance) {
         if (distance <= FIRST_ADDITIONAL_FARE_DISTANCE) {
             return value;
         }
@@ -30,6 +30,22 @@ public class Fare {
             Math.min(distance, SECOND_ADDITIONAL_FARE_DISTANCE) - FIRST_ADDITIONAL_FARE_DISTANCE, 5)
             + calculateOverFare(distance - SECOND_ADDITIONAL_FARE_DISTANCE, 8);
     }
+
+    public Fare applyDistancePolicy(final int distance) {
+        if (distance <= FIRST_ADDITIONAL_FARE_DISTANCE) {
+            return new Fare(value);
+        }
+        if (distance <= SECOND_ADDITIONAL_FARE_DISTANCE) {
+            final int result = this.value + calculateOverFare(distance - FIRST_ADDITIONAL_FARE_DISTANCE, 5);
+            return new Fare(result);
+        }
+
+        final int firstResult = calculateOverFare(
+            Math.min(distance, SECOND_ADDITIONAL_FARE_DISTANCE) - FIRST_ADDITIONAL_FARE_DISTANCE, 5);
+        final int secondResult = calculateOverFare(distance - SECOND_ADDITIONAL_FARE_DISTANCE, 8);
+        return new Fare(value + firstResult + secondResult);
+    }
+
 
     public int calculateOverFare(final int distance, final int unitDistance) {
         return ((distance - 1) / unitDistance + 1) * 100;

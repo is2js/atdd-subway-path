@@ -31,7 +31,8 @@ class FareTest {
         final Fare fare = new Fare();
 
         //when
-        final int actual = fare.calculate(distance);
+        final int actual = fare.applyDistancePolicy(distance)
+            .getValue();
 
         //then
         assertThat(actual).isEqualTo(expected);

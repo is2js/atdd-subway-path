@@ -34,7 +34,8 @@ public class Path {
     }
 
     public int calculateFare() {
-        return fare.calculate(distance);
+        final Fare resultFare = this.fare.applyDistancePolicy(distance);
+        return resultFare.getValue();
     }
 
     public List<Station> getStations() {
