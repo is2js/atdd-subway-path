@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_강남역;
 import static wooteco.subway.testutils.SubWayFixtures.STATION_REQUEST_잠실역;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_파랑;
 
 import java.util.List;
 import javax.sql.DataSource;
@@ -13,10 +14,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import wooteco.subway.dao.line.JdbcLineDao;
+import wooteco.subway.dao.line.LineDao;
 import wooteco.subway.dao.section.JdbcSectionDao;
 import wooteco.subway.dao.section.SectionDao;
 import wooteco.subway.dao.station.JdbcStationDao;
 import wooteco.subway.dao.station.StationDao;
+import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 import wooteco.subway.exception.StationDuplicateException;
@@ -28,12 +32,14 @@ class StationServiceTest {
     private DataSource dataSource;
     private StationDao stationDao;
     private SectionDao sectionDao;
+    private LineDao lineDao;
     private StationService stationService;
 
     @BeforeEach
     void setUp() {
         this.stationDao = new JdbcStationDao(dataSource);
         this.sectionDao = new JdbcSectionDao(dataSource);
+        this.lineDao = new JdbcLineDao(dataSource);
         this.stationService = new StationService(stationDao, sectionDao);
     }
 
@@ -98,19 +104,23 @@ class StationServiceTest {
         final Station 분당_1역 = stationDao.save(new Station("분당_1역"));
         final Station 분당_2역 = stationDao.save(new Station("분당_2역"));
         final Station 분당_3역 = stationDao.save(new Station("분당_3역"));
-        final Section 구간1_2 = sectionDao.save(new Section(1L, 분당_1역, 분당_2역, 10));
-        final Section 구간2_3 = sectionDao.save(new Section(1L, 분당_2역, 분당_3역, 10));
+
+        final Line line = lineDao.save(일호선_파랑);
+
+        final Section 구간1_2 = sectionDao.save(new Section(line, 분당_1역, 분당_2역, 10));
+        final Section 구간2_3 = sectionDao.save(new Section(line, 분당_2역, 분당_3역, 10));
 
         //when & then
         assertThatThrownBy(() -> stationService.delete(분당_2역.getId()))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("[ERROR] 해당역은 구간에서 사용되고 있습니다.");
 
-//        stationService.delete(분당_1역.getId());
-//        stationService.delete(분당_2역.getId());
-//        stationService.delete(분당_3역.getId());
+        stationDao.deleteById(분당_1역.getId());
+        stationDao.deleteById(분당_2역.getId());
+        stationDao.deleteById(분당_3역.getId());
         sectionDao.deleteById(구간1_2.getId());
         sectionDao.deleteById(구간2_3.getId());
+        lineDao.deleteById(line.getId());
     }
 
     @DisplayName("id List로 전체 역을 조회한다.")

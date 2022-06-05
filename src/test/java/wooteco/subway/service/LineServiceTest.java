@@ -239,7 +239,7 @@ class LineServiceTest {
         final LineRequest lineRequest = new LineRequest("1호선", "green", 일번역.getId(), 이번역.getId(), 10, 900);
 
         final Line line = lineService.create(lineRequest);
-        final Section expected = new Section(line.getId(), 일번역, 이번역, 10);
+        final Section expected = new Section(line.getId(), line, 일번역, 이번역, 10);
         final List<Section> sections = sectionDao.findSectionsByLineId(line.getId());
 
         assertThat(sections).usingRecursiveComparison()

@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 
@@ -18,7 +19,11 @@ public class JdbcSectionDao implements SectionDao {
     private static final RowMapper<Section> SECTION_ROW_MAPPER = (resultSet, rowNum) -> (
         new Section(
             resultSet.getLong("id"),
-            resultSet.getLong("line_id"),
+            new Line(resultSet.getLong("line_id"),
+                resultSet.getString("line_name"),
+                resultSet.getString("line_color"),
+                resultSet.getInt("line_extra_fare")
+            ),
             new Station(resultSet.getLong("up_station_id"), resultSet.getString("up_station_name")),
             new Station(resultSet.getLong("down_station_id"), resultSet.getString("down_station_name")),
             resultSet.getInt("distance")
@@ -38,7 +43,8 @@ public class JdbcSectionDao implements SectionDao {
 
     @Override
     public Section save(final Section section) {
-        final MapSqlParameterSource parameters = new MapSqlParameterSource("line_id", section.getLineId())
+        final MapSqlParameterSource parameters = new MapSqlParameterSource()
+            .addValue("line_id", section.getLine().getId())
             .addValue("up_station_id", section.getUpStation().getId())
             .addValue("down_station_id", section.getDownStation().getId())
             .addValue("distance", section.getDistance());
@@ -58,11 +64,14 @@ public class JdbcSectionDao implements SectionDao {
     @Override
     public Optional<Section> findById(final Long id) {
         final String sql = ""
-            + "SELECT s.ID as id, s.LINE_ID AS line_id, "
+            + "SELECT s.ID as id, "
+            + "     l.ID AS line_id, l.NAME AS line_name, l.COLOR AS line_color, l.EXTRA_FARE AS line_extra_fare, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
             + "     dst.ID AS down_station_id, dst.NAME AS down_station_name, "
             + "     s.DISTANCE "
-            + "FROM section s"
+            + "FROM section s "
+            + "     LEFT JOIN LINE l "
+            + "     ON s.LINE_ID = l.ID "
             + "     LEFT JOIN STATION ust "
             + "     ON s.UP_STATION_ID = ust.ID "
             + "     LEFT JOIN STATION dst "
@@ -79,11 +88,14 @@ public class JdbcSectionDao implements SectionDao {
     @Override
     public List<Section> findSectionsByLineId(final Long lineId) {
         final String sql = ""
-            + "SELECT s.ID as id, s.LINE_ID AS line_id, "
+            + "SELECT s.ID as id, "
+            + "     l.ID AS line_id, l.NAME AS line_name, l.COLOR AS line_color, l.EXTRA_FARE AS line_extra_fare, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
             + "     dst.ID AS down_station_id, dst.NAME AS down_station_name, "
             + "     s.DISTANCE "
             + "FROM section s"
+            + "     LEFT JOIN LINE l "
+            + "     ON s.LINE_ID = l.ID "
             + "     LEFT JOIN STATION ust "
             + "     ON s.UP_STATION_ID = ust.ID "
             + "     LEFT JOIN STATION dst "
@@ -122,11 +134,14 @@ public class JdbcSectionDao implements SectionDao {
     @Override
     public List<Section> findAll() {
         final String sql = ""
-            + "SELECT s.ID as id, s.LINE_ID AS line_id, "
+            + "SELECT s.ID as id, "
+            + "     l.ID AS line_id, l.NAME AS line_name, l.COLOR AS line_color, l.EXTRA_FARE AS line_extra_fare, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
             + "     dst.ID AS down_station_id, dst.NAME AS down_station_name, "
             + "     s.DISTANCE "
             + "FROM section s"
+            + "     LEFT JOIN LINE l "
+            + "     ON s.LINE_ID = l.ID "
             + "     LEFT JOIN STATION ust "
             + "     ON s.UP_STATION_ID = ust.ID "
             + "     LEFT JOIN STATION dst "

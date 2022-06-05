@@ -17,7 +17,9 @@ public class SubWayFixtures {
     public static final LineRequest LINE_REQUEST_분당선_STATION_1_3 = new LineRequest("분당선", "bg-red-601", 1L, 3L, 12,
         900);
     public static final Line 일호선_파랑 = new Line("1호선", "blue", 900);
+    public static final Line 일번_일호선_파랑 = new Line(1L, "1호선", "blue", 900);
     public static final Line 이호선_그린 = new Line("2호선", "green", 900);
+    public static final Line 이번_이호선_그린 = new Line(2L, "2호선", "green", 900);
     public static final StationRequest STATION_REQUEST_강남역 = new StationRequest("강남역");
     public static final StationRequest STATION_REQUEST_잠실역 = new StationRequest("잠실역");
     public static final StationRequest STATION_REQUEST_역삼역 = new StationRequest("역삼역");
@@ -38,13 +40,13 @@ public class SubWayFixtures {
     public static final SectionRequest SECTION_REQUEST_1번역_2번역_거리5 = new SectionRequest(1L, 2L, 5);
     public static final SectionRequest SECTION_REQUEST_2번역_3번역_거리10 = new SectionRequest(2L, 3L, 10);
     public static final SectionRequest SECTION_REQUEST_3번역_4번역_거리15 = new SectionRequest(3L, 4L, 15);
-    public static final Section 일호선_구간_1번역_2번역 = new Section(1L, 일번_강남역, 이번_선릉역, 1);
-    public static final Section 일호선_구간_1번역_3번역 = new Section(1L, 일번_강남역, 삼번_잠실역, 2);
-    public static final Section 일호선_구간_1번역_2번역_거리_10 = new Section(1L, 일번_강남역, 이번_선릉역, 10);
-    public static final Section 일호선_구간_2번역_3번역_거리_12 = new Section(2L, 이번_선릉역, 삼번_잠실역, 12);
+    public static final Section 일호선_구간_1번역_2번역 = new Section(일번_일호선_파랑, 일번_강남역, 이번_선릉역, 1);
+    public static final Section 일호선_구간_1번역_3번역 = new Section(일번_일호선_파랑, 일번_강남역, 삼번_잠실역, 2);
+    public static final Section 일호선_구간_1번역_2번역_거리_10 = new Section(1L, 일호선_파랑, 일번_강남역, 이번_선릉역, 10);
+    public static final Section 일호선_구간_2번역_3번역_거리_12 = new Section(2L, 일호선_파랑, 이번_선릉역, 삼번_잠실역, 12);
     public static final Sections 일호선_구간_1_2_3 = new Sections(일호선_구간_1번역_2번역_거리_10, 일호선_구간_2번역_3번역_거리_12);
-    public static final Section 일호선_구간_1번역_3번역_거리_22 = new Section(3L, 1L, 일번_강남역, 삼번_잠실역, 22);
-    public static final Section 일호선_구간_3번역_4번역_거리_5 = new Section(4L, 1L, 삼번_잠실역, 사번_사당역, 5);
-    public static final Section 일호선_구간_4번역_5번역_거리_3 = new Section(5L, 1L, 사번_사당역, 오번_신림역, 3);
-    public static final Section 일호선_구간_1번역_5번역_거리_31 = new Section(6L, 1L, 일번_강남역, 오번_신림역, 31);
+    public static final Section 일호선_구간_1번역_3번역_거리_22 = new Section(3L, 일호선_파랑, 일번_강남역, 삼번_잠실역, 22);
+    public static final Section 일호선_구간_3번역_4번역_거리_5 = new Section(4L, 일호선_파랑, 삼번_잠실역, 사번_사당역, 5);
+    public static final Section 일호선_구간_4번역_5번역_거리_3 = new Section(5L, 일호선_파랑, 사번_사당역, 오번_신림역, 3);
+    public static final Section 일호선_구간_1번역_5번역_거리_31 = new Section(6L, 일호선_파랑, 일번_강남역, 오번_신림역, 31);
 }

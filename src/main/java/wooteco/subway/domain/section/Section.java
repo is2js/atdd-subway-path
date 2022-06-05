@@ -1,6 +1,7 @@
 package wooteco.subway.domain.section;
 
 import java.util.Objects;
+import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 
 public class Section {
@@ -10,26 +11,30 @@ public class Section {
     private static final int INVALID_DISTANCE_STANDARD = 0;
 
     private final Long id;
-    private final long lineId;
+    private final Line line;
     private final Station upStation;
     private final Station downStation;
     private final int distance;
 
     public Section(final Long id, final Section previousSection) {
-        this(id, previousSection.lineId, previousSection.upStation, previousSection.downStation,
+        this(id, previousSection.getLine(), previousSection.upStation, previousSection.downStation,
             previousSection.distance);
     }
 
-    public Section(final long lineId, final Station upStation, final Station downStation, final int distance) {
-        this(null, lineId, upStation, downStation, distance);
+    public Section(final Line line,
+                   final Station upStation,
+                   final Station downStation,
+                   final int distance) {
+        this(null, line, upStation, downStation, distance);
     }
 
-    public Section(final Long id, final long lineId, final Station upStation, final Station downStation,
+    public Section(final Long id, final Line line, final Station upStation,
+                   final Station downStation,
                    final int distance) {
         validateSameStations(upStation, downStation);
         validateInValidDistance(distance);
         this.id = id;
-        this.lineId = lineId;
+        this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
@@ -49,19 +54,18 @@ public class Section {
 
     public Section createMiddleToDownSection(final Section unSplitSection) {
         return new Section(unSplitSection.id,
-            lineId,
-            downStation,
+            line, downStation,
             unSplitSection.downStation,
             unSplitSection.getDistance() - distance);
     }
 
     public Section createUpToMiddleSection(final Section unSplitSection) {
-        return new Section(unSplitSection.id, lineId, unSplitSection.upStation, upStation,
+        return new Section(unSplitSection.id, line, unSplitSection.upStation, upStation,
             unSplitSection.getDistance() - distance);
     }
 
     public Section createUpToDownSection(final Section middleToDownSection) {
-        return new Section(id, lineId, upStation, middleToDownSection.downStation,
+        return new Section(id, line, upStation, middleToDownSection.downStation,
             distance + middleToDownSection.distance);
     }
 
@@ -99,8 +103,8 @@ public class Section {
         return id;
     }
 
-    public Long getLineId() {
-        return lineId;
+    public Line getLine() {
+        return line;
     }
 
     public int getDistance() {
@@ -128,21 +132,21 @@ public class Section {
             return false;
         }
         final Section section = (Section) o;
-        return getLineId() == section.getLineId() && getDistance() == section.getDistance() && Objects.equals(
-            getId(), section.getId()) && Objects.equals(upStation, section.upStation) && Objects.equals(
-            downStation, section.downStation);
+        return getDistance() == section.getDistance() && Objects.equals(getId(), section.getId())
+            && Objects.equals(line, section.line) && Objects.equals(getUpStation(),
+            section.getUpStation()) && Objects.equals(getDownStation(), section.getDownStation());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLineId(), upStation, downStation, getDistance());
+        return Objects.hash(getId(), line, getUpStation(), getDownStation(), getDistance());
     }
 
     @Override
     public String toString() {
         return "Section{" +
             "id=" + id +
-            ", lineId=" + lineId +
+            ", line=" + line +
             ", upStation=" + upStation +
             ", downStation=" + downStation +
             ", distance=" + distance +

@@ -32,15 +32,15 @@ public class LineService {
     public Line create(final LineRequest lineRequest) {
         final Line line = lineRequest.toEntity();
         checkDuplicateName(line);
-        final Line created = lineDao.save(line);
+        final Line createdLine = lineDao.save(line);
 
         final Station upStation = stationDao.findById(lineRequest.getUpStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
         final Station downStation = stationDao.findById(lineRequest.getDownStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
 
-        sectionDao.save(new Section(created.getId(), upStation, downStation, lineRequest.getDistance()));
-        return created;
+        sectionDao.save(new Section(createdLine, upStation, downStation, lineRequest.getDistance()));
+        return createdLine;
     }
 
     private void checkDuplicateName(final Line line) {

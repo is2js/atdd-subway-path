@@ -43,14 +43,22 @@ public class JdbcLineDao implements LineDao {
 
     @Override
     public Optional<Line> findById(final Long id) {
-        final String sql = "" + "SELECT "
+        final String sql = ""
+            + "SELECT "
             + "     l.id AS line_id, l.name AS line_name, l.COLOR AS line_color, l.EXTRA_FARE AS line_extra_fare, "
             + "     s.ID AS section_id, s.DISTANCE AS distance, "
             + "     ust.ID AS up_station_id, ust.NAME AS up_station_name, "
-            + "     dst.ID AS down_station_id, dst.NAME AS down_station_name " + "FROM " + "     LINE l "
-            + "     LEFT JOIN SECTION s " + "     ON l.ID = s.LINE_ID " + "     LEFT JOIN STATION ust "
-            + "     ON s.UP_STATION_ID = ust.ID " + "     LEFT JOIN STATION dst "
-            + "     ON s.DOWN_STATION_ID = dst.ID " + "WHERE " + "     l.id = :id";
+            + "     dst.ID AS down_station_id, dst.NAME AS down_station_name "
+            + "FROM "
+            + "     LINE l "
+            + "     LEFT JOIN SECTION s "
+            + "     ON l.ID = s.LINE_ID "
+            + "     LEFT JOIN STATION ust "
+            + "     ON s.UP_STATION_ID = ust.ID "
+            + "     LEFT JOIN STATION dst "
+            + "     ON s.DOWN_STATION_ID = dst.ID "
+            + "WHERE "
+            + "     l.id = :id";
         final MapSqlParameterSource parameters = new MapSqlParameterSource("id", id);
         final List<Map<String, Object>> rows = namedParameterJdbcTemplate.queryForList(sql, parameters);
         return toLine(rows);
@@ -70,11 +78,15 @@ public class JdbcLineDao implements LineDao {
     }
 
     private Sections toSections(final List<Map<String, Object>> rows) {
-        return new Sections(rows.stream().map(this::toSection).collect(Collectors.toList()));
+        return new Sections(rows.stream()
+            .map(this::toSection)
+            .collect(Collectors.toList()));
     }
 
     private Section toSection(final Map<String, Object> row) {
-        return new Section((Long) row.get("section_id"), (Long) row.get("line_id"),
+        return new Section((Long) row.get("section_id"),
+            new Line((Long) row.get("line_id"), (String) row.get("line_name"),
+                (String) row.get("line_color"), (int) row.get("line_extra_fare")),
             new Station((Long) row.get("up_station_id"), (String) row.get("up_station_name")),
             new Station((Long) row.get("down_station_id"), (String) row.get("down_station_name")),
             (int) row.get("distance"));

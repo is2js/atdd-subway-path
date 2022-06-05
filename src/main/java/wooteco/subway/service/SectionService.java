@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import wooteco.subway.dao.line.LineDao;
 import wooteco.subway.dao.section.SectionDao;
 import wooteco.subway.dao.station.StationDao;
+import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 import wooteco.subway.domain.section.Sections;
@@ -60,7 +61,10 @@ public class SectionService {
         final Station downStation = stationDao.findById(sectionRequest.getDownStationId())
             .orElseThrow(() -> new StationNotFoundException("[ERROR] 해당 이름의 지하철역이 존재하지 않습니다."));
 
-        Section newSection = sectionRequest.toEntity(lineId, upStation, downStation);
+        final Line line = lineDao.findById(lineId)
+            .orElseThrow(() -> new LineNotFoundException("[ERROR] 해당 지하철 호선이 존재하지 않습니다."));
+
+        Section newSection = sectionRequest.toEntity(line, upStation, downStation);
         newSection = sectionDao.save(newSection); // transactional믿고 일단 저장해서 id배정된 domain으로 sections에 진입한다.
 
         new Sections(currentSections).addSection(newSection)

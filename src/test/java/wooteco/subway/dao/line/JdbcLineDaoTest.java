@@ -54,8 +54,8 @@ public class JdbcLineDaoTest {
 
         //when
         final Line 이호선_그린_domain = lineDao.save(이호선_그린_entity);
-        final Section sectionA = sectionDao.save(new Section(이호선_그린_domain.getId(), 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(이호선_그린_domain.getId(), 이번역, 삼번역, 12));
+        final Section sectionA = sectionDao.save(new Section(이호선_그린_domain, 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(이호선_그린_domain, 이번역, 삼번역, 12));
 
         //then
         Assertions.assertThat(이호선_그린_domain).usingRecursiveComparison()
@@ -95,8 +95,8 @@ public class JdbcLineDaoTest {
         final Line 일호선 = lineDao.save(일호선_파랑);
         final Line 이호선 = lineDao.save(이호선_그린);
 
-        final Section sectionA = sectionDao.save(new Section(일호선.getId(), 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(이호선.getId(), 이번역, 삼번역, 12));
+        final Section sectionA = sectionDao.save(new Section(일호선, 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(이호선, 이번역, 삼번역, 12));
 
         //when
         List<Line> lines = lineDao.findAll();
@@ -120,7 +120,7 @@ public class JdbcLineDaoTest {
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
         final Line line = lineDao.save(이호선_그린);
-        final Section section = sectionDao.save(new Section(line.getId(), 일번역, 이번역, 10));
+        final Section section = sectionDao.save(new Section(line.getId(), line, 일번역, 이번역, 10));
 
         final Line actual = lineDao.findById(line.getId())
             .orElse(null);
@@ -144,10 +144,9 @@ public class JdbcLineDaoTest {
 
         final Line created = lineDao.save(이호선_그린);
 
-        final Section sectionA = sectionDao.save(new Section(created.getId(), 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(created.getId(), 이번역, 삼번역, 12));
+        final Section sectionA = sectionDao.save(new Section(created, 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(created, 이번역, 삼번역, 12));
 
-        System.out.println("lineDao.findAll() = " + lineDao.findAll());
         //when
         lineDao.deleteById(created.getId());
 
@@ -171,8 +170,8 @@ public class JdbcLineDaoTest {
 
         final Line target = lineDao.save(이호선_그린); // 내부에서 section join시 3번까지... 위에서 미리 생겨서...
 
-        final Section sectionA = sectionDao.save(new Section(target.getId(), 일번역, 이번역, 10));
-        final Section sectionB = sectionDao.save(new Section(target.getId(), 이번역, 삼번역, 12));
+        final Section sectionA = sectionDao.save(new Section(target, 일번역, 이번역, 10));
+        final Section sectionB = sectionDao.save(new Section(target, 이번역, 삼번역, 12));
 
         final Line lineForUpdate = new Line(target.getId(), "일호선", "green", 900);
 

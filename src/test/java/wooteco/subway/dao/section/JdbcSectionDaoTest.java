@@ -5,6 +5,7 @@ import static wooteco.subway.testutils.SubWayFixtures.강남역;
 import static wooteco.subway.testutils.SubWayFixtures.선릉역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_2번역;
 import static wooteco.subway.testutils.SubWayFixtures.일호선_구간_1번역_3번역;
+import static wooteco.subway.testutils.SubWayFixtures.일호선_파랑;
 import static wooteco.subway.testutils.SubWayFixtures.잠실역;
 
 import java.util.List;
@@ -17,8 +18,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import wooteco.subway.dao.line.JdbcLineDao;
+import wooteco.subway.dao.line.LineDao;
 import wooteco.subway.dao.station.JdbcStationDao;
 import wooteco.subway.dao.station.StationDao;
+import wooteco.subway.domain.Line;
 import wooteco.subway.domain.Station;
 import wooteco.subway.domain.section.Section;
 
@@ -29,11 +33,13 @@ class JdbcSectionDaoTest {
     private DataSource dataSource;
     private SectionDao sectionDao;
     private StationDao stationDao;
+    private LineDao lineDao;
 
     @BeforeEach
     void setUp() {
         sectionDao = new JdbcSectionDao(dataSource);
         stationDao = new JdbcStationDao(dataSource);
+        lineDao = new JdbcLineDao(dataSource);
     }
 
     @DisplayName("구간을 생성한다.")
@@ -55,42 +61,45 @@ class JdbcSectionDaoTest {
         //given
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
+        final Line line = lineDao.save(일호선_파랑);
 
-        final Section expected = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
+        final Section expected = sectionDao.save(new Section(line, 일번역, 이번역, 10));
 
         //when
         final Section actual = sectionDao.findById(expected.getId())
             .orElseThrow();
 
         //then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getId()).isEqualTo(expected.getId());
 
         sectionDao.deleteById(expected.getId());
 
         stationDao.deleteById(일번역.getId());
         stationDao.deleteById(이번역.getId());
+        lineDao.deleteById(line.getId());
     }
 
     @DisplayName("특정 노선의 모든 구간을 조회한다.")
     @Test
     void findAllByLineId() {
         //given
-        final Long lineId = 1L;
         final Station 일번역 = stationDao.save(강남역);
         final Station 이번역 = stationDao.save(선릉역);
         final Station 삼번역 = stationDao.save(잠실역);
-        final Section createdA = sectionDao.save(new Section(1L, 일번역, 이번역, 1));
-        final Section createdB = sectionDao.save(new Section(1L, 일번역, 삼번역, 2));
+        final Line line = lineDao.save(일호선_파랑);
+        final Section createdA = sectionDao.save(new Section(line, 일번역, 이번역, 1));
+        final Section createdB = sectionDao.save(new Section(line, 일번역, 삼번역, 2));
 
         //when
-        final List<Section> sections = sectionDao.findSectionsByLineId(lineId);
+        final List<Section> sections = sectionDao.findSectionsByLineId(line.getId());
 
         //then
-        assertThat(sections).isNotEmpty();
+        assertThat(sections).hasSize(2);
 
         stationDao.deleteById(일번역.getId());
         stationDao.deleteById(이번역.getId());
         stationDao.deleteById(삼번역.getId());
+        lineDao.deleteById(line.getId());
 
         sectionDao.deleteById(createdA.getId());
         sectionDao.deleteById(createdB.getId());
@@ -123,10 +132,11 @@ class JdbcSectionDaoTest {
         final Station 이번역 = stationDao.save(new Station("선릉역"));
         final Station 백번역 = stationDao.save(new Station(100L, "백번역"));
         final Station 백일번역 = stationDao.save(new Station(101L, "백일번역"));
+        final Line line = lineDao.save(일호선_파랑);
 
-        final Section createdA = sectionDao.save(new Section(1L, 일번역, 이번역, 10));
+        final Section createdA = sectionDao.save(new Section(line, 일번역, 이번역, 10));
 
-        final Section updatedA = new Section(createdA.getId(), createdA.getLineId(), 백번역, 백일번역, 100);
+        final Section updatedA = new Section(createdA.getId(), line, 백번역, 백일번역, 100);
 
         //when
         sectionDao.update(updatedA);
@@ -140,6 +150,7 @@ class JdbcSectionDaoTest {
         stationDao.deleteById(이번역.getId());
         stationDao.deleteById(백번역.getId());
         stationDao.deleteById(백일번역.getId());
+        lineDao.deleteById(line.getId());
 
         sectionDao.deleteById(createdA.getId());
     }
