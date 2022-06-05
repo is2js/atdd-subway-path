@@ -38,10 +38,10 @@ public class Path {
     }
 
     public int calculateFare() {
-        Fare resultFare = this.fare.applyDistancePolicy(distance);
-        resultFare = resultFare.applyMaxLineExtraFarePolicy(maxExtraFare);
-        resultFare = resultFare.applyAgeDiscountPolicy(age);
-
+        final Fare resultFare = fare.applyDistancePolicy(distance)
+            .applyMaxLineExtraFarePolicy(maxExtraFare)
+            .applyAgeDiscountPolicy(age);
+        
         return resultFare.getValue();
     }
 
