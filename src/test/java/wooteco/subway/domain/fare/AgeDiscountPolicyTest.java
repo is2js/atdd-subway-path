@@ -26,7 +26,7 @@ class AgeDiscountPolicyTest {
 
         //when
         final AgeDiscountPolicy ageDiscountPolicy = AgeDiscountPolicy.from(age);
-        final Fare actual = ageDiscountPolicy.apply(value);
+        final Fare actual = new Fare(ageDiscountPolicy.apply(value));
 
         //then
         assertThat(actual).isEqualTo(expected);

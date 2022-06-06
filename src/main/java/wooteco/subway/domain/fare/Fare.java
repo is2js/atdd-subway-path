@@ -41,19 +41,9 @@ public class Fare {
         return new Fare(value + maxExtraFare);
     }
 
-    public Fare applyAgeDiscountPolicy2(final int age) {
-        if (6 <= age && age < 13) {
-            return new Fare((int) ((value - 350) * (1 - 0.5)));
-        }
-        if (13 <= age && age < 19) {
-            return new Fare((int) ((value - 350) * (1 - 0.2)));
-        }
-        return new Fare(value);
-    }
-
     public Fare applyAgeDiscountPolicy(final int age) {
         final AgeDiscountPolicy ageDiscountPolicy = AgeDiscountPolicy.from(age);
-        return ageDiscountPolicy.apply(value);
+        return new Fare(ageDiscountPolicy.apply(value));
     }
 
     public int getValue() {

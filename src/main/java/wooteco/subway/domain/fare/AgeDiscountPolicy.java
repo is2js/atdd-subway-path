@@ -28,7 +28,7 @@ public enum AgeDiscountPolicy {
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 나이는 1~150살 사이만 입력 가능합니다."));
     }
 
-    public Fare apply(final double value) {
-        return new Fare((int) ((value - discountAmount) * (1 - discountRate)));
+    public int apply(final double value) {
+        return (int) ((value - discountAmount) * (1 - discountRate));
     }
 }
