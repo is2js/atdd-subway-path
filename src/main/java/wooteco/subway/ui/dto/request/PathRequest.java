@@ -1,31 +1,35 @@
 package wooteco.subway.ui.dto.request;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public class PathRequest {
 
-    private static final String ERROR_NULL = "[ERROR] 이름에 빈칸 입력은 허용하지 않습니다.";
-
-    private long source;
-    private long target;
+    @NotNull(message = "[ERROR] 출발역을 입력하세요")
+    private Long source;
+    @NotNull(message = "[ERROR] 도착역을 입력하세요")
+    private Long target;
+    @Positive(message = "[ERROR] 나이는 양수야 합니다.")
     private int age;
 
     private PathRequest() {
     }
 
-    public PathRequest(final long source, final long target, final int age) {
+    public PathRequest(final Long source, final Long target, final Integer age) {
         this.source = source;
         this.target = target;
         this.age = age;
     }
 
-    public long getSource() {
+    public Long getSource() {
         return source;
     }
 
-    public long getTarget() {
+    public Long getTarget() {
         return target;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
