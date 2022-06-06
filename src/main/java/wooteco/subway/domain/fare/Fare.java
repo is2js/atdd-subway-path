@@ -41,16 +41,7 @@ public class Fare {
         return new Fare(value + maxExtraFare);
     }
 
-    /*
-- [ ] 청소년: 운임에서 350원 공제한 금액의 20% 할인
-- [ ] 어린이: 운임에서 350원 공제한 금액의 50% 할인
-
-  ```
-  - 청소년: 13세 이상~19세 미만
-  - 어린이: 6세 이상~13세 미만
-  ```
-  */
-    public Fare applyAgeDiscountPolicy(final int age) {
+    public Fare applyAgeDiscountPolicy2(final int age) {
         if (6 <= age && age < 13) {
             return new Fare((int) ((value - 350) * (1 - 0.5)));
         }
@@ -58,6 +49,11 @@ public class Fare {
             return new Fare((int) ((value - 350) * (1 - 0.2)));
         }
         return new Fare(value);
+    }
+
+    public Fare applyAgeDiscountPolicy(final int age) {
+        final AgeDiscountPolicy ageDiscountPolicy = AgeDiscountPolicy.from(age);
+        return ageDiscountPolicy.apply(value);
     }
 
     public int getValue() {
