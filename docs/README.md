@@ -1,12 +1,6 @@
 <p align="center">
     <img width="200px;" src="https://raw.githubusercontent.com/woowacourse/atdd-subway-admin-frontend/master/images/main_logo.png"/>
 </p>
-<p align="center">
-  <a href="https://techcourse.woowahan.com/c/Dr6fhku7" alt="woowacuorse subway">
-    <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fedu.nextstep.camp%2Fc%2FR89PYi5H">
-  </a>
-  <img alt="GitHub" src="https://img.shields.io/github/license/woowacourse/atdd-subway-path">
-</p>
 
 <br>
 - 테스트용 front: https://d2owgqwkhzq0my.cloudfront.net/
@@ -17,26 +11,36 @@
 스프링 과정 실습을 위한 지하철 노선도 애플리케이션
 
 <br>
+# 실행 방법
 
-## 1단계 기능 요구 사항
+1. 해당 repository를 clone한 뒤 springBoot를 실행합니다.
+    ```java
+    ./gradlew bootRun
+    ```
+2. 제공되는 프론트엔드 웹사이트에서 local에서 실행중인 api서버를 연결합니다.
+	![3d4b36ee-5781-44d8-babb-735ca7f3eea3](https://raw.githubusercontent.com/is2js/screenshots/main/3d4b36ee-5781-44d8-babb-735ca7f3eea3.gif)
+    
+3. 지하철 역 -> 노선 -> 구간 추가  이후에 경로조회를 실시합니다.
+	1. 환승을 고려한 최단경로를 확인합니다.
+	2. 거리별 => 환승노선 최대요금 1개 반영 => 나이별 공제 및 할인 => 3개 정책이 반영된 금액을 확인합니다.
+		![4949139b-8ec0-4840-90ff-374c571cd616](https://raw.githubusercontent.com/is2js/screenshots/main/4949139b-8ec0-4840-90ff-374c571cd616.gif)
 
-### station controller 추가
+# 기능 구현 목록
 
-- 이미 등록된 이름 요청시 에러 응답
+## 노선도 구현
 
-### line controller 추가
+### 1단계 기능 요구 사항
 
-- 노선 등록
-- 노선 조회
-- 노선 목록
-- 노선 수정
-- 노선 삭제
+- 제공된 [API 문서](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/d5c93e187919493da3280be44de0f17f#Line)
+	- 노선 등록
+	- 노선 조회
+	- 노선 목록
+	- 노선 수정
+	- 노선 삭제
 
-- [API 문서](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/d5c93e187919493da3280be44de0f17f#Line) 참고
 
-### line controller test 추가
 
-## 2단계 기능 요구 사항
+### 2단계 기능 요구 사항
 
 - H2에 지하철 데이터 저장하기
 	- 기존 List 자료구조 H2 DB로 변경
@@ -46,40 +50,34 @@
 - 스프링 빈을 활용하기
 	- 객체와 싱글톤이나 static으로 구현 객체들을 스프링 빈으로 관리
 
-## 3단계 기능 요구 사항
+### 3단계 기능 요구 사항
 
-### 지하철 노선 추가 API 수정
+- 구간 관리 API 스펙: [API 문서v2](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/c682be69ae4e412c9e3905a59ef7b7ed#Line)
+- 노선 관리 추가 구현
+	- [x] 노선 추가 시 3가지 정보를 추가로 입력 받음
+		- upStationId: 상행 종점
+		- downStationId: 하행 종점
+		- distance: 두 종점간의 거리
+	- [x] 두 종점간의 연결 정보를 이용하여 노선 추가 시 구간(Section) 정보도 함께 등록
 
-- [x] 노선 추가 시 3가지 정보를 추가로 입력 받음
-	- upStationId: 상행 종점
-	- downStationId: 하행 종점
-	- distance: 두 종점간의 거리
-- [x] 두 종점간의 연결 정보를 이용하여 노선 추가 시 구간(Section) 정보도 함께 등록
-	- 변경된 API 스펙은 [API 문서v2](https://github.com/jinyoungchoi95/atdd-subway-map.git) 참고
+- 구간 관리 API 구현
+	- [x] 노선에 구간정보 추가
+	- [x] 구간/구간들 도메인 생성
+	- [x] 구간 등록
+		- [x] [예외]상행역과 하행역이 이미 노선에 모두 등록되어 있다면 추가할 수 없음
+		- [x] [예외]상행역과 하행역 둘 중 하나도 포함되어있지 않으면 추가할 수 없음
+		- [x] [예외] 역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 등록을 할 수 없음
+		- [x] 하나의 노선에는 갈래길이 허용되지 않기 때문에 새로운 구간이 추가되기 전에 갈래길이 생기지 않도록 기존 구간을 변경
+	- [x] 노선에 포함된 구간 정보를 통해 상행 종점부터 하행 종점까지의 역 목록을 응답
+	- [x] 구간 제거
+		- [x] [예외] 구간내 존재하지 않는 지하철역은 구간 제거할 수 없음
+		- [x] [예외] 구간이 하나인 노선에서 마지막 구간을 제거할 수 없음
+	
+		참고
 
-### 구간 관리 API 구현
+## 경로 조회 구현
 
-- [x] 노선에 구간정보 추가
-- [x] 구간/구간들 도메인 생성
-- [x] 구간 등록
-	- [x] [예외]상행역과 하행역이 이미 노선에 모두 등록되어 있다면 추가할 수 없음
-	- [x] [예외]상행역과 하행역 둘 중 하나도 포함되어있지 않으면 추가할 수 없음
-	- [x] [예외] 역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 등록을 할 수 없음
-	- [x] 하나의 노선에는 갈래길이 허용되지 않기 때문에 새로운 구간이 추가되기 전에 갈래길이 생기지 않도록 기존 구간을 변경
-- [x] 노선에 포함된 구간 정보를 통해 상행 종점부터 하행 종점까지의 역 목록을 응답
-- [x] 구간 제거
-	- [x] [예외] 구간내 존재하지 않는 지하철역은 구간 제거할 수 없음
-	- [x] [예외] 구간이 하나인 노선에서 마지막 구간을 제거할 수 없음
-- 구간 관리 API
-	- 스펙은 [API 문서v2](https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/c682be69ae4e412c9e3905a59ef7b7ed#Line)
-	  참고
-
-# 경로 추가 미션
-
-- 테스트용 front:
-	- https://d2owgqwkhzq0my.cloudfront.net/
-
-## 1단계 기능 요구 사항
+### 1단계 기능 요구 사항
 
 - api의 구현은 인수테스트부터 하향식으로 구현한다.
 - [x] 출발역(source) 도착역(target) 나이(age)로 조회 요청(GET)시 아래 항목을 응답하는 api 구현
@@ -153,18 +151,17 @@
 
 </details>
 
-## 2단계 요구사항
+### 2단계 요구사항
 
-### 노선별 추가 요금 및 연령별 요금 할인
+- 노선별 추가 요금 및 연령별 요금 할인
+	- 환승 노선을 고려한, 노선 중 가장 비싼 금액의 추가 요금을 거리별 요금에 추가
+		- [x] 추가 요금이 있는 노선을 이용할 경우 (기존 거리별)측정된 요금에 추가한다.
+		- [x] 경로 중 추가요금이 있는 노선을 환승하여 이용할 경우 가장 높은 금액의 추가요금만 적용한다.
+	- 기본요금 => 거리별 요금 => 환승 고려 노선 추가요금 => **나이별 요금 공제 및 할인을 적용**
+		- [x] 청소년: 운임에서 350원 공제한 금액의 20% 할인
+		- [x] 어린이: 운임에서 350원 공제한 금액의 50% 할인
 
-- 환승 노선을 고려한, 노선 중 가장 비싼 금액의 추가 요금을 거리별 요금에 추가
-	- [x] 추가 요금이 있는 노선을 이용할 경우 (기존 거리별)측정된 요금에 추가한다.
-	- [x] 경로 중 추가요금이 있는 노선을 환승하여 이용할 경우 가장 높은 금액의 추가요금만 적용한다.
-- 기본요금 => 거리별 요금 => 환승 고려 노선 추가요금 => **나이별 요금 공제 및 할인을 적용**
-	- [x] 청소년: 운임에서 350원 공제한 금액의 20% 할인
-	- [x] 어린이: 운임에서 350원 공제한 금액의 50% 할인
-
-### 노선별 추가요금 구현시 힌트
+- 노선별 추가요금 구현시 힌트
 
     ```
     - 청소년: 13세 이상~19세 미만
